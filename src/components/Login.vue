@@ -11,6 +11,10 @@
         <label for="password">Password: </label>
         <input type="password" id="password" name="password" required /><br />
       </div>
+      <div class="superAdmin">
+        <input type="checkbox" name="optionName" value="optionValue" id="optionId">
+        <label for="optionId"> ¿Usted es super administrador?</label> <br>
+      </div>
       <button type="submit">Login</button>
       <button type="sign in">Registrarse</button>
     </form>
@@ -30,7 +34,7 @@ export default {
 .login {
   background-color: white;
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem;
   width: auto;
   max-width: 90vw;
   border-radius: 10px;
@@ -38,17 +42,28 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+.login form input[type ="checkbox"] {
+  margin: 0.5rem 0;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.login .superAdmin {
+  color: gray;
+}
+
+
+
 .login img {
   display: block;
   max-width: 80%;
   height: auto;
-  margin: 0 auto 1rem;
+  margin: 0 auto 0.2rem;
   border-radius: 8px;
 }
 
 .login form {
-  padding: 10px;
-  font-size: xx-large;
+  padding: 2px;
 }
 
 .login form input {
@@ -58,6 +73,13 @@ export default {
 
 .login form .user {
   padding: 10px;
+  font-size: xx-large;
+
+}
+
+.login form .password {
+  padding: 10px;
+  font-size: xx-large;
 }
 
 .login button {
