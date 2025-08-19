@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style scoped>
-/* Scoped styles ensure that the CSS only applies to this component vhvhvmjngv*/
+/* Scoped styles ensure that the CSS only applies to this component*/
 .login {
   background-color: white;
   text-align: center;
