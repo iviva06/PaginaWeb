@@ -1,13 +1,12 @@
 <template>
-    <Login></Login>
-    <Panel></Panel>
+  <div id="app">
+    <!-- Aquí Vue mostrará la vista correspondiente -->
+    <router-view />
+  </div>
 </template>
 
-<script setup>
-    import Login from './components/Login.vue';
-    import Panel from './components/Panel.vue';
+<script>
+export default {
+  name: 'App'
+}
 </script>
-
-<style scoped>
-
-</style>

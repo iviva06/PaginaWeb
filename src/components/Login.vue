@@ -1,18 +1,24 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
+  <link rel="stylesheet" href="src\assets\fondo.css">
   <div class="login">
     <img src="/src/assets/logo_login.jpg" alt="logo_login" />
     <form>
       <div class="user">
         <label for="user">Username: </label>
-        <input type="text" id="user" name="user" required /><br />
+        <input type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
       </div>
       <div class="password">
         <label for="password">Password: </label>
-        <input type="password" id="password" name="password" required /><br />
+        <input type="password" placeholder="Ingrese su contraseña" id="password" name="password" required /><br />
       </div>
-      <button type="submit">Login</button>
-      <button type="sign in">Registrarse</button>
+      <router-link to ="/sidebar">
+        <button type="submit">Login</button>
+      </router-link>
+
+      <router-link to ="/register">
+        <button type="sign in">Registrarse</button>
+      </router-link>
     </form>
   </div>
 </template>
@@ -81,6 +87,7 @@ export default {
 .login button:hover {
   background-color: #890f16;
 }
+
 
 @media (max-width: 480px) {
   .login {

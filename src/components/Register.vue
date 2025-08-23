@@ -1,6 +1,49 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="Register">
+  <link rel="stylesheet" href="src\assets\fondo.css">
+  <div class="register">
+    <div class="header">
+      <img src="../assets/logo_circulo.jpg" alt="Logo">
+      <h1>Registro de usuario</h1>
+    </div>
+
+    <form>
+      <div class="name">
+        <label for="name">Name: </label>
+        <input type="text" placeholder="Ingrese su nombre" id="name" name="name" required /><br />
+      </div>
+
+      <div class="user">
+        <label for="user">Username: </label>
+        <input type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
+      </div>
+
+      <div class="dni">
+        <label for="dni">DNI: </label>
+        <input type="number" placeholder="Ingrese su DNI" max="99999999" id="dni" name="dni" required /><br />
+      </div>
+
+      <div class="password">
+        <label for="password">Password: </label>
+        <input type="text" placeholder="Ingrese su contraseña" id="password" name="password" required /><br />
+      </div>
+
+      <div class="accessID">
+        <label for="accessID">Access code: </label>
+        <input type="text" placeholder="Ingrese el código de acceso" id="accessID" name="accessID" required /><br /> <!-- Chequear si código es text o number --->
+      </div>
+
+      <div class="buttons">
+        <router-link to ="/">
+        <button type="submit">Registrarse</button>
+        </router-link>
+
+        <router-link to ="/">
+        <button type="sign in">Cancelar</button>
+        </router-link>
+      </div>
+
+    </form>
   </div>
 </template>
 
@@ -14,9 +57,20 @@ export default {
 
 <style scoped>
 /* Scoped styles ensure that the CSS only applies to this component*/
-.login {
+.register .header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.register .header img {
+  height: 3rem;
+  margin-right: 2rem;
+}
+
+.register {
   background-color: white;
-  text-align: center;
   padding: 1.5rem;
   width: auto;
   max-width: 90vw;
@@ -25,35 +79,41 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.login img {
-  display: block;
-  max-width: 80%;
-  height: auto;
-  margin: 0 auto 0.2rem;
-  border-radius: 8px;
-}
-
-.login form {
+.register form {
   padding: 2px;
 }
 
-.login form input {
+.register form input {
   padding: 10px;
-  font-size: large;
+  font-size: medium;
 }
 
-.login form .user {
+.register form .user {
   padding: 10px;
-  font-size: xx-large;
-
+  font-size: x-large;
 }
 
-.login form .password {
+.register form .password {
   padding: 10px;
-  font-size: xx-large;
+  font-size: x-large;
 }
 
-.login button {
+.register form .dni {
+  padding: 10px;
+  font-size: x-large;
+}
+
+.register form .accessID {
+  padding: 10px;
+  font-size: x-large;
+}
+
+.register form .name {
+  padding: 10px;
+  font-size: x-large;
+}
+
+.register button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
@@ -65,24 +125,39 @@ export default {
   margin-right: 1rem;
 }
 
-.login button:hover {
+.register .buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.register button:hover {
   background-color: #890f16;
 }
 
+/*Sacar flechitas dni*/
+input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
 @media (max-width: 480px) {
-  .login {
+  .register {
     padding: 1rem;
     font-size: 0.9rem;
   }
 
-  .login form {
+  .register form {
     font-size: 1rem;
   }
 }
 
 @media (max-width: 768px) {
-  .login {
-    width: 95%;
+  .register {
+    width: 100%;
   }
 }
 </style>
