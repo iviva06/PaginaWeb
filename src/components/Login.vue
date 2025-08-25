@@ -12,7 +12,7 @@
         <label for="password">Password: </label>
         <input type="password" placeholder="Ingrese su contraseña" id="password" name="password" required /><br />
       </div>
-      <router-link to ="/sidebar">
+      <router-link to ="/homeprincipal">
         <button type="submit">Login</button>
       </router-link>
 
