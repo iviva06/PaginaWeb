@@ -16,11 +16,9 @@
       <router-link to="/agregarcurso">
         <button class="addCourseButton"><i class="bx bxs-book"></i> Agregar un curso</button>
       </router-link>
-      <select>
-        <option>Programación</option>
-        <option>Matemáticas</option>
-        <option>Física</option>
-      </select>
+      <router-link to="/mostrarcursos">
+        <button class="addCourseButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
+      </router-link>
     </aside>
     <main>
       <h1>Agregar un nuevo estudiante</h1>
@@ -101,8 +99,6 @@ function cerrarPopup() {
   box-sizing: border-box;
 }
 
-/*---------Header---------*/
-
 header button {
   background-color: #6f1515;
   color: white;
@@ -141,8 +137,6 @@ header img {
   margin-right: 15px;
 }
 
-/*---------Sidebar---------*/
-
 .sidebar {
   display: flex;
 }
@@ -170,6 +164,7 @@ aside button {
   gap: 7px;
   border-radius: 16px;
   font-family: questrial, sans-serif;
+  width: 180px;
 }
 
 aside select {
@@ -179,8 +174,6 @@ aside select {
   font-family: questrial, sans-serif;
   border-radius: 16px;
 }
-
-/*---------Main---------*/
 
 main {
   flex: 1;
@@ -242,7 +235,6 @@ form select {
   font-family: questrial, sans-serif;
   width: 600px;
 }
-/*---------Popup (modal)---------*/
 
 .modal {
   position: fixed;

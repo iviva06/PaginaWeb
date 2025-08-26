@@ -18,14 +18,13 @@
       <router-link to="/agregarcurso">
         <button class="addCourseButton"><i class="bx bxs-book"></i> Agregar un curso</button>
       </router-link>
-      <select>
-        <option>Programación</option>
-        <option>Matemáticas</option>
-        <option>Física</option>
-      </select>
+      <router-link to="/mostrarcursos">
+        <button class="addCourseButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
+      </router-link>
     </aside>
+
     <main>
-      <h2>Bienvenido/a a la Gestión de Cursos</h2>
+      <h2>Bienvenido a la Gestión de Cursos</h2>
       <p>Elija la opción que desee</p>
     </main>
   </div>
@@ -41,8 +40,6 @@
 * {
   box-sizing: border-box;
 }
-
-/*---------Header---------*/
 
 header button {
   background-color: #6f1515;
@@ -61,7 +58,7 @@ header button {
 }
 
 .logoutButton a {
-  text-decoration: none; /* para borrar la linea azul de hipervinculo */
+  text-decoration: none;
 }
 
 header {
@@ -82,8 +79,6 @@ header img {
   margin-right: 15px;
 }
 
-/*---------Sidebar---------*/
-
 .sidebar {
   display: flex;
 }
@@ -95,7 +90,7 @@ aside {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+
   height: 100vh;
 }
 
@@ -108,9 +103,11 @@ aside button {
   text-align: left;
   display: flex;
   align-items: center;
+  margin-bottom: 15px;
   gap: 7px;
   border-radius: 16px;
   font-family: questrial, sans-serif;
+  width: 180px;
 }
 
 aside select {
@@ -121,15 +118,6 @@ aside select {
   border-radius: 16px;
 }
 
-.login form {
-  padding: 2px;
-}
-
-form .ID {
-  padding: 10px;
-  font-size: x-large;
-  margin-bottom: 10px;
-}
 main {
   flex: 1;
   display: flex;
@@ -137,24 +125,9 @@ main {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 20x;
+  padding: 20px;
   font-size: xx-large;
-  color: rgb(0, 0, 0);
+  color: lightslategray;
   font-family: questrial, sans-serif;
-}
-
-.saveButton button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  font-size: 1.5rem;
-  background-color: #890f16;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  color: white;
-  margin-right: 1rem;
-}
-main h2 {
-  font-size: xxx-large;
 }
 </style>

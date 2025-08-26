@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <link rel="stylesheet" href="src\assets\fondo.css">
+  <link rel="stylesheet" href="src\assets\fondo.css" />
   <div class="register">
     <div class="header">
-      <img src="../assets/logo_circulo.jpg" alt="Logo">
+      <img src="../assets/logo_circulo.jpg" alt="Logo" />
       <h1>Registro de usuario</h1>
     </div>
 
@@ -20,29 +20,48 @@
 
       <div class="dni">
         <label for="dni">DNI: </label>
-        <input type="number" placeholder="Ingrese su DNI" max="99999999" id="dni" name="dni" required /><br />
+        <input
+          type="number"
+          placeholder="Ingrese su DNI"
+          max="99999999"
+          id="dni"
+          name="dni"
+          required
+        /><br />
       </div>
 
       <div class="password">
         <label for="password">Password: </label>
-        <input type="text" placeholder="Ingrese su contraseña" id="password" name="password" required /><br />
+        <input
+          type="text"
+          placeholder="Ingrese su contraseña"
+          id="password"
+          name="password"
+          required
+        /><br />
       </div>
 
       <div class="accessID">
         <label for="accessID">Access code: </label>
-        <input type="text" placeholder="Ingrese el código de acceso" id="accessID" name="accessID" required /><br /> <!-- Chequear si código es text o number --->
+        <input
+          type="text"
+          placeholder="Ingrese el código de acceso"
+          id="accessID"
+          name="accessID"
+          required
+        /><br />
+        <!-- Chequear si código es text o number --->
       </div>
 
       <div class="buttons">
-        <router-link to ="/">
-        <button type="submit">Registrarse</button>
+        <router-link to="/">
+          <button type="submit">Registrarse</button>
         </router-link>
 
-        <router-link to ="/">
-        <button type="sign in">Cancelar</button>
+        <router-link to="/">
+          <button type="sign in">Cancelar</button>
         </router-link>
       </div>
-
     </form>
   </div>
 </template>
@@ -50,7 +69,7 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Login',
+  name: "Login",
   // You can add data, methods, and other component options here
 };
 </script>
@@ -132,17 +151,16 @@ export default {
   align-items: center;
 }
 
-
 .register button:hover {
-  background-color: #890f16;
+  background-color: #6f1515;
 }
 
 /*Sacar flechitas dni*/
 input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 @media (max-width: 480px) {
   .register {

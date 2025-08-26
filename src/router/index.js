@@ -5,6 +5,7 @@ import SideBar from "../components/SideBar.vue";
 import HomePrincipal from "../components/HomePrincipal.vue";
 import AgregarCurso from "../components/AgregarCurso.vue";
 import AgregarEstudiante from "../components/AgregarEstudiante.vue";
+import MostrarCursos from "../components/MostrarCursos.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: "/agregarestudiante",
     name: "AgregarEstudiante",
     component: AgregarEstudiante,
+  },
+  {
+    path: "/mostrarcursos",
+    name: "MostrarCursos",
+    component: MostrarCursos,
   },
 ];
 

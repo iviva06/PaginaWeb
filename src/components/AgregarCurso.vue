@@ -15,13 +15,10 @@
       <router-link to="/agregarestudiante">
         <button><i class="bx bxs-user"></i> Agregar estudiante</button>
       </router-link>
-
       <button class="addCourseButton"><i class="bx bxs-book"></i> Agregar un curso</button>
-      <select>
-        <option>Programación</option>
-        <option>Matemáticas</option>
-        <option>Física</option>
-      </select>
+      <router-link to="/mostrarcursos">
+        <button class="addCourseButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
+      </router-link>
     </aside>
     <main>
       <h1>Agregar un nuevo curso</h1>
@@ -90,8 +87,6 @@ function cerrarPopup() {
   box-sizing: border-box;
 }
 
-/*---------Header---------*/
-
 header button {
   background-color: #6f1515;
   color: white;
@@ -130,8 +125,6 @@ header img {
   margin-right: 15px;
 }
 
-/*---------Sidebar---------*/
-
 .sidebar {
   display: flex;
 }
@@ -143,7 +136,7 @@ aside {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+
   height: 100vh;
 }
 
@@ -152,9 +145,11 @@ aside button {
   color: black;
   border: 1px solid #aaa;
   padding: 10px;
+  width: 180px;
   cursor: pointer;
   text-align: left;
   display: flex;
+  margin-bottom: 15px;
   align-items: center;
   gap: 7px;
   border-radius: 16px;
@@ -168,8 +163,6 @@ aside select {
   font-family: questrial, sans-serif;
   border-radius: 16px;
 }
-
-/*---------Main---------*/
 
 main {
   flex: 1;
@@ -214,8 +207,6 @@ form input {
   font-family: questrial, sans-serif;
   width: 600px;
 }
-
-/*---------Popup (modal)---------*/
 
 .modal {
   position: fixed;
