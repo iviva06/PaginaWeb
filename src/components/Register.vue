@@ -1,11 +1,13 @@
+
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <link rel="stylesheet" href="src\assets\fondo.css">
+  <link rel="stylesheet" href="src\assets\fondo.css" />
   <div class="register">
     <div class="header">
-      <img src="../assets/logo_circulo.jpg" alt="Logo">
+      <img src="../assets/logo_circulo.jpg" alt="Logo" />
       <h1>Registro de usuario</h1>
     </div>
+
 
     <form>
       <div class="name">
@@ -13,47 +15,74 @@
         <input type="text" placeholder="Ingrese su nombre" id="name" name="name" required /><br />
       </div>
 
+
       <div class="user">
         <label for="user">Username: </label>
         <input type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
       </div>
 
+
       <div class="dni">
         <label for="dni">DNI: </label>
-        <input type="number" placeholder="Ingrese su DNI" max="99999999" id="dni" name="dni" required /><br />
+        <input
+          type="number"
+          placeholder="Ingrese su DNI"
+          max="99999999"
+          id="dni"
+          name="dni"
+          required
+        /><br />
       </div>
+
 
       <div class="password">
         <label for="password">Password: </label>
-        <input type="text" placeholder="Ingrese su contraseña" id="password" name="password" required /><br />
+        <input
+          type="text"
+          placeholder="Ingrese su contraseña"
+          id="password"
+          name="password"
+          required
+        /><br />
       </div>
+
 
       <div class="accessID">
         <label for="accessID">Access code: </label>
-        <input type="text" placeholder="Ingrese el código de acceso" id="accessID" name="accessID" required /><br /> <!-- Chequear si código es text o number --->
+        <input
+          type="text"
+          placeholder="Ingrese el código de acceso"
+          id="accessID"
+          name="accessID"
+          required
+        /><br />
+        <!-- Chequear si código es text o number --->
       </div>
+
 
       <div class="buttons">
-        <router-link to ="/">
-        <button type="submit">Registrarse</button>
+        <router-link to="/">
+          <button type="submit">Registrarse</button>
         </router-link>
 
-        <router-link to ="/">
-        <button type="sign in">Cancelar</button>
+
+        <router-link to="/">
+          <button type="sign in">Cancelar</button>
         </router-link>
       </div>
-
     </form>
   </div>
 </template>
 
+
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Login',
+  name: "Login",
   // You can add data, methods, and other component options here
 };
 </script>
+
 
 <style scoped>
 /* Scoped styles ensure that the CSS only applies to this component*/
@@ -64,10 +93,12 @@ export default {
   justify-content: center;
 }
 
+
 .register .header img {
   height: 3rem;
   margin-right: 2rem;
 }
+
 
 .register {
   background-color: white;
@@ -79,44 +110,52 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+
 .register form {
   padding: 2px;
 }
+
 
 .register form input {
   padding: 10px;
   font-size: medium;
 }
 
+
 .register form .user {
   padding: 10px;
   font-size: x-large;
 }
+
 
 .register form .password {
   padding: 10px;
   font-size: x-large;
 }
 
+
 .register form .dni {
   padding: 10px;
   font-size: x-large;
 }
+
 
 .register form .accessID {
   padding: 10px;
   font-size: x-large;
 }
 
+
 .register form .name {
   padding: 10px;
   font-size: x-large;
 }
 
+
 .register button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  font-size: 1.5rem;
+  font-size: 1.5reA;
   background-color: #890f16;
   border-radius: 10px;
   border: none;
@@ -124,6 +163,7 @@ export default {
   color: white;
   margin-right: 1rem;
 }
+
 
 .register .buttons {
   display: flex;
@@ -134,15 +174,17 @@ export default {
 
 
 .register button:hover {
-  background-color: #890f16;
+  background-color: #6f1515;
 }
+
 
 /*Sacar flechitas dni*/
 input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 
 @media (max-width: 480px) {
   .register {
@@ -150,10 +192,12 @@ input::-webkit-outer-spin-button,
     font-size: 0.9rem;
   }
 
+
   .register form {
     font-size: 1rem;
   }
 }
+
 
 @media (max-width: 768px) {
   .register {
@@ -161,3 +205,6 @@ input::-webkit-outer-spin-button,
   }
 }
 </style>
+
+
+

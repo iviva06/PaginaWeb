@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <link rel="stylesheet" href="src\assets\fondo.css">
+  <link rel="stylesheet" href="src\assets\fondo.css" />
   <div class="login">
     <img src="/src/assets/logo_login.jpg" alt="logo_login" />
     <form>
@@ -10,26 +10,35 @@
       </div>
       <div class="password">
         <label for="password">Password: </label>
-        <input type="password" placeholder="Ingrese su contraseña" id="password" name="password" required /><br />
+        <input
+          type="password"
+          placeholder="Ingrese su contraseña"
+          id="password"
+          name="password"
+          required
+        /><br />
       </div>
-      <router-link to ="/homeprincipal">
+      <router-link to="/homeprincipal">
         <button type="submit">Login</button>
       </router-link>
 
-      <router-link to ="/register">
+
+      <router-link to="/register">
         <button type="sign in">Registrarse</button>
       </router-link>
     </form>
   </div>
 </template>
 
+
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Login',
+  name: "Login",
   // You can add data, methods, and other component options here
 };
 </script>
+
 
 <style scoped>
 /* Scoped styles ensure that the CSS only applies to this component*/
@@ -44,6 +53,7 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+
 .login img {
   display: block;
   max-width: 80%;
@@ -52,25 +62,29 @@ export default {
   border-radius: 8px;
 }
 
+
 .login form {
   padding: 2px;
 }
+
 
 .login form input {
   padding: 10px;
   font-size: large;
 }
 
+
 .login form .user {
   padding: 10px;
   font-size: xx-large;
-
 }
+
 
 .login form .password {
   padding: 10px;
   font-size: xx-large;
 }
+
 
 .login button {
   margin-top: 1rem;
@@ -84,8 +98,9 @@ export default {
   margin-right: 1rem;
 }
 
+
 .login button:hover {
-  background-color: #890f16;
+  background-color: #6f1515;
 }
 
 
@@ -95,10 +110,12 @@ export default {
     font-size: 0.9rem;
   }
 
+
   .login form {
     font-size: 1rem;
   }
 }
+
 
 @media (max-width: 768px) {
   .login {
@@ -106,3 +123,6 @@ export default {
   }
 }
 </style>
+
+
+
