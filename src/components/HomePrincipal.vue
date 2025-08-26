@@ -14,9 +14,15 @@
   <div class="sidebar">
     <aside>
       <div class="asideButtons" style="text-decoration: none ">
-        <button><i class='bx bxs-user'></i> Agregar estudiante</button>
-        <button><i class='bx bxs-book'></i> Agregar un curso</button>
+        <router-link to ="/agregarestudiante" style="text-decoration: none ">
+          <button><i class='bx bxs-user'></i> Agregar estudiante</button>
+        </router-link>
+
+        <router-link to ="/agregarcurso" style="text-decoration: none ">
+          <button><i class='bx bxs-book'></i> Agregar un curso</button>
+        </router-link>
       </div>
+      
       <select>
         <option>Programación</option>
         <option>Matemáticas</option>
