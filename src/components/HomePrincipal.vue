@@ -4,8 +4,9 @@
         <h1>Universidad de Belgrano</h1>
 
         <div style="margin-left:auto" class="logoutButton">
-          <router-link to ="/">
+          <router-link to ="/modificacioncurso">
             <button>Cerrar sesión <i class='bx bxs-door-open'  ></i> </button>
+            <!-- CAMBIAR DSP RUTA!!!! -->
           </router-link>
         </div>
     </header>
