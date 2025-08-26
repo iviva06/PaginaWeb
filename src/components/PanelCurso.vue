@@ -12,10 +12,8 @@
 
   <div class="sidebar">
     <aside>
-      <div class="asideButtons" style="text-decoration: none ">
-        <button><i class='bx bxs-user'></i> Agregar estudiante</button>
-        <button><i class='bx bxs-book'></i> Agregar un curso</button>
-      </div>
+      <button><i class='bx bxs-user'></i> Agregar estudiante</button>
+      <button><i class='bx bxs-book'></i> Agregar un curso</button>
       <select>
         <option>Programación</option>
         <option>Matemáticas</option>
@@ -23,8 +21,7 @@
       </select>
     </aside>
     <main>
-      <h2>Bienvenido a la Gestión de Cursos</h2>
-      <p>Elija la opción que desee</p>
+      
     </main>
   </div>
 
@@ -39,8 +36,6 @@
 
 <style scoped>
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
@@ -55,7 +50,6 @@ header button {
   border-radius: 16px;
   font-family: questrial, sans-serif;
 }
-
 
 .logoutButton button{
   display: flex;
@@ -99,26 +93,21 @@ aside {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  min-height: 100vh;
-
+  height: 100vh;
 }
 
-.asideButtons button {
+aside button {
   background-color: #d3d3d3;
   color: black;
   border: 1px solid #aaa;
   padding: 10px;
-  width: 180px;
-  height: 50px;
   cursor: pointer;
   text-align: left;
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
   gap: 7px;
   border-radius: 16px;
   font-family: questrial, sans-serif;
-  text-decoration: none;
 }
 
 aside select {

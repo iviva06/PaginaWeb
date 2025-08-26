@@ -3,6 +3,7 @@ import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 import SideBar from '../components/SideBar.vue'
 import HomePrincipal from '../components/HomePrincipal.vue'
+import PanelCurso from '../components/PanelCurso.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/homeprincipal',
     name: 'HomePrincipal',
     component: HomePrincipal
+  },
+  {
+    path: '/panelcurso',
+    name: 'PanelCurso',
+    component: PanelCurso
   }
 ]
 
