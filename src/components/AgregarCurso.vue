@@ -5,14 +5,12 @@
     <img src="../assets/logo_header.jpg" alt="Logo Circular UB" />
     <h1>Universidad de Belgrano</h1>
 
-
     <div style="margin-left: auto" class="logoutButton">
       <router-link to="/">
         <button>Cerrar sesión <i class="bx bxs-door-open"></i></button>
       </router-link>
     </div>
   </header>
-
 
   <div class="sidebar">
     <aside>
@@ -60,7 +58,6 @@
     </main>
   </div>
 
-
   <main class="page-content">
     <slot></slot>
   </main>
@@ -85,12 +82,10 @@ function guardar() {
   */
 }
 
-
 function cerrarPopup() {
   mostrarPopup.value = false;
 }
 </script>
-
 
 <style scoped>
 * {
@@ -108,18 +103,15 @@ header button {
   font-family: questrial, sans-serif;
 }
 
-
 .logoutButton button {
   display: flex;
   align-items: center;
   gap: 3px;
 }
 
-
 .logoutButton a {
   text-decoration: none; /* para borrar la linea azul de hipervinculo */
 }
-
 
 header {
   background-color: #6f1515; /* rojo UB */
@@ -131,7 +123,6 @@ header {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva,
     Verdana, sans-serif;
 }
-
 
 header img {
   width: 50px;
@@ -174,7 +165,6 @@ aside button {
   font-family: questrial, sans-serif;
 }
 
-
 aside select {
   padding: 10px;
   border: 1px solid #464141;
@@ -213,13 +203,11 @@ main {
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-
 .saveButton button:hover {
   background-color: #6f1515; /* distinto al normal */
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
 
 form input {
   padding: 10px;
@@ -229,7 +217,6 @@ form input {
   font-family: questrial, sans-serif;
   width: 600px;
 }
-
 
 .modal {
   position: fixed;
@@ -241,7 +228,6 @@ form input {
   z-index: 9999;
 }
 
-
 .modal-content {
   background: #ffffff;
   padding: 20px 20px;
@@ -250,7 +236,6 @@ form input {
   text-align: center;
   font-size: 18px;
 }
-
 
 .modal-content button {
   margin-top: 1rem;
@@ -265,13 +250,11 @@ form input {
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-
 .modal-content button:hover {
   background-color: #6f1515; /* distinto al normal */
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
 
 .modal-content p {
   font-size: 22px;
