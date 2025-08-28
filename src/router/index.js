@@ -6,6 +6,7 @@ import HomePrincipal from '../components/HomePrincipal.vue'
 import AgregarEstudiante from '../components/AgregarEstudiante.vue'
 import AgregarCurso from '../components/AgregarCurso.vue'
 import MostrarCursos from '@/components/MostrarCursos.vue'
+import MostrarCursosAdmin from '@/components/MostrarCursosAdmin.vue'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/mostrarcursos',
     name: 'MostrarCursos',
     component: MostrarCursos
+  },
+  {
+    path: '/mostrarcursosadmin',
+    name: 'MostrarCursosAdmin',
+    component: MostrarCursosAdmin
   }
 ]
 

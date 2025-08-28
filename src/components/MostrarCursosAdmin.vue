@@ -46,23 +46,6 @@
       </div>
 
       <!-- Modal edición -->
-      <div v-if="mostrarEdicion" class="modal">
-        <div class="modal-content">
-          <h3>Editar curso</h3>
-          <input
-            v-model="nombreEditado"
-            placeholder="Nuevo nombre del curso"
-            class="input-modal"
-          />
-
-          <div class="modal-buttons">
-            <button class="guardar" @click="guardarCambios">✅ Guardar cambios</button>
-            <button class="eliminar" @click="eliminarCurso">🗑 Eliminar curso</button>
-            <button class="cancelar" @click="cerrarEdicion">❌ Cancelar</button>
-          </div>
-        </div>
-      </div>
-
       <div class="tablaEstudiantesCurso">
         <table>
           <thead>
@@ -85,9 +68,6 @@
               <td>
                 <button @click="editarEstudiante(index)">
                   <img src="../assets/editar-texto-_2_.ico" alt="Editar" />
-                </button>
-                <button @click="eliminarEstudiante(index)">
-                  <img src="../assets/eliminar.ico" alt="Eliminar" />
                 </button>
               </td>
             </tr>
@@ -140,35 +120,6 @@ const abrirEdicion = () => {
   }
 };
 
-// Cerrar modal
-const cerrarEdicion = () => {
-  mostrarEdicion.value = false;
-  nombreEditado.value = "";
-};
-
-// Guardar cambios del curso!!
-const guardarCambios = () => {
-  if (nombreEditado.value.trim() === "") {
-    alert("El nombre no puede estar vacío.");
-    return;
-  }
-  cursoSeleccionado.value.nombre = nombreEditado.value;
-  cerrarEdicion();
-};
-
-// Eliminar curso con confirmación
-const eliminarCurso = () => {
-  if (
-    confirm(`¿Seguro que deseas eliminar el curso "${cursoSeleccionado.value.nombre}"?`)
-  ) {
-    cursos.value = cursos.value.filter(
-      (c) => c.id !== cursoSeleccionado.value.id
-    );
-    cursoSeleccionado.value = null;
-    cerrarEdicion();
-  }
-};
-
 // Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref([
   { nombre: "Juan", apellido: "Pérez", dni: "12345678", turno: "Mañana", promedio: 8.5 },
@@ -198,13 +149,6 @@ const cerrarEdicionEstudiante = () => {
   mostrarEdicionEstudiante.value = false;
   estudianteEditado.value = {};
   estudianteIndexEditado = null;
-};
-
-// Eliminar estudiante
-const eliminarEstudiante = (index) => {
-  if (confirm(`¿Seguro que deseas eliminar a ${estudiantes.value[index].nombre} ${estudiantes.value[index].apellido}?`)) {
-    estudiantes.value.splice(index, 1);
-  }
 };
 
 </script>
@@ -519,21 +463,10 @@ main {
   font-family: 'Questrial', sans-serif;
 
 }
-.modal-buttons .eliminar {
-  background: #d9534f;
-  color: white;
-  font-family: 'Questrial', sans-serif;
 
-}
 .modal-buttons .cancelar {
   background: #d9534f;
   color: white;
   font-family: 'Questrial', sans-serif;
 }
 </style>
-
-
-
-
-
-
