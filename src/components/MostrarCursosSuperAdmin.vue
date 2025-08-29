@@ -12,6 +12,23 @@
         <h2>Curso: {{ cursoSeleccionado.nombre }}</h2>
         <p>ID del curso: {{ cursoSeleccionado.id }}</p>
       </div>
+      <div class="infoCursoButton">
+        <button @click="abrirEdicion">Editar curso</button>
+      </div>
+    </div>
+
+    <!-- Modal edición -->
+    <div v-if="mostrarEdicion" class="modal">
+      <div class="modal-content">
+        <h3>Editar curso</h3>
+        <input v-model="nombreEditado" placeholder="Nuevo nombre del curso" class="input-modal" />
+
+        <div class="modal-buttons">
+          <button class="guardar" @click="guardarCambios">✅ Guardar cambios</button>
+          <button class="eliminar" @click="eliminarCurso">🗑 Eliminar curso</button>
+          <button class="cancelar" @click="cerrarEdicion">❌ Cancelar</button>
+        </div>
+      </div>
     </div>
 
     <!-- Modal edición -->
@@ -37,6 +54,9 @@
             <td>
               <button @click="editarEstudiante(index)">
                 <img src="../assets/editar-texto-_2_.ico" alt="" />
+              </button>
+              <button @click="eliminarEstudiante(index)">
+                <img src="../assets/eliminar.ico" alt="Eliminar" />
               </button>
             </td>
           </tr>
@@ -83,8 +103,16 @@ const cursos = ref([
 const cursoSeleccionado = ref("");
 
 // Estado del modal
+const mostrarEdicion = ref(false);
+const nombreEditado = ref("");
 
 // Abrir modal edición
+const abrirEdicion = () => {
+  if (cursoSeleccionado.value) {
+    nombreEditado.value = cursoSeleccionado.value.nombre;
+    mostrarEdicion.value = true;
+  }
+};
 
 // Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref([
@@ -116,6 +144,38 @@ const cerrarEdicionEstudiante = () => {
   estudianteEditado.value = {};
   estudianteIndexEditado = null;
 };
+// Guardar cambios del curso!!
+const guardarCambios = () => {
+  if (nombreEditado.value.trim() === "") {
+    alert("El nombre no puede estar vacío.");
+    return;
+  }
+  cursoSeleccionado.value.nombre = nombreEditado.value;
+  cerrarEdicion();
+};
+
+// Eliminar curso con confirmación
+const eliminarCurso = () => {
+  if (confirm("¿Seguro que deseas eliminar el curso ${cursoSeleccionado.value.nombre}?")) {
+    cursos.value = cursos.value.filter((c) => c.id !== cursoSeleccionado.value.id);
+    cursoSeleccionado.value = null;
+    cerrarEdicion();
+  }
+};
+// Eliminar estudiante
+const eliminarEstudiante = (index) => {
+  if (
+    confirm(
+      "¿Seguro que deseas eliminar a ${estudiantes.value[index].nombre} ${estudiantes.value[index].apellido}?"
+    )
+  ) {
+    estudiantes.value.splice(index, 1);
+  }
+}; // Cerrar modal
+const cerrarEdicion = () => {
+  mostrarEdicion.value = false;
+  nombreEditado.value = "";
+};
 </script>
 
 <style>
@@ -136,7 +196,6 @@ select {
   font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
   border-radius: 12px;
   border: 1px solid #ccc;
-  margin-bottom: 20px;
 }
 
 .tablaEstudiantesCurso th {
@@ -171,16 +230,12 @@ select {
 .infoCurso {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 8px;
+
   align-items: start;
   margin-bottom: 20px;
 }
 
 .infoCursoText {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  height: 200px;
 }
 
 .infoCursoText h2 {
@@ -198,6 +253,13 @@ select {
   background-color: #890f16;
   color: white;
   border: none;
+  display: flex;
+  flex-direction: row;
+  justify-items: end;
+  margin-bottom: 30px;
+}
+.infoCursoButton {
+  align-self: end;
 }
 
 .infoCursoButton button:hover {
@@ -348,7 +410,11 @@ select {
   color: white;
   font-family: "Questrial", sans-serif;
 }
-
+.modal-buttons .eliminar {
+  background: #d9534f;
+  color: white;
+  font-family: "Questrial", sans-serif;
+}
 .modal-buttons .cancelar {
   background: #d9534f;
   color: white;

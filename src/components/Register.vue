@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <link rel="stylesheet" href="src\assets\fondo.css" />
   <div class="register">

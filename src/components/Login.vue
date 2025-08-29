@@ -18,13 +18,11 @@
           required
         /><br />
       </div>
-      <router-link to="/homeprincipal">
-        <button type="submit">Login</button>
-      </router-link>
 
-      <router-link to="/register">
-        <button type="sign in">Registrarse</button>
-      </router-link>
+      <div class="buttons">
+        <RouterLink class="btn" :to="{ name: 'HomePrincipal' }"><button>Login</button></RouterLink>
+        <router-link to="register"><button>Registrarse</button> </router-link>
+      </div>
     </form>
   </div>
 </template>
@@ -77,7 +75,7 @@ export default {
   font-size: xx-large;
 }
 
-.login button {
+.buttons button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1.5rem;

@@ -1,53 +1,38 @@
+// src/router/index.js
 import { createRouter, createWebHistory } from "vue-router";
-import Login from "../components/Login.vue";
-import Register from "../components/Register.vue";
-import SideBar from "../components/SideBar.vue";
-import HomePrincipal from "../components/HomePrincipal.vue";
-import AgregarCurso from "../components/AgregarCurso.vue";
-import AgregarEstudiante from "../components/AgregarEstudiante.vue";
-import MostrarCursos from "../components/MostrarCursos.vue";
+
+// Usa alias @ (recomendado) o rutas relativas ../
+import Login from "@/components/Login.vue";
+import Register from "@/components/Register.vue";
+import AppLayout from "@/components/AppLayout.vue";
+
+// ✅ Lazy imports con alias @
+const MostrarCursos = () => import("@/components/MostrarCursos.vue");
+const MostrarCursosSuperAdmin = () => import("@/components/MostrarCursosSuperAdmin.vue");
+const AgregarEstudiante = () => import("@/components/AgregarEstudiante.vue");
+const AgregarCurso = () => import("@/components/AgregarCurso.vue");
+const HomePrincipal = () => import("@/components/HomePrincipal.vue");
 
 const routes = [
+  { path: "/", name: "Login", component: Login },
+  { path: "/register", name: "Register", component: Register },
   {
-    path: "/",
-    name: "Login",
-    component: Login,
+    path: "/app",
+    component: AppLayout,
+    children: [
+      { path: "homeprincipal", name: "HomePrincipal", component: HomePrincipal },
+      { path: "mostrarcursos", name: "MostrarCursos", component: MostrarCursos },
+      { path: "agregarestudiante", name: "AgregarEstudiante", component: AgregarEstudiante },
+      { path: "agregarcurso", name: "AgregarCurso", component: AgregarCurso },
+      {
+        path: "mostrarcursosSuperAdmin",
+        name: "MostrarCursosSuperAdmin",
+        component: MostrarCursosSuperAdmin,
+      },
+      { path: "", redirect: { name: "MostrarCursos" } },
+    ],
   },
-  {
-    path: "/register",
-    name: "Register",
-    component: Register,
-  },
-  {
-    path: "/sidebar",
-    name: "Sidebar",
-    component: SideBar,
-  },
-  {
-    path: "/homeprincipal",
-    name: "HomePrincipal",
-    component: HomePrincipal,
-  },
-  {
-    path: "/agregarcurso",
-    name: "AgregarCurso",
-    component: AgregarCurso,
-  },
-  {
-    path: "/agregarestudiante",
-    name: "AgregarEstudiante",
-    component: AgregarEstudiante,
-  },
-  {
-    path: "/mostrarcursos",
-    name: "MostrarCursos",
-    component: MostrarCursos,
-  },
+  { path: "/:pathMatch(.*)*", redirect: "/" },
 ];
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
-
-export default router;
+export default createRouter({ history: createWebHistory(), routes });
