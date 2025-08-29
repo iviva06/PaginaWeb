@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+
+<!-- eslint-disable vue/multi-word-component-names -->
+>>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 <template>
   <link rel="stylesheet" href="src\assets\fondo.css" />
   <div class="register">
@@ -6,16 +11,19 @@
       <h1>Registro de usuario</h1>
     </div>
 
+
     <form>
       <div class="name">
         <label for="name">Name: </label>
         <input type="text" placeholder="Ingrese su nombre" id="name" name="name" required /><br />
       </div>
 
+
       <div class="user">
         <label for="user">Username: </label>
         <input type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
       </div>
+
 
       <div class="dni">
         <label for="dni">DNI: </label>
@@ -29,6 +37,7 @@
         /><br />
       </div>
 
+
       <div class="password">
         <label for="password">Password: </label>
         <input
@@ -39,6 +48,7 @@
           required
         /><br />
       </div>
+
 
       <div class="accessID">
         <label for="accessID">Access code: </label>
@@ -52,11 +62,16 @@
         <!-- Chequear si código es text o number --->
       </div>
 
+
       <div class="buttons">
         <router-link to="/">
           <button type="submit">Registrarse</button>
         </router-link>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
         <router-link to="/">
           <button type="sign in">Cancelar</button>
         </router-link>
@@ -65,6 +80,7 @@
   </div>
 </template>
 
+
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -72,6 +88,7 @@ export default {
   // You can add data, methods, and other component options here
 };
 </script>
+
 
 <style scoped>
 /* Scoped styles ensure that the CSS only applies to this component*/
@@ -82,10 +99,12 @@ export default {
   justify-content: center;
 }
 
+
 .register .header img {
   height: 3rem;
   margin-right: 2rem;
 }
+
 
 .register {
   background-color: white;
@@ -97,44 +116,52 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+
 .register form {
   padding: 2px;
 }
+
 
 .register form input {
   padding: 10px;
   font-size: medium;
 }
 
+
 .register form .user {
   padding: 10px;
   font-size: x-large;
 }
+
 
 .register form .password {
   padding: 10px;
   font-size: x-large;
 }
 
+
 .register form .dni {
   padding: 10px;
   font-size: x-large;
 }
+
 
 .register form .accessID {
   padding: 10px;
   font-size: x-large;
 }
 
+
 .register form .name {
   padding: 10px;
   font-size: x-large;
 }
 
+
 .register button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  font-size: 1.5rem;
+  font-size: 1.5reA;
   background-color: #890f16;
   border-radius: 10px;
   border: none;
@@ -142,6 +169,7 @@ export default {
   color: white;
   margin-right: 1rem;
 }
+
 
 .register .buttons {
   display: flex;
@@ -154,12 +182,17 @@ export default {
   background-color: #6f1515;
 }
 
+
 /*Sacar flechitas dni*/
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 
 @media (max-width: 480px) {
   .register {
@@ -167,10 +200,12 @@ input::-webkit-inner-spin-button {
     font-size: 0.9rem;
   }
 
+
   .register form {
     font-size: 1rem;
   }
 }
+
 
 @media (max-width: 768px) {
   .register {
@@ -178,3 +213,6 @@ input::-webkit-inner-spin-button {
   }
 }
 </style>
+
+
+

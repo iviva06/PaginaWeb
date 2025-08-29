@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <main>
     <h1>Agregar un nuevo estudiante</h1>
     <form>
@@ -42,19 +43,84 @@
       <div class="modal-content">
         <p>✅ El estudiante se guardó correctamente</p>
         <button @click="cerrarPopup">Aceptar</button>
+=======
+  <header>
+    <img src="../assets/logo_header.jpg" alt="Logo Circular UB" />
+    <h1>Universidad de Belgrano</h1>
+
+
+    <div style="margin-left: auto" class="logoutButton">
+      <router-link to="/">
+        <button>Cerrar sesión <i class="bx bxs-door-open"></i></button>
+      </router-link>
+    </div>
+  </header>
+  <div class="sidebar">
+    <aside>
+      <button><i class="bx bxs-user"></i> Agregar estudiante</button>
+      <router-link to="/agregarcurso">
+        <button class="addCourseButton"><i class="bx bxs-book"></i> Agregar un curso</button>
+      </router-link>
+      <router-link to="/mostrarcursos">
+        <button class="addCourseButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
+      </router-link>
+    </aside>
+    <main>
+      <h1>Agregar un nuevo estudiante</h1>
+      <form>
+        <div class="nombre">
+          <label for="nombre">Nombre </label><br />
+          <input
+            type="text"
+            placeholder="Nombre del estudiante"
+            id="nombre"
+            name="Nombre"
+            required
+          /><br />
+        </div>
+        <div class="apellido">
+          <label for="apellido">Apellido </label><br />
+          <input
+            type="text"
+            placeholder="Apellido del estudiante"
+            id="apellido"
+            name="apellido"
+            required
+          /><br />
+        </div>
+        <div class="dni">
+          <label for="dni">DNI </label><br />
+          <input type="text" placeholder="DNI del estudiante" id="dni" name="DNI" required /><br />
+        </div>
+        <div class="curso">
+          <label for="curso">Curso </label><br />
+          <select>
+            <option>Programación</option>
+            <option>Matemáticas</option>
+            <option>Física</option>
+          </select>
+        </div>
+      </form>
+      <div class="saveButton">
+        <button type="button" @click="guardar">Guardar</button>
+>>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
       </div>
     </div>
   </main>
+
 
   <main class="page-content">
     <slot></slot>
   </main>
 </template>
 
+
 <script setup>
 import { ref } from "vue";
 
+
 const mostrarPopup = ref(false);
+
 
 function guardar() {
   //  lógica real de guardado (API)
@@ -67,10 +133,12 @@ function guardar() {
   */
 }
 
+
 function cerrarPopup() {
   mostrarPopup.value = false;
 }
 </script>
+
 
 <style scoped>
 * {
@@ -86,13 +154,11 @@ header button {
   border-radius: 16px;
   font-family: questrial, sans-serif;
 }
-
 .logoutButton button {
   display: flex;
   align-items: center;
   gap: 3px;
 }
-
 .logoutButton a {
   text-decoration: none; /* para borrar la linea azul de hipervinculo */
 }
@@ -107,14 +173,16 @@ header {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva,
     Verdana, sans-serif;
 }
-
 header img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   margin-right: 15px;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 .sidebar {
   display: flex;
 }
@@ -130,6 +198,7 @@ aside {
   height: 100vh;
 }
 
+
 aside button {
   background-color: #d3d3d3;
   color: black;
@@ -144,6 +213,7 @@ aside button {
   font-family: questrial, sans-serif;
   width: 180px;
 }
+
 
 aside select {
   padding: 10px;
@@ -169,6 +239,7 @@ main {
   line-height: 50px;
 }
 
+
 .saveButton button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
@@ -182,19 +253,23 @@ main {
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
+
 .saveButton button:hover {
   background-color: #6f1515; /* distinto al normal */
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+
 main h1 {
   font-size: xxx-large;
 }
 
+
 form input :placeholder-shown {
   font-size: small;
 }
+
 
 form input {
   padding: 15px;
@@ -205,6 +280,7 @@ form input {
   width: 600px;
 }
 
+
 form select {
   padding: 15px;
   font-size: xx-large;
@@ -213,6 +289,7 @@ form select {
   font-family: questrial, sans-serif;
   width: 600px;
 }
+
 
 .modal {
   position: fixed;
@@ -224,6 +301,7 @@ form select {
   z-index: 9999;
 }
 
+
 .modal-content {
   background: #ffffff;
   padding: 20px 20px;
@@ -232,6 +310,7 @@ form select {
   text-align: center;
   font-size: 18px;
 }
+
 
 .modal-content button {
   margin-top: 1rem;
@@ -246,13 +325,18 @@ form select {
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
+
 .modal-content button:hover {
   background-color: #6f1515; /* distinto al normal */
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+
 .modal-content p {
   font-size: 22px;
 }
 </style>
+
+
+

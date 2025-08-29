@@ -1,74 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <select v-model="cursoSeleccionado">
-    <option disabled value="">Seleccioná un curso</option>
-    <option v-for="curso in cursos" :key="curso.id" :value="curso">
-      {{ curso.nombre }}
-    </option>
-  </select>
-
-  <main v-if="cursoSeleccionado">
-    <div class="infoCurso">
-      <div class="infoCursoText">
-        <h2>Curso: {{ cursoSeleccionado.nombre }}</h2>
-        <p>ID del curso: {{ cursoSeleccionado.id }}</p>
-      </div>
-    </div>
-
-    <!-- Modal edición -->
-    <div class="tablaEstudiantesCurso">
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>DNI</th>
-            <th>Turno</th>
-            <th>Promedio</th>
-            <th>Edición</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(estudiante, index) in estudiantes" :key="index">
-            <td>{{ estudiante.nombre }}</td>
-            <td>{{ estudiante.apellido }}</td>
-            <td>{{ estudiante.dni }}</td>
-            <td>{{ estudiante.turno }}</td>
-            <td>{{ estudiante.promedio }}</td>
-            <td>
-              <button @click="editarEstudiante(index)">
-                <img src="../assets/editar-texto-_2_.ico" alt="" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Modal edición estudiante -->
-    <div v-if="mostrarEdicionEstudiante" class="modal">
-      <div class="modal-content">
-        <h3>Editar estudiante</h3>
-        <input v-model="estudianteEditado.nombre" placeholder="Nombre" class="input-modal" />
-        <input v-model="estudianteEditado.apellido" placeholder="Apellido" class="input-modal" />
-        <input v-model="estudianteEditado.dni" placeholder="DNI" class="input-modal" />
-        <input v-model="estudianteEditado.turno" placeholder="Turno" class="input-modal" />
-        <input
-          v-model="estudianteEditado.promedio"
-          type="number"
-          step="0.1"
-          placeholder="Promedio"
-          class="input-modal"
-        />
-
-        <div class="modal-buttons">
-          <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
-          <button class="cancelar" @click="cerrarEdicionEstudiante">❌ Cancelar</button>
-        </div>
-      </div>
-    </div>
-  </main>
-=======
   <head>
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
@@ -116,23 +46,6 @@
       </div>
 
       <!-- Modal edición -->
-      <div v-if="mostrarEdicion" class="modal">
-        <div class="modal-content">
-          <h3>Editar curso</h3>
-          <input
-            v-model="nombreEditado"
-            placeholder="Nuevo nombre del curso"
-            class="input-modal"
-          />
-
-          <div class="modal-buttons">
-            <button class="guardar" @click="guardarCambios">✅ Guardar cambios</button>
-            <button class="eliminar" @click="eliminarCurso">🗑 Eliminar curso</button>
-            <button class="cancelar" @click="cerrarEdicion">❌ Cancelar</button>
-          </div>
-        </div>
-      </div>
-
       <div class="tablaEstudiantesCurso">
         <table>
           <thead>
@@ -155,9 +68,6 @@
               <td>
                 <button @click="editarEstudiante(index)">
                   <img src="../assets/editar-texto-_2_.ico" alt="Editar" />
-                </button>
-                <button @click="eliminarEstudiante(index)">
-                  <img src="../assets/eliminar.ico" alt="Eliminar" />
                 </button>
               </td>
             </tr>
@@ -183,7 +93,6 @@
       </div>
     </main>
   </div>
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 </template>
 
 <script setup>
@@ -200,10 +109,6 @@ const cursos = ref([
 const cursoSeleccionado = ref("");
 
 // Estado del modal
-<<<<<<< HEAD
-
-// Abrir modal edición
-=======
 const mostrarEdicion = ref(false);
 const nombreEditado = ref("");
 
@@ -215,44 +120,10 @@ const abrirEdicion = () => {
   }
 };
 
-// Cerrar modal
-const cerrarEdicion = () => {
-  mostrarEdicion.value = false;
-  nombreEditado.value = "";
-};
-
-// Guardar cambios del curso!!
-const guardarCambios = () => {
-  if (nombreEditado.value.trim() === "") {
-    alert("El nombre no puede estar vacío.");
-    return;
-  }
-  cursoSeleccionado.value.nombre = nombreEditado.value;
-  cerrarEdicion();
-};
-
-// Eliminar curso con confirmación
-const eliminarCurso = () => {
-  if (
-    confirm(`¿Seguro que deseas eliminar el curso "${cursoSeleccionado.value.nombre}"?`)
-  ) {
-    cursos.value = cursos.value.filter(
-      (c) => c.id !== cursoSeleccionado.value.id
-    );
-    cursoSeleccionado.value = null;
-    cerrarEdicion();
-  }
-};
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
-
 // Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref([
   { nombre: "Juan", apellido: "Pérez", dni: "12345678", turno: "Mañana", promedio: 8.5 },
-<<<<<<< HEAD
-  { nombre: "María", apellido: "Gómez", dni: "87654321", turno: "Tarde", promedio: 7.9 },
-=======
   { nombre: "María", apellido: "Gómez", dni: "87654321", turno: "Tarde", promedio: 7.9 }
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 ]);
 
 // Estado modal estudiante
@@ -278,18 +149,6 @@ const cerrarEdicionEstudiante = () => {
   mostrarEdicionEstudiante.value = false;
   estudianteEditado.value = {};
   estudianteIndexEditado = null;
-};
-<<<<<<< HEAD
-</script>
-
-<style>
-=======
-
-// Eliminar estudiante
-const eliminarEstudiante = (index) => {
-  if (confirm(`¿Seguro que deseas eliminar a ${estudiantes.value[index].nombre} ${estudiantes.value[index].apellido}?`)) {
-    estudiantes.value.splice(index, 1);
-  }
 };
 
 </script>
@@ -380,7 +239,6 @@ aside select {
   border-radius: 16px;
 }
 
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 main {
   flex: 1;
   display: flex;
@@ -393,17 +251,6 @@ main {
   font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
 }
 
-<<<<<<< HEAD
-select {
-  padding: 10px;
-  font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  margin-bottom: 20px;
-}
-
-=======
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 .tablaEstudiantesCurso th {
   margin-top: 20px;
   padding: 10px;
@@ -436,27 +283,16 @@ select {
 .infoCurso {
   display: grid;
   grid-template-columns: 1fr auto;
-<<<<<<< HEAD
-  gap: 8px;
-=======
   gap: 16px;
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
   align-items: start;
   margin-bottom: 20px;
 }
 
-<<<<<<< HEAD
-.infoCursoText {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-=======
 
 .infoCursoText {
   display: flex;
   flex-direction: column;
   gap: 8px;
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
   height: 200px;
 }
 
@@ -607,10 +443,7 @@ select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
-<<<<<<< HEAD
-=======
   width: 100%;
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 }
 .modal-buttons {
   display: flex;
@@ -627,36 +460,13 @@ select {
 .modal-buttons .guardar {
   background: #28a745;
   color: white;
-<<<<<<< HEAD
-  font-family: "Questrial", sans-serif;
-}
-
-.modal-buttons .cancelar {
-  background: #d9534f;
-  color: white;
-  font-family: "Questrial", sans-serif;
-}
-</style>
-=======
   font-family: 'Questrial', sans-serif;
 
 }
-.modal-buttons .eliminar {
-  background: #d9534f;
-  color: white;
-  font-family: 'Questrial', sans-serif;
 
-}
 .modal-buttons .cancelar {
   background: #d9534f;
   color: white;
   font-family: 'Questrial', sans-serif;
 }
 </style>
-
-
-
-
-
-
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
