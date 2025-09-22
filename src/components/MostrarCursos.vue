@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <select v-model="cursoSeleccionado">
     <option disabled value="">Seleccioná un curso</option>
     <option v-for="curso in cursos" :key="curso.id" :value="curso">
@@ -29,7 +28,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(estudiante, index) in estudiantes" :key="index">
+          <tr v-for="(estudiante, index) in courseList" :key="index">
             <td>{{ estudiante.nombre }}</td>
             <td>{{ estudiante.apellido }}</td>
             <td>{{ estudiante.dni }}</td>
@@ -68,126 +67,17 @@
       </div>
     </div>
   </main>
-=======
-  <head>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  </head>
-
-  <header>
-    <img src="../assets/logo_header.jpg" alt="Logo Circular UB" />
-    <h1>Universidad de Belgrano</h1>
-
-    <div style="margin-left: auto" class="logoutButton">
-      <router-link to="/">
-        <button>Cerrar sesión <i class="bx bxs-door-open"></i></button>
-      </router-link>
-    </div>
-  </header>
-
-  <div class="sidebar">
-    <aside>
-      <div class="asideButtons" style="text-decoration: none">
-        <router-link to="/agregarestudiante">
-          <button><i class="bx bxs-user"></i> Agregar estudiante</button>
-        </router-link>
-        <router-link to="/agregarcurso">
-          <button class="addCourseButton"><i class="bx bxs-book"></i> Agregar un curso</button>
-        </router-link>
-      </div>
-
-      <!-- v-model vincula la variable cursoSeleccionado -->
-      <select v-model="cursoSeleccionado">
-        <option disabled value="">Seleccioná un curso</option>
-        <option v-for="curso in cursos" :key="curso.id" :value="curso">
-          {{ curso.nombre }}
-        </option>
-      </select>
-    </aside>
-
-    <main v-if="cursoSeleccionado">
-      <div class="infoCurso">
-        <div class="infoCursoText">
-          <h2>Curso: {{ cursoSeleccionado.nombre }}</h2>
-          <p>ID del curso: {{ cursoSeleccionado.id }}</p>
-        </div>
-        <div class="infoCursoButton">
-          <button @click="abrirEdicion">Editar curso</button>
-        </div>
-      </div>
-
-      <!-- Modal edición -->
-      <div v-if="mostrarEdicion" class="modal">
-        <div class="modal-content">
-          <h3>Editar curso</h3>
-          <input
-            v-model="nombreEditado"
-            placeholder="Nuevo nombre del curso"
-            class="input-modal"
-          />
-
-          <div class="modal-buttons">
-            <button class="guardar" @click="guardarCambios">✅ Guardar cambios</button>
-            <button class="eliminar" @click="eliminarCurso">🗑 Eliminar curso</button>
-            <button class="cancelar" @click="cerrarEdicion">❌ Cancelar</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="tablaEstudiantesCurso">
-        <table>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>DNI</th>
-              <th>Turno</th>
-              <th>Promedio</th>
-              <th>Edición</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(estudiante, index) in estudiantes" :key="index">
-              <td>{{ estudiante.nombre }}</td>
-              <td>{{ estudiante.apellido }}</td>
-              <td>{{ estudiante.dni }}</td>
-              <td>{{ estudiante.turno }}</td>
-              <td>{{ estudiante.promedio }}</td>
-              <td>
-                <button @click="editarEstudiante(index)">
-                  <img src="../assets/editar-texto-_2_.ico" alt="Editar" />
-                </button>
-                <button @click="eliminarEstudiante(index)">
-                  <img src="../assets/eliminar.ico" alt="Eliminar" />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Modal edición estudiante -->
-      <div v-if="mostrarEdicionEstudiante" class="modal">
-        <div class="modal-content">
-          <h3>Editar estudiante</h3>
-          <input v-model="estudianteEditado.nombre" placeholder="Nombre" class="input-modal" />
-          <input v-model="estudianteEditado.apellido" placeholder="Apellido" class="input-modal" />
-          <input v-model="estudianteEditado.dni" placeholder="DNI" class="input-modal" />
-          <input v-model="estudianteEditado.turno" placeholder="Turno" class="input-modal" />
-          <input v-model="estudianteEditado.promedio" type="number" step="0.1" placeholder="Promedio" class="input-modal" />
-
-          <div class="modal-buttons">
-            <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
-            <button class="cancelar" @click="cerrarEdicionEstudiante">❌ Cancelar</button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useCourseStore } from "@/stores/courseStore";
+
+const courseStore = useCourseStore();
+
+const courseList = computed(() => {
+  return courseStore.courseList;
+});
 
 // Cursos mock (en el futuro pueden venir del backend)
 const cursos = ref([
@@ -200,59 +90,13 @@ const cursos = ref([
 const cursoSeleccionado = ref("");
 
 // Estado del modal
-<<<<<<< HEAD
 
 // Abrir modal edición
-=======
-const mostrarEdicion = ref(false);
-const nombreEditado = ref("");
-
-// Abrir modal edición
-const abrirEdicion = () => {
-  if (cursoSeleccionado.value) {
-    nombreEditado.value = cursoSeleccionado.value.nombre;
-    mostrarEdicion.value = true;
-  }
-};
-
-// Cerrar modal
-const cerrarEdicion = () => {
-  mostrarEdicion.value = false;
-  nombreEditado.value = "";
-};
-
-// Guardar cambios del curso!!
-const guardarCambios = () => {
-  if (nombreEditado.value.trim() === "") {
-    alert("El nombre no puede estar vacío.");
-    return;
-  }
-  cursoSeleccionado.value.nombre = nombreEditado.value;
-  cerrarEdicion();
-};
-
-// Eliminar curso con confirmación
-const eliminarCurso = () => {
-  if (
-    confirm(`¿Seguro que deseas eliminar el curso "${cursoSeleccionado.value.nombre}"?`)
-  ) {
-    cursos.value = cursos.value.filter(
-      (c) => c.id !== cursoSeleccionado.value.id
-    );
-    cursoSeleccionado.value = null;
-    cerrarEdicion();
-  }
-};
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 
 // Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref([
   { nombre: "Juan", apellido: "Pérez", dni: "12345678", turno: "Mañana", promedio: 8.5 },
-<<<<<<< HEAD
   { nombre: "María", apellido: "Gómez", dni: "87654321", turno: "Tarde", promedio: 7.9 },
-=======
-  { nombre: "María", apellido: "Gómez", dni: "87654321", turno: "Tarde", promedio: 7.9 }
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 ]);
 
 // Estado modal estudiante
@@ -279,108 +123,9 @@ const cerrarEdicionEstudiante = () => {
   estudianteEditado.value = {};
   estudianteIndexEditado = null;
 };
-<<<<<<< HEAD
 </script>
 
 <style>
-=======
-
-// Eliminar estudiante
-const eliminarEstudiante = (index) => {
-  if (confirm(`¿Seguro que deseas eliminar a ${estudiantes.value[index].nombre} ${estudiantes.value[index].apellido}?`)) {
-    estudiantes.value.splice(index, 1);
-  }
-};
-
-</script>
-
-<style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: questrial, sans-serif;
-}
-
-/*---------Header---------*/
-header button {
-  background-color: #6f1515;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 16px;
-  font-family: 'Questrial', sans-serif;
-}
-
-.logoutButton button {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.logoutButton a {
-  text-decoration: none;
-}
-
-header {
-  background-color: #6f1515; /* rojo UB */
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode",
-    Verdana, sans-serif;
-}
-
-header img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 15px;
-}
-
-/*---------Sidebar---------*/
-.sidebar {
-  display: flex;
-}
-aside {
-  background-color: #d3d3d3;
-  margin: 0;
-  padding: 0;
-  width: 220px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.asideButtons button {
-  background-color: #d3d3d3;
-  color: black;
-  border: 1px solid #aaa;
-  padding: 10px;
-  width: 180px;
-  cursor: pointer;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  gap: 7px;
-  border-radius: 16px;
-  font-family: questrial, sans-serif;
-}
-
-aside select {
-  padding: 10px;
-  border: 1px solid #464141;
-  background-color: rgba(123, 115, 115, 0.226);
-  font-family: questrial, sans-serif;
-  border-radius: 16px;
-}
-
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 main {
   flex: 1;
   display: flex;
@@ -393,7 +138,6 @@ main {
   font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
 }
 
-<<<<<<< HEAD
 select {
   padding: 10px;
   font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
@@ -402,8 +146,6 @@ select {
   margin-bottom: 20px;
 }
 
-=======
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 .tablaEstudiantesCurso th {
   margin-top: 20px;
   padding: 10px;
@@ -436,27 +178,15 @@ select {
 .infoCurso {
   display: grid;
   grid-template-columns: 1fr auto;
-<<<<<<< HEAD
   gap: 8px;
-=======
-  gap: 16px;
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
   align-items: start;
   margin-bottom: 20px;
 }
 
-<<<<<<< HEAD
 .infoCursoText {
   display: flex;
   flex-direction: column;
   gap: 6px;
-=======
-
-.infoCursoText {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
   height: 200px;
 }
 
@@ -607,10 +337,6 @@ select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
-<<<<<<< HEAD
-=======
-  width: 100%;
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 }
 .modal-buttons {
   display: flex;
@@ -627,7 +353,6 @@ select {
 .modal-buttons .guardar {
   background: #28a745;
   color: white;
-<<<<<<< HEAD
   font-family: "Questrial", sans-serif;
 }
 
@@ -637,26 +362,3 @@ select {
   font-family: "Questrial", sans-serif;
 }
 </style>
-=======
-  font-family: 'Questrial', sans-serif;
-
-}
-.modal-buttons .eliminar {
-  background: #d9534f;
-  color: white;
-  font-family: 'Questrial', sans-serif;
-
-}
-.modal-buttons .cancelar {
-  background: #d9534f;
-  color: white;
-  font-family: 'Questrial', sans-serif;
-}
-</style>
-
-
-
-
-
-
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597

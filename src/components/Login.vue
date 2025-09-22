@@ -3,14 +3,14 @@
   <link rel="stylesheet" href="src\assets\fondo.css" />
   <div class="login">
     <img src="/src/assets/logo_login.jpg" alt="logo_login" />
-    <form>
+    <form @submit.prevent="login">
       <div class="user">
         <label for="user">Username: </label>
-        <input type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
+        <input v-model="usuario" type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
       </div>
       <div class="password">
         <label for="password">Password: </label>
-        <input
+        <input v-model="password"
           type="password"
           placeholder="Ingrese su contraseña"
           id="password"
@@ -18,32 +18,28 @@
           required
         /><br />
       </div>
-<<<<<<< HEAD
 
       <div class="buttons">
-        <RouterLink class="btn" :to="{ name: 'HomePrincipal' }"><button>Login</button></RouterLink>
+        <button class="btn" type="submit">Login</button>
         <router-link to="register"><button>Registrarse</button> </router-link>
       </div>
-=======
-      <router-link to="/homeprincipal">
-        <button type="submit">Login</button>
-      </router-link>
-
-
-      <router-link to="/register">
-        <button type="sign in">Registrarse</button>
-      </router-link>
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
     </form>
   </div>
 </template>
 
 
-<script>
-export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "Login",
-  // You can add data, methods, and other component options here
+<script setup>
+import { useAutenticacionStore } from '@/stores/autenticacionStore';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+const autenticacionStore = useAutenticacionStore();
+const { usuario, password } = storeToRefs(autenticacionStore);
+const router = useRouter();
+const login = () => {
+  autenticacionStore.iniciarSesion()
+  if (autenticacionStore.autenticacion) {
+    router.push('/app/homeprincipal');
+  }
 };
 </script>
 
@@ -93,12 +89,7 @@ export default {
   font-size: xx-large;
 }
 
-<<<<<<< HEAD
 .buttons button {
-=======
-
-.login button {
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1.5rem;

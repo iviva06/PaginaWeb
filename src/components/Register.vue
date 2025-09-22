@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-
-<!-- eslint-disable vue/multi-word-component-names -->
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 <template>
   <link rel="stylesheet" href="src\assets\fondo.css" />
   <div class="register">
@@ -68,10 +63,6 @@
           <button type="submit">Registrarse</button>
         </router-link>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
         <router-link to="/">
           <button type="sign in">Cancelar</button>
         </router-link>
@@ -189,10 +180,6 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 
 @media (max-width: 480px) {
   .register {

@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <main>
     <h1>Agregar un nuevo estudiante</h1>
     <form>
@@ -43,67 +42,6 @@
       <div class="modal-content">
         <p>✅ El estudiante se guardó correctamente</p>
         <button @click="cerrarPopup">Aceptar</button>
-=======
-  <header>
-    <img src="../assets/logo_header.jpg" alt="Logo Circular UB" />
-    <h1>Universidad de Belgrano</h1>
-
-
-    <div style="margin-left: auto" class="logoutButton">
-      <router-link to="/">
-        <button>Cerrar sesión <i class="bx bxs-door-open"></i></button>
-      </router-link>
-    </div>
-  </header>
-  <div class="sidebar">
-    <aside>
-      <button><i class="bx bxs-user"></i> Agregar estudiante</button>
-      <router-link to="/agregarcurso">
-        <button class="addCourseButton"><i class="bx bxs-book"></i> Agregar un curso</button>
-      </router-link>
-      <router-link to="/mostrarcursos">
-        <button class="addCourseButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
-      </router-link>
-    </aside>
-    <main>
-      <h1>Agregar un nuevo estudiante</h1>
-      <form>
-        <div class="nombre">
-          <label for="nombre">Nombre </label><br />
-          <input
-            type="text"
-            placeholder="Nombre del estudiante"
-            id="nombre"
-            name="Nombre"
-            required
-          /><br />
-        </div>
-        <div class="apellido">
-          <label for="apellido">Apellido </label><br />
-          <input
-            type="text"
-            placeholder="Apellido del estudiante"
-            id="apellido"
-            name="apellido"
-            required
-          /><br />
-        </div>
-        <div class="dni">
-          <label for="dni">DNI </label><br />
-          <input type="text" placeholder="DNI del estudiante" id="dni" name="DNI" required /><br />
-        </div>
-        <div class="curso">
-          <label for="curso">Curso </label><br />
-          <select>
-            <option>Programación</option>
-            <option>Matemáticas</option>
-            <option>Física</option>
-          </select>
-        </div>
-      </form>
-      <div class="saveButton">
-        <button type="button" @click="guardar">Guardar</button>
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
       </div>
     </div>
   </main>
@@ -179,10 +117,6 @@ header img {
   border-radius: 50%;
   margin-right: 15px;
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 1b55e7d4545a0845c3a86da6b04ccb339b01e597
 .sidebar {
   display: flex;
 }
