@@ -38,7 +38,9 @@ const router = useRouter();
 const login = () => {
   autenticacionStore.iniciarSesion()
   if (autenticacionStore.autenticacion) {
-    router.push('/app/homeprincipal');
+    console.log("Antes del router");
+    router.push({ name: 'HomePrincipal'});
+    console.log("Login exitoso");
   }
 };
 </script>

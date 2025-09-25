@@ -29,7 +29,7 @@
       <select v-model="cursoSeleccionado">
         <option disabled value="">Seleccioná un curso</option>
         <option v-for="curso in cursos" :key="curso.id" :value="curso">
-          {{ curso.nombre }}
+          <p @click="clickCurso(curso.id)" >{{ curso.nombre }}</p>
         </option>
       </select>
     </aside>
@@ -53,18 +53,18 @@
               <th>Nombre</th>
               <th>Apellido</th>
               <th>DNI</th>
-              <th>Turno</th>
+              <th>Semestre</th>
               <th>Promedio</th>
               <th>Edición</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(estudiante, index) in estudiantes" :key="index">
-              <td>{{ estudiante.nombre }}</td>
-              <td>{{ estudiante.apellido }}</td>
+              <td>{{ estudiante.name }}</td>
+              <td>{{ estudiante.lastName }}</td>
               <td>{{ estudiante.dni }}</td>
-              <td>{{ estudiante.turno }}</td>
-              <td>{{ estudiante.promedio }}</td>
+              <td>{{ estudiante.numSemester }}</td>
+              <td>{{ estudiante.average }}</td>
               <td>
                 <button @click="editarEstudiante(index)">
                   <img src="../assets/editar-texto-_2_.ico" alt="Editar" />
@@ -97,13 +97,10 @@
 
 <script setup>
 import { ref } from "vue";
+import { useCourseStore } from "@/stores/courseStore";
 
-// Cursos mock (en el futuro pueden venir del backend)
-const cursos = ref([
-  { id: 1, nombre: "Programación" },
-  { id: 2, nombre: "Matemáticas" },
-  { id: 3, nombre: "Física" },
-]);
+const courseStore = useCourseStore();
+const cursos = ref(courseStore.courses); // Lista de cursos desde el store
 
 // variable reactiva vinculada al <select>
 const cursoSeleccionado = ref("");
@@ -121,10 +118,7 @@ const abrirEdicion = () => {
 };
 
 // Lista de estudiantes (mock de ejemplo)
-const estudiantes = ref([
-  { nombre: "Juan", apellido: "Pérez", dni: "12345678", turno: "Mañana", promedio: 8.5 },
-  { nombre: "María", apellido: "Gómez", dni: "87654321", turno: "Tarde", promedio: 7.9 }
-]);
+const estudiantes = ref();
 
 // Estado modal estudiante
 const mostrarEdicionEstudiante = ref(false);
@@ -149,6 +143,14 @@ const cerrarEdicionEstudiante = () => {
   mostrarEdicionEstudiante.value = false;
   estudianteEditado.value = {};
   estudianteIndexEditado = null;
+};
+
+const clickCurso = (IDCurso) => {
+  courseStore.courseList.array.forEach(course => {
+    if (course.id === IDCurso) {
+      estudiantes.value = course.students;
+    }
+  });
 };
 
 </script>

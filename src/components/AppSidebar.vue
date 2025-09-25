@@ -26,8 +26,8 @@ import { useCourseStore } from '@/stores/courseStore';
 
 defineProps({ open: { type: Boolean, default: false } });
 const courseStore = useCourseStore();
-const clickCurso = () => {
-  courseStore.fetchCourses()
+const clickCurso = async () => {
+  await courseStore.fetchCourses()
 };
 
 defineEmits(["close"]);

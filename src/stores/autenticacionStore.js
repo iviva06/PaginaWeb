@@ -23,10 +23,9 @@ export const useAutenticacionStore = defineStore("autenticacion", {
         if (data && data.token) {
           this.token = data.token;
           sessionStorage.setItem('token', this.token);
-          console.log(this.token);
           this.autenticacion = true;
+          console.log(this.token);
         }
-
 
       } catch (error) {
         console.error("Error al iniciar sesión:", error);

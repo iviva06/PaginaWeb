@@ -6,7 +6,7 @@ import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 import AppLayout from "@/components/AppLayout.vue";
 
-// ✅ Lazy imports con alias @
+// Lazy imports con alias @
 const MostrarCursos = () => import("@/components/MostrarCursos.vue");
 const MostrarCursosSuperAdmin = () => import("@/components/MostrarCursosSuperAdmin.vue");
 const AgregarEstudiante = () => import("@/components/AgregarEstudiante.vue");
