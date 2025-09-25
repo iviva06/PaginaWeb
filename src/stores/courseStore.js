@@ -4,7 +4,6 @@ import { defineStore } from "pinia";
 export const useCourseStore = defineStore("autenticacion", {
   state: () => ({
     courseList: [],
-
   }),
   actions: {
     async fetchCourses() {

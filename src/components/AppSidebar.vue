@@ -14,7 +14,7 @@
       <router-link to="/app/agregarcurso" class="botonesNav">
         <button class="SidebarButton"><i class="bx bxs-book"></i> Agregar un curso</button>
       </router-link>
-      <router-link to="/app/mostrarcursos" class="botonesNav">
+      <router-link @click="clickCurso" to="/app/mostrarcursos" class="botonesNav">
         <button class="SidebarButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
       </router-link>
     </nav>
@@ -22,7 +22,14 @@
 </template>
 
 <script setup>
+import { useCourseStore } from '@/stores/courseStore';
+
 defineProps({ open: { type: Boolean, default: false } });
+const courseStore = useCourseStore();
+const clickCurso = () => {
+  courseStore.fetchCourses()
+};
+
 defineEmits(["close"]);
 </script>
 
