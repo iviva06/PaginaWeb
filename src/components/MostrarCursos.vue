@@ -27,8 +27,8 @@
             <th>Edición</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(estudiante, index) in courseList" :key="index">
+        <tbody v-if="countStudents">
+          <tr  v-for="(estudiante, index) in estudiantes" :key="index">
             <td>{{ estudiante.name }}</td>
             <td>{{ estudiante.lastName }}</td>
             <td>{{ estudiante.dni }}</td>
@@ -87,6 +87,8 @@ const cursoSeleccionado = ref();
 
 // Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref();
+const countStudents = computed(() => estudiantes.value.length > 0 ? true : false);
+
 
 // Estado modal estudiante
 const mostrarEdicionEstudiante = ref(false);
@@ -117,6 +119,10 @@ const clickCurso = (cursoSeleccionado) => {
   courseStore.courseList.array.forEach(course => {
     console.log(course.id, cursoSeleccionado.id);
     if (course.id === cursoSeleccionado.id) {
+      if (course.students.length === 0) {
+        console.log("El curso no tiene estudiantes asignados.");
+        estudiantes.value = [];
+      }
       console.log("Curso encontrado:", course);
       estudiantes.value = course.students;
     }
