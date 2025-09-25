@@ -12,6 +12,7 @@ const MostrarCursosSuperAdmin = () => import("@/components/MostrarCursosSuperAdm
 const AgregarEstudiante = () => import("@/components/AgregarEstudiante.vue");
 const AgregarCurso = () => import("@/components/AgregarCurso.vue");
 const HomePrincipal = () => import("@/components/HomePrincipal.vue");
+const MostrarCursosAdmin = () => import("@/components/MostrarCursosAdmin.vue");
 
 const routes = [
   { path: "/", name: "Login", component: Login },
@@ -24,6 +25,7 @@ const routes = [
       { path: "mostrarcursos", name: "MostrarCursos", component: MostrarCursos },
       { path: "agregarestudiante", name: "AgregarEstudiante", component: AgregarEstudiante },
       { path: "agregarcurso", name: "AgregarCurso", component: AgregarCurso },
+      { path: "mostrarcursosadmin", name: "MostrarCursosAdmin", component: MostrarCursosAdmin},
       {
         path: "mostrarcursosSuperAdmin",
         name: "MostrarCursosSuperAdmin",

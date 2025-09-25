@@ -3,17 +3,6 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
-  <header>
-    <img src="../assets/logo_header.jpg" alt="Logo Circular UB" />
-    <h1>Universidad de Belgrano</h1>
-
-    <div style="margin-left: auto" class="logoutButton">
-      <router-link to="/">
-        <button>Cerrar sesión <i class="bx bxs-door-open"></i></button>
-      </router-link>
-    </div>
-  </header>
-
   <div class="sidebar">
     <aside>
       <div class="asideButtons" style="text-decoration: none">
@@ -82,7 +71,7 @@
           <input v-model="estudianteEditado.nombre" placeholder="Nombre" class="input-modal" />
           <input v-model="estudianteEditado.apellido" placeholder="Apellido" class="input-modal" />
           <input v-model="estudianteEditado.dni" placeholder="DNI" class="input-modal" />
-          <input v-model="estudianteEditado.turno" placeholder="Turno" class="input-modal" />
+          <input v-model="estudianteEditado.turno" placeholder="Semestre" class="input-modal" />
           <input v-model="estudianteEditado.promedio" type="number" step="0.1" placeholder="Promedio" class="input-modal" />
 
           <div class="modal-buttons">

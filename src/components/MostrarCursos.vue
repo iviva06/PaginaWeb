@@ -1,8 +1,8 @@
 <template>
-  <select v-model="cursoSeleccionado">
+  <select v-model="cursoSeleccionado" @change="clickCurso(cursoSeleccionado)">
     <option disabled value="">Seleccioná un curso</option>
     <option v-for="curso in cursos" :key="curso.id" :value="curso">
-      {{ curso.nombre }}
+      {{ curso.name}}
     </option>
   </select>
 
@@ -22,18 +22,18 @@
             <th>Nombre</th>
             <th>Apellido</th>
             <th>DNI</th>
-            <th>Turno</th>
+            <th>Semestre</th>
             <th>Promedio</th>
             <th>Edición</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(estudiante, index) in courseList" :key="index">
-            <td>{{ estudiante.nombre }}</td>
-            <td>{{ estudiante.apellido }}</td>
+            <td>{{ estudiante.name }}</td>
+            <td>{{ estudiante.lastName }}</td>
             <td>{{ estudiante.dni }}</td>
-            <td>{{ estudiante.turno }}</td>
-            <td>{{ estudiante.promedio }}</td>
+            <td>{{ estudiante.numSemester }}</td>
+            <td>{{ estudiante.average }}</td>
             <td>
               <button @click="editarEstudiante(index)">
                 <img src="../assets/editar-texto-_2_.ico" alt="" />
@@ -74,30 +74,19 @@ import { computed, ref } from "vue";
 import { useCourseStore } from "@/stores/courseStore";
 
 const courseStore = useCourseStore();
+const cursos = computed(() => courseStore.courseList);
 
-const courseList = computed(() => {
-  return courseStore.courseList;
-});
 
-// Cursos mock (en el futuro pueden venir del backend)
-const cursos = ref([
-  { id: 1, nombre: "Programación" },
-  { id: 2, nombre: "Matemáticas" },
-  { id: 3, nombre: "Física" },
-]);
 
 // variable reactiva vinculada al <select>
-const cursoSeleccionado = ref("");
+const cursoSeleccionado = ref();
 
 // Estado del modal
 
 // Abrir modal edición
 
 // Lista de estudiantes (mock de ejemplo)
-const estudiantes = ref([
-  { nombre: "Juan", apellido: "Pérez", dni: "12345678", turno: "Mañana", promedio: 8.5 },
-  { nombre: "María", apellido: "Gómez", dni: "87654321", turno: "Tarde", promedio: 7.9 },
-]);
+const estudiantes = ref();
 
 // Estado modal estudiante
 const mostrarEdicionEstudiante = ref(false);
@@ -122,6 +111,16 @@ const cerrarEdicionEstudiante = () => {
   mostrarEdicionEstudiante.value = false;
   estudianteEditado.value = {};
   estudianteIndexEditado = null;
+};
+
+const clickCurso = (cursoSeleccionado) => {
+  courseStore.courseList.array.forEach(course => {
+    console.log(course.id, cursoSeleccionado.id);
+    if (course.id === cursoSeleccionado.id) {
+      console.log("Curso encontrado:", course);
+      estudiantes.value = course.students;
+    }
+  });
 };
 </script>
 
