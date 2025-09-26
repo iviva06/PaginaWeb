@@ -35,7 +35,7 @@
             <td>{{ estudiante.numSemester }}</td>
             <td>{{ estudiante.average }}</td>
             <td>
-              <button @click="editarEstudiante(index)">
+              <button @click="editarEstudiante(index, estudiante.id)">
                 <img src="../assets/editar-texto-_2_.ico" alt="" />
               </button>
             </td>
@@ -48,16 +48,16 @@
     <div v-if="mostrarEdicionEstudiante" class="modal">
       <div class="modal-content">
         <h3>Editar estudiante</h3>
-        <input v-model="estudianteEditado.nombre" placeholder="Nombre" class="input-modal" />
-        <input v-model="estudianteEditado.apellido" placeholder="Apellido" class="input-modal" />
-        <input v-model="estudianteEditado.dni" placeholder="DNI" class="input-modal" />
-        <input v-model="estudianteEditado.turno" placeholder="Turno" class="input-modal" />
+        <input v-model="courseStore.estudianteActualizado.name" placeholder="Nombre" class="input-modal" />
+        <input v-model="courseStore.estudianteActualizado.lastName" placeholder="Apellido" class="input-modal" />
+        <input v-model="courseStore.estudianteActualizado.dni" placeholder="DNI" class="input-modal" />
+        <input v-model="courseStore.estudianteActualizado.numSemester" placeholder="Semestre" class="input-modal" />
         <input
-          v-model="estudianteEditado.promedio"
           type="number"
           step="0.1"
           placeholder="Promedio"
           class="input-modal"
+          value="1"
         />
 
         <div class="modal-buttons">
@@ -86,37 +86,44 @@ const cursoSeleccionado = ref();
 // Abrir modal edición
 
 // Lista de estudiantes (mock de ejemplo)
-const estudiantes = ref();
-const countStudents = computed(() => estudiantes.value.length > 0 ? true : false);
+const estudiantes = ref([]);
+const countStudents = computed(() => Array.isArray(estudiantes.value) && estudiantes.value.length > 0);
 
 
 // Estado modal estudiante
 const mostrarEdicionEstudiante = ref(false);
 const estudianteEditado = ref({});
-let estudianteIndexEditado = null;
+// let estudianteIndexEditado = null;
 
 // Editar estudiante
-const editarEstudiante = (index) => {
-  estudianteEditado.value = { ...estudiantes.value[index] };
-  estudianteIndexEditado = index;
+const editarEstudiante = (index, id) => {
+  courseStore.estudianteActualizado.name = estudiantes.value[index].name;
+  courseStore.estudianteActualizado.lastName = estudiantes.value[index].lastName;
+  courseStore.estudianteActualizado.dni = estudiantes.value[index].dni;
+  courseStore.estudianteActualizado.numSemester = estudiantes.value[index].numSemester;
+  // estudianteIndexEditado = index;
   mostrarEdicionEstudiante.value = true;
+  courseStore.setIdEstudiante(id);
 };
 
 // Guardar cambios estudiante
-const guardarCambiosEstudiante = () => {
-  estudiantes.value[estudianteIndexEditado] = { ...estudianteEditado.value };
-  cerrarEdicionEstudiante();
+const guardarCambiosEstudiante = async () => {
+  await courseStore.updateStudent();
+  if(courseStore.isUpdated) {
+    cerrarEdicionEstudiante();
+  }
+  console.log();
 };
 
 // Cerrar modal estudiante
 const cerrarEdicionEstudiante = () => {
   mostrarEdicionEstudiante.value = false;
   estudianteEditado.value = {};
-  estudianteIndexEditado = null;
 };
 
 const clickCurso = (cursoSeleccionado) => {
-  courseStore.courseList.array.forEach(course => {
+  console.log(courseStore.courseList.length);
+  courseStore.courseList.forEach(course => {
     console.log(course.id, cursoSeleccionado.id);
     if (course.id === cursoSeleccionado.id) {
       if (course.students.length === 0) {
