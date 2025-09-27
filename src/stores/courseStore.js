@@ -1,7 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
-export const useCourseStore = defineStore("autenticacion", {
+export const useCourseStore = defineStore("course", {
   state: () => ({
     courseList: [],
     idEditStudent: String,
@@ -73,6 +73,27 @@ export const useCourseStore = defineStore("autenticacion", {
         console.error("Error al actualizar el estudiante:", error);
       }
     },
+    async deleteStudent(studentId){
+      try {
+        console.log("Intentando borrar estudiante con ID:", studentId);
+
+        const response = await axios.delete(
+          `http://34.176.250.35:8080/system/api/v1/students/${studentId}`,
+          { headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` } }
+        );
+
+        if (response.status === 200 || response.status === 204) {
+          console.log(`Estudiante con ID ${studentId} eliminado con éxito.`);
+          return true;
+        } else {
+          console.warn("Respuesta inesperada al eliminar:", response);
+          return false;
+        }
+      } catch (error) {
+        console.error("Error al eliminar el estudiante:", error.response || error);
+        return false;
+      }
+    }
   },
 });
 

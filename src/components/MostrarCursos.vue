@@ -9,7 +9,7 @@
   <main v-if="cursoSeleccionado">
     <div class="infoCurso">
       <div class="infoCursoText">
-        <h2>Curso: {{ cursoSeleccionado.nombre }}</h2>
+        <h2>Curso: {{ cursoSeleccionado.name }}</h2>
         <p>ID del curso: {{ cursoSeleccionado.id }}</p>
       </div>
     </div>
@@ -75,15 +75,7 @@ import { useCourseStore } from "@/stores/courseStore";
 
 const courseStore = useCourseStore();
 const cursos = computed(() => courseStore.courseList);
-
-
-
-// variable reactiva vinculada al <select>
 const cursoSeleccionado = ref();
-
-// Estado del modal
-
-// Abrir modal edición
 
 // Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref([]);
@@ -93,7 +85,7 @@ const countStudents = computed(() => Array.isArray(estudiantes.value) && estudia
 // Estado modal estudiante
 const mostrarEdicionEstudiante = ref(false);
 const estudianteEditado = ref({});
-// let estudianteIndexEditado = null;
+
 
 // Editar estudiante
 const editarEstudiante = (index, id) => {
@@ -101,7 +93,6 @@ const editarEstudiante = (index, id) => {
   courseStore.estudianteActualizado.lastName = estudiantes.value[index].lastName;
   courseStore.estudianteActualizado.dni = estudiantes.value[index].dni;
   courseStore.estudianteActualizado.numSemester = estudiantes.value[index].numSemester;
-  // estudianteIndexEditado = index;
   mostrarEdicionEstudiante.value = true;
   courseStore.setIdEstudiante(id);
 };

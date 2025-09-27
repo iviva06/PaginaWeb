@@ -1,15 +1,15 @@
 <template>
-  <select v-model="cursoSeleccionado">
+  <select v-model="cursoSeleccionado" @change="clickCurso(cursoSeleccionado)">
     <option disabled value="">Seleccioná un curso</option>
     <option v-for="curso in cursos" :key="curso.id" :value="curso">
-      {{ curso.nombre }}
+      {{ curso.name}}
     </option>
   </select>
 
   <main v-if="cursoSeleccionado">
     <div class="infoCurso">
       <div class="infoCursoText">
-        <h2>Curso: {{ cursoSeleccionado.nombre }}</h2>
+        <h2>Curso: {{ cursoSeleccionado.name }}</h2>
         <p>ID del curso: {{ cursoSeleccionado.id }}</p>
       </div>
       <div class="infoCursoButton">
@@ -39,23 +39,23 @@
             <th>Nombre</th>
             <th>Apellido</th>
             <th>DNI</th>
-            <th>Turno</th>
+            <th>Semestre</th>
             <th>Promedio</th>
             <th>Edición</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="countStudents">
           <tr v-for="(estudiante, index) in estudiantes" :key="index">
-            <td>{{ estudiante.nombre }}</td>
-            <td>{{ estudiante.apellido }}</td>
+            <td>{{ estudiante.name }}</td>
+            <td>{{ estudiante.lastName }}</td>
             <td>{{ estudiante.dni }}</td>
-            <td>{{ estudiante.turno }}</td>
-            <td>{{ estudiante.promedio }}</td>
+            <td>{{ estudiante.numSemester }}</td>
+            <td>{{ estudiante.average }}</td>
             <td>
-              <button @click="editarEstudiante(index)">
+              <button @click="editarEstudiante(index, estudiante.id)">
                 <img src="../assets/editar-texto-_2_.ico" alt="" />
               </button>
-              <button @click="eliminarEstudiante(index)">
+              <button @click="eliminarEstudiante(index, estudiante.id)">
                 <img src="../assets/eliminar.ico" alt="Eliminar" />
               </button>
             </td>
@@ -68,18 +68,17 @@
     <div v-if="mostrarEdicionEstudiante" class="modal">
       <div class="modal-content">
         <h3>Editar estudiante</h3>
-        <input v-model="estudianteEditado.nombre" placeholder="Nombre" class="input-modal" />
-        <input v-model="estudianteEditado.apellido" placeholder="Apellido" class="input-modal" />
-        <input v-model="estudianteEditado.dni" placeholder="DNI" class="input-modal" />
-        <input v-model="estudianteEditado.turno" placeholder="Turno" class="input-modal" />
+        <input v-model="courseStore.estudianteActualizado.name" placeholder="Nombre" class="input-modal" />
+        <input v-model="courseStore.estudianteActualizado.lastName" placeholder="Apellido" class="input-modal" />
+        <input v-model="courseStore.estudianteActualizado.dni" placeholder="DNI" class="input-modal" />
+        <input v-model="courseStore.estudianteActualizado.numSemester" placeholder="Semestre" class="input-modal" />
         <input
-          v-model="estudianteEditado.promedio"
           type="number"
           step="0.1"
           placeholder="Promedio"
           class="input-modal"
+          value="1"
         />
-
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
           <button class="cancelar" @click="cerrarEdicionEstudiante">❌ Cancelar</button>
@@ -90,21 +89,36 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref, onMounted } from "vue";
+import { useCourseStore } from "@/stores/courseStore";
 
-// Cursos mock (en el futuro pueden venir del backend)
-const cursos = ref([
-  { id: 1, nombre: "Programación" },
-  { id: 2, nombre: "Matemáticas" },
-  { id: 3, nombre: "Física" },
-]);
 
-// variable reactiva vinculada al <select>
-const cursoSeleccionado = ref("");
+const courseStore = useCourseStore();
+const cursos = computed(() => courseStore.courseList);
+const cursoSeleccionado = ref();
 
 // Estado del modal
 const mostrarEdicion = ref(false);
 const nombreEditado = ref("");
+
+const clickCurso = (cursoSeleccionado) => {
+  console.log(courseStore.courseList.length);
+  courseStore.courseList.forEach(course => {
+    console.log(course.id, cursoSeleccionado.id);
+    if (course.id === cursoSeleccionado.id) {
+      if (course.students.length === 0) {
+        console.log("El curso no tiene estudiantes asignados.");
+        estudiantes.value = [];
+      }
+      console.log("Curso encontrado:", course);
+      estudiantes.value = course.students;
+    }
+  });
+};
+
+onMounted(async () => {
+  await courseStore.fetchCourses();
+});
 
 // Abrir modal edición
 const abrirEdicion = () => {
@@ -115,35 +129,58 @@ const abrirEdicion = () => {
 };
 
 // Lista de estudiantes (mock de ejemplo)
-const estudiantes = ref([
-  { nombre: "Juan", apellido: "Pérez", dni: "12345678", turno: "Mañana", promedio: 8.5 },
-  { nombre: "María", apellido: "Gómez", dni: "87654321", turno: "Tarde", promedio: 7.9 },
-]);
+const estudiantes = ref([]);
+const countStudents = computed(() => Array.isArray(estudiantes.value) && estudiantes.value.length > 0);
 
 // Estado modal estudiante
 const mostrarEdicionEstudiante = ref(false);
 const estudianteEditado = ref({});
-let estudianteIndexEditado = null;
 
 // Editar estudiante
-const editarEstudiante = (index) => {
-  estudianteEditado.value = { ...estudiantes.value[index] };
-  estudianteIndexEditado = index;
+const editarEstudiante = (index, id) => {
+  courseStore.estudianteActualizado.name = estudiantes.value[index].name;
+  courseStore.estudianteActualizado.lastName = estudiantes.value[index].lastName;
+  courseStore.estudianteActualizado.dni = estudiantes.value[index].dni;
+  courseStore.estudianteActualizado.numSemester = estudiantes.value[index].numSemester;
   mostrarEdicionEstudiante.value = true;
+  courseStore.setIdEstudiante(id);
 };
 
+const eliminarEstudiante = async (index, id) => {
+  const estudiante = estudiantes.value[index];
+  if (
+    confirm(
+      `¿Seguro que deseas eliminar a ${estudiante.name} ${estudiante.lastName} (DNI: ${estudiante.dni})?`
+    )
+  ) {
+    const deleted = await courseStore.deleteStudent(id);
+
+    if (deleted) {
+      estudiantes.value.splice(index, 1);
+      alert("✅ Estudiante eliminado con éxito.");
+
+    } else {
+      alert("❌ Error al eliminar el estudiante.");
+    }
+  }
+}
+
 // Guardar cambios estudiante
-const guardarCambiosEstudiante = () => {
-  estudiantes.value[estudianteIndexEditado] = { ...estudianteEditado.value };
-  cerrarEdicionEstudiante();
+const guardarCambiosEstudiante = async () => {
+  await courseStore.updateStudent();
+  if(courseStore.isUpdated) {
+    cerrarEdicionEstudiante();
+  }
+  console.log();
 };
+
 
 // Cerrar modal estudiante
 const cerrarEdicionEstudiante = () => {
   mostrarEdicionEstudiante.value = false;
   estudianteEditado.value = {};
-  estudianteIndexEditado = null;
 };
+
 // Guardar cambios del curso!!
 const guardarCambios = () => {
   if (nombreEditado.value.trim() === "") {
@@ -162,16 +199,7 @@ const eliminarCurso = () => {
     cerrarEdicion();
   }
 };
-// Eliminar estudiante
-const eliminarEstudiante = (index) => {
-  if (
-    confirm(
-      "¿Seguro que deseas eliminar a ${estudiantes.value[index].nombre} ${estudiantes.value[index].apellido}?"
-    )
-  ) {
-    estudiantes.value.splice(index, 1);
-  }
-}; // Cerrar modal
+ // Cerrar modal
 const cerrarEdicion = () => {
   mostrarEdicion.value = false;
   nombreEditado.value = "";
