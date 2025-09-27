@@ -38,7 +38,7 @@
       <div class="curso">
         <label for="curso">Curso </label><br />
         <select v-model="cursoSeleccionado" id="curso" required @change="clickCurso(cursoSeleccionado)">
-          <option :value="0" disabled>Selecciona un curso</option>
+          <option :value="undefined" disabled>Selecciona un curso</option>
           <option v-for="curso in courseStore.courseList" :key="curso.id" :value="curso">
           {{ curso.name }}</option>
         </select>
@@ -71,7 +71,7 @@ import { useCourseStore } from "@/stores/courseStore";
 const studentStore = useStudentStore();
 const courseStore = useCourseStore();
 
-const cursoSeleccionado = ref();
+const cursoSeleccionado = ref(undefined);
 const clickCurso = (curso) => {
   studentStore.nuevoEstudiante.idCourse = curso.id;
 };
@@ -84,7 +84,8 @@ const guardarEstudiante = async () => {
   await studentStore.createStudent();
 
   if (studentStore.isCreated) {
-    alert("✅ Estudiante creado con éxito");
+    mostrarPopup.value = true;
+    studentStore.isCreated = false;
   }
 };
 
