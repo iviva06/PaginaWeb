@@ -5,6 +5,7 @@
       <div class="nombre">
         <label for="nombre">Nombre </label><br />
         <input
+          v-model="studentStore.nuevoEstudiante.name"
           type="text"
           placeholder="Nombre del estudiante"
           id="nombre"
@@ -15,6 +16,7 @@
       <div class="apellido">
         <label for="apellido">Apellido </label><br />
         <input
+          v-model="studentStore.nuevoEstudiante.lastName"
           type="text"
           placeholder="Apellido del estudiante"
           id="apellido"
@@ -24,19 +26,26 @@
       </div>
       <div class="dni">
         <label for="dni">DNI </label><br />
-        <input type="text" placeholder="DNI del estudiante" id="dni" name="DNI" required /><br />
+        <input
+          v-model="studentStore.nuevoEstudiante.dni"
+          type="text"
+          placeholder="DNI del estudiante"
+          id="dni"
+          name="DNI"
+          required
+        /><br />
       </div>
       <div class="curso">
         <label for="curso">Curso </label><br />
-        <select>
-          <option>Programación</option>
-          <option>Matemáticas</option>
-          <option>Física</option>
+        <select v-model="cursoSeleccionado" id="curso" required @change="clickCurso(cursoSeleccionado)">
+          <option :value="0" disabled>Selecciona un curso</option>
+          <option v-for="curso in courseStore.courseList" :key="curso.id" :value="curso">
+          {{ curso.name }}</option>
         </select>
       </div>
     </form>
-    <div class="saveButton">
-      <button type="button" @click="guardar">Guardar</button>
+    <div class="saveButton" @click="guardarEstudiante">
+      <button type="button">Guardar</button>
     </div>
     <div v-if="mostrarPopup" class="modal" @click.self="cerrarPopup">
       <div class="modal-content">
@@ -54,22 +63,33 @@
 
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useStudentStore } from "@/stores/studentStore";
+import { useCourseStore } from "@/stores/courseStore";
 
+
+const studentStore = useStudentStore();
+const courseStore = useCourseStore();
+
+const cursoSeleccionado = ref();
+const clickCurso = (curso) => {
+  studentStore.nuevoEstudiante.idCourse = curso.id;
+};
+
+onMounted(async () => {
+  await courseStore.fetchCourses()
+})
+
+const guardarEstudiante = async () => {
+  await studentStore.createStudent();
+
+  if (studentStore.isCreated) {
+    alert("✅ Estudiante creado con éxito");
+  }
+};
 
 const mostrarPopup = ref(false);
 
-
-function guardar() {
-  //  lógica real de guardado (API)
-  mostrarPopup.value = true;
-  /*
-  // autocerrar después de 2 segundos
-  setTimeout(() => {
-    mostrarPopup.value = false;
-  }, 2000);
-  */
-}
 
 
 function cerrarPopup() {

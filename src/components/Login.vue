@@ -20,7 +20,7 @@
       </div>
 
       <div class="buttons">
-        <button class="btn" type="submit">Login</button>
+        <button class="btn" type="submit" @click="login">Login</button>
         <router-link to="register"><button>Registrarse</button> </router-link>
       </div>
     </form>
@@ -32,15 +32,19 @@
 import { useAutenticacionStore } from '@/stores/autenticacionStore';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
+
 const autenticacionStore = useAutenticacionStore();
 const { usuario, password } = storeToRefs(autenticacionStore);
 const router = useRouter();
-const login = () => {
-  autenticacionStore.iniciarSesion()
+
+const login = async () => {
+  await autenticacionStore.iniciarSesion();   
   if (autenticacionStore.autenticacion) {
     console.log("Antes del router");
-    router.push({ name: 'HomePrincipal'});
+    router.push({ name: 'HomePrincipal' });
     console.log("Login exitoso");
+  } else {
+    alert("Usuario o contraseña incorrectos");
   }
 };
 </script>
