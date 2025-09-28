@@ -13,7 +13,7 @@
         <p>ID del curso: {{ cursoSeleccionado.id }}</p>
       </div>
       <div class="infoCursoButton">
-        <button @click="abrirEdicion">Editar curso</button>
+        <button @click="abrirEdicionCurso(cursoSeleccionado)">Editar Curso</button>
       </div>
     </div>
 
@@ -21,11 +21,11 @@
     <div v-if="mostrarEdicion" class="modal">
       <div class="modal-content">
         <h3>Editar curso</h3>
-        <input v-model="nombreEditado" placeholder="Nuevo nombre del curso" class="input-modal" />
+        <input v-model="nombreEditado" placeholder="Nombre" />
 
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambios">✅ Guardar cambios</button>
-          <button class="eliminar" @click="eliminarCurso">🗑 Eliminar curso</button>
+          <button class="eliminar" @click="eliminarCurso()">🗑 Eliminar curso</button>
           <button class="cancelar" @click="cerrarEdicion">❌ Cancelar</button>
         </div>
       </div>
@@ -120,14 +120,6 @@ onMounted(async () => {
   await courseStore.fetchCourses();
 });
 
-// Abrir modal edición
-const abrirEdicion = () => {
-  if (cursoSeleccionado.value) {
-    nombreEditado.value = cursoSeleccionado.value.nombre;
-    mostrarEdicion.value = true;
-  }
-};
-
 // Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref([]);
 const countStudents = computed(() => Array.isArray(estudiantes.value) && estudiantes.value.length > 0);
@@ -146,24 +138,11 @@ const editarEstudiante = (index, id) => {
   courseStore.setIdEstudiante(id);
 };
 
-const eliminarEstudiante = async (index, id) => {
-  const estudiante = estudiantes.value[index];
-  if (
-    confirm(
-      `¿Seguro que deseas eliminar a ${estudiante.name} ${estudiante.lastName} (DNI: ${estudiante.dni})?`
-    )
-  ) {
-    const deleted = await courseStore.deleteStudent(id);
-
-    if (deleted) {
-      estudiantes.value.splice(index, 1);
-      alert("✅ Estudiante eliminado con éxito.");
-
-    } else {
-      alert("❌ Error al eliminar el estudiante.");
-    }
-  }
-}
+const abrirEdicionCurso = (curso) => {
+  courseStore.setCursoAEditar(curso);
+  nombreEditado.value = curso.name; // <--- Carga el nombre actual del curso en el input del modal
+  mostrarEdicion.value = true; // <--- Abre el modal
+};
 
 // Guardar cambios estudiante
 const guardarCambiosEstudiante = async () => {
@@ -182,28 +161,69 @@ const cerrarEdicionEstudiante = () => {
 };
 
 // Guardar cambios del curso!!
-const guardarCambios = () => {
+const guardarCambios = async () => {
   if (nombreEditado.value.trim() === "") {
     alert("El nombre no puede estar vacío.");
     return;
   }
-  cursoSeleccionado.value.nombre = nombreEditado.value;
-  cerrarEdicion();
+
+  courseStore.cursoActualizado.name = nombreEditado.value;
+
+  const success = await courseStore.updateCourse();
+
+  if (success) {
+
+    cursoSeleccionado.value.name = nombreEditado.value;
+    cerrarEdicion();
+  } else {
+    alert("Hubo un error al guardar los cambios del curso.");
+  }
 };
 
 // Eliminar curso con confirmación
-const eliminarCurso = () => {
-  if (confirm("¿Seguro que deseas eliminar el curso ${cursoSeleccionado.value.nombre}?")) {
-    cursos.value = cursos.value.filter((c) => c.id !== cursoSeleccionado.value.id);
-    cursoSeleccionado.value = null;
-    cerrarEdicion();
+const eliminarCurso = async (id) => {
+  if (confirm(`¿Seguro que deseas eliminar el curso con ID ${id}?`)) {
+    try {
+      await courseStore.deleteCourse(id);
+      alert("Curso eliminado correctamente");
+    } catch (error) {
+      alert("Ocurrió un error al eliminar el curso", error);
+    }
   }
 };
  // Cerrar modal
 const cerrarEdicion = () => {
   mostrarEdicion.value = false;
   nombreEditado.value = "";
+  courseStore.cursoActualizado.id = null;
 };
+
+
+const successMessage = ref('');
+const errorMessage = ref('');
+
+const eliminarEstudiante = async (index, id) => {
+    successMessage.value = '';
+    errorMessage.value = '';
+
+    if (!confirm(`¿Estás seguro de que quieres eliminar el estudiante con ID ${id}?`)) {
+        return;
+    }
+    await courseStore.deleteStudent(id);
+
+    // try {
+    //   console.log("Prueba")
+    //   await courseStore.deleteStudent(id);
+
+    //   estudiantes.value.splice(index, 1);
+
+    //   successMessage.value = `Estudiante ID ${id} eliminado correctamente.`;
+    // } catch (error) {
+    //     console.error("Error al eliminar el estudiante desde el componente:", error);
+    //     errorMessage.value = `No se pudo eliminar el estudiante ID ${id}. Revisa los detalles en la consola.`;
+    // }
+};
+
 </script>
 
 <style>
