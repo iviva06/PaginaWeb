@@ -53,22 +53,6 @@ export const useCourseStore = defineStore("course", {
       }
     },
 
-    async addCourse(nameCourse, courseShift) {
-      try {
-        const response = await axios.post('http://34.176.250.35:8080/system/api/v1/courses',
-          {name: nameCourse, Shift: courseShift},
-          { headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` } }
-        );
-        const data = response.data;
-        if (data) {
-          console.log("Curso agregado:", data);
-          this.courseList.push(data);
-        }
-      } catch (error) {
-        console.error("Error al agregar el curso:", error);
-      }
-    },
-
     async updateStudent() {
       try {
         const response = await axios.patch(`http://34.176.250.35:8080/system/api/v1/students/${this.idEditStudent}`,
@@ -155,6 +139,32 @@ export const useCourseStore = defineStore("course", {
         return false;
       }
     },
+
+    async addCourse(name, shift) {
+      const token = sessionStorage.getItem('token');
+
+      try {
+        const { data } = await axios.post(
+          'http://34.176.250.35:8080/system/api/v1/courses',
+          { name, shift },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (data && data.id) {
+          this.courseList.push(data);
+          return data;
+        }
+        throw new Error('El servidor no devolvió el curso creado');
+      } catch (error) {
+        console.error('Error al crear el curso:', error.response?.data || error.message);
+        throw error;
+      }
+    }
 
   }
 });

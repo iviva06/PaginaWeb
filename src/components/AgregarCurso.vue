@@ -1,13 +1,7 @@
-
-
 <template>
   <main>
     <h1>Agregar un nuevo curso</h1>
-    <form>
-      <div class="ID">
-        <label for="ID">ID </label><br />
-        <input type="text" placeholder="Ingrese el ID del curso" id="ID" name="ID" required /><br />
-      </div>
+    <form @submit.prevent="crearCurso">
       <div class="nombre">
         <label for="nombre">Nombre del curso </label><br />
         <input
@@ -15,17 +9,37 @@
           placeholder="Ingrese el nombre del curso"
           id="nombre"
           name="nombre"
+          v-model="name"
           required
         /><br />
       </div>
+
+      <div class="turno">
+        <label for="turno">Turno </label><br />
+        <select id="turno" name="turno" v-model="shift" required>
+          <option value="" disabled>Seleccione el turno</option>
+          <option value="MORNING">Mañana</option>
+          <option value="AFTERNOON">Tarde</option>
+          <option value="EVENING">Noche</option>
+        </select>
+        <br />
+      </div>
     </form>
     <div class="saveButton">
-      <button type="button" @click="guardar">Guardar</button>
+      <button type="button" @click="crearCurso">Crear Curso</button>
     </div>
+
     <div v-if="mostrarPopup" class="modal" @click.self="cerrarPopup">
       <div class="modal-content">
         <p>✅ El Curso se guardó correctamente</p>
         <button @click="cerrarPopup">Aceptar</button>
+      </div>
+    </div>
+
+    <div v-if="mostrarPopupError" class="modal" @click.self="cerrarPopupError">
+      <div class="modal-content error-content">
+        <p>❌ Error al guardar el curso. Inténtelo de nuevo.</p>
+        <button @click="cerrarPopupError">Aceptar</button>
       </div>
     </div>
   </main>
@@ -38,25 +52,46 @@
 
 <script setup>
 import { ref } from "vue";
-
+import { useCourseStore } from "@/stores/courseStore";
 
 const mostrarPopup = ref(false);
+const mostrarPopupError = ref(false);
+const courseStore = useCourseStore();
+
+const name = ref("");
+const shift = ref("");
+const isLoading = ref(false);
 
 
-function guardar() {
-  //  lógica real de guardado (API)
-  mostrarPopup.value = true;
-  /*
-  // autocerrar después de 2 segundos
-  setTimeout(() => {
-    mostrarPopup.value = false;
-  }, 2000);
-  */
-}
-
-function cerrarPopup() {
+const crearCurso = async () => {
+  if (isLoading.value) return; // Evitar múltiples envíos
+  isLoading.value = true;
   mostrarPopup.value = false;
-}
+  mostrarPopupError.value = false;
+
+  try {
+    await courseStore.addCourse(name.value, shift.value);
+
+    mostrarPopup.value = true;
+    name.value = "";
+    shift.value = "";
+
+  } catch (error) {
+    console.error("Error al crear el curso en el componente:", error);
+    mostrarPopupError.value = true;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+
+const cerrarPopup = () => {
+  mostrarPopup.value = false;
+};
+
+const cerrarPopupError = () => {
+  mostrarPopupError.value = false;
+};
 </script>
 
 <style scoped>
@@ -80,6 +115,15 @@ main {
   margin-bottom: 200px;
   line-height: 50px;
 }
+
+select {
+  padding: 10px;
+  font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
 .saveButton button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
