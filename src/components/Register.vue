@@ -10,13 +10,7 @@
     <form>
       <div class="name">
         <label for="name">Name: </label>
-        <input type="text" placeholder="Ingrese su nombre" id="name" name="name" required /><br />
-      </div>
-
-
-      <div class="user">
-        <label for="user">Username: </label>
-        <input type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
+        <input type="text" v-model="name" placeholder="Ingrese su nombre" id="name" name="name" required /><br />
       </div>
 
 
@@ -28,8 +22,14 @@
           max="99999999"
           id="dni"
           name="dni"
+          v-model="dni"
           required
         /><br />
+      </div>
+
+      <div class="email">
+        <label for="email">Email: </label>
+        <input type="email" v-model="email" placeholder="Ingrese su email" id="email" name="email" required /><br />
       </div>
 
 
@@ -40,6 +40,7 @@
           placeholder="Ingrese su contraseña"
           id="password"
           name="password"
+          v-model="password"
           required
         /><br />
       </div>
@@ -52,15 +53,15 @@
           placeholder="Ingrese el código de acceso"
           id="accessID"
           name="accessID"
+          v-model="accessID"
           required
         /><br />
-        <!-- Chequear si código es text o number --->
       </div>
 
 
       <div class="buttons">
         <router-link to="/">
-          <button type="submit">Registrarse</button>
+          <button type="button">Registrarse</button>
         </router-link>
 
         <router-link to="/">
@@ -73,10 +74,54 @@
 
 
 <script>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAutenticacionStore } from "@/stores/autenticacionStore";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Login",
-  // You can add data, methods, and other component options here
+  name: "Register",
+  setup() {
+    const name = ref("");
+    const email = ref("");
+    const password = ref("");
+    const dni = ref("");
+    const accessCode = ref("");
+
+    const authStore = useAutenticacionStore();
+    const router = useRouter();
+
+    const handleRegister = async () => {
+
+      const userData = {
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        dni: Number(dni.value),
+        accessCode: Number(accessCode.value)
+      };
+
+      try {
+        const response = await authStore.registrarUsuario(userData);
+        console.log("Usuario registrado:", response);
+
+        alert("Registro exitoso");
+        router.push("/");
+      } catch (error) {
+        console.error("Error al registrar:", error);
+        alert("Hubo un error al registrarse. Revisa la consola para más detalles.");
+      }
+    };
+
+    return {
+      name,
+      email,
+      password,
+      dni,
+      accessCode,
+      handleRegister,
+    };
+  },
 };
 </script>
 
