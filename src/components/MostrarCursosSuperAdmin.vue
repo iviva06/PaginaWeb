@@ -25,7 +25,7 @@
 
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambios">✅ Guardar cambios</button>
-          <button class="eliminar" @click="eliminarCurso()">🗑 Eliminar curso</button>
+          <button class="eliminar" @click="eliminarCurso">🗑 Eliminar curso</button>
           <button class="cancelar" @click="cerrarEdicion">❌ Cancelar</button>
         </div>
       </div>
@@ -180,17 +180,7 @@ const guardarCambios = async () => {
   }
 };
 
-// Eliminar curso con confirmación
-const eliminarCurso = async (id) => {
-  if (confirm(`¿Seguro que deseas eliminar el curso con ID ${id}?`)) {
-    try {
-      await courseStore.deleteCourse(id);
-      alert("Curso eliminado correctamente");
-    } catch (error) {
-      alert("Ocurrió un error al eliminar el curso", error);
-    }
-  }
-};
+
  // Cerrar modal
 const cerrarEdicion = () => {
   mostrarEdicion.value = false;
@@ -201,6 +191,24 @@ const cerrarEdicion = () => {
 
 const successMessage = ref('');
 const errorMessage = ref('');
+
+const eliminarCurso = async () => {
+    if (!confirm(`¿Estás seguro de que quieres eliminar el curso: ${courseStore.cursoActualizado.name} (ID: ${courseStore.cursoActualizado.id})? Esta acción es irreversible.`)) {
+        return;
+    }
+
+    const idAEliminar = courseStore.cursoActualizado.id;
+    const success = await courseStore.deleteCourse(idAEliminar);
+
+    if (success) {
+        alert(`✅ Curso ID ${idAEliminar} eliminado correctamente.`);
+
+        cursoSeleccionado.value = null;
+        cerrarEdicion();
+    } else {
+        alert("❌ Hubo un error al eliminar el curso. Revisa la consola para más detalles.");
+    }
+};
 
 const eliminarEstudiante = async (index, id) => {
     successMessage.value = '';

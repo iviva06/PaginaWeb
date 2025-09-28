@@ -138,26 +138,24 @@ export const useCourseStore = defineStore("course", {
     async deleteCourse(id) {
       const token = sessionStorage.getItem('token');
       try {
-        const response = await axios.delete(
-          `http://34.176.250.35:8080/system/api/v1/courses/${id}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          }
+        const url = `http://34.176.250.35:8080/system/api/v1/courses/${id}`;
+        const response = await axios.delete(url,
+          { headers: { 'Authorization': `Bearer ${token}` } }
         );
 
         if (response.status === 200 || response.status === 204) {
-          this.courseList = this.courseList.filter(curso => curso.id !== id);
-          console.log(`Curso con ID ${id} eliminado exitosamente.`);
+          this.courseList = this.courseList.filter(course => course.id !== id);
           return true;
+        } else {
+          console.error("Respuesta inesperada al eliminar el curso:", response);
+          return false;
         }
-
       } catch (error) {
         console.error("Error al eliminar el curso:", error);
-        throw error;
+        return false;
       }
     },
+
   }
 });
 
