@@ -23,11 +23,24 @@
 
 <script setup>
 import { useCourseStore } from '@/stores/courseStore';
+import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 defineProps({ open: { type: Boolean, default: false } });
 const courseStore = useCourseStore();
 const clickCurso = async () => {
   await courseStore.fetchCourses()
+  const token = sessionStorage.getItem(`token`)
+  const decoded = jwtDecode(token);
+  console.log("Rol: " + decoded.role[0])
+  if(decoded.role[0] === "ROLE_SUPER_ADMIN"){
+    router.push("/app/mostrarcursosSuperAdmin")
+  }
+  else if(decoded.role[0] === "ROLE_ADMIN"){
+    router.push("/app/mostrarcursos")
+  }
 };
 
 defineEmits(["close"]);

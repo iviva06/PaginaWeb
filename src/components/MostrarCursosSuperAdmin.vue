@@ -55,7 +55,7 @@
               <button @click="editarEstudiante(index, estudiante.id)">
                 <img src="../assets/editar-texto-_2_.ico" alt="" />
               </button>
-              <button @click="eliminarEstudiante(index, estudiante.id)">
+              <button @click="eliminarEstudiante(index, estudiante.dni)">
                 <img src="../assets/eliminar.ico" alt="Eliminar" />
               </button>
             </td>
@@ -210,26 +210,34 @@ const eliminarCurso = async () => {
     }
 };
 
-const eliminarEstudiante = async (index, id) => {
+const eliminarEstudiante = async (index, studentDni) => {
     successMessage.value = '';
     errorMessage.value = '';
 
-    if (!confirm(`¿Estás seguro de que quieres eliminar el estudiante con ID ${id}?`)) {
+    if (!cursoSeleccionado.value || !cursoSeleccionado.value.id) {
+        errorMessage.value = "No se ha seleccionado un curso o el curso no tiene un ID válido.";
+        alert("❌ Error: " + errorMessage.value);
         return;
     }
-    await courseStore.deleteStudent(id);
 
-    // try {
-    //   console.log("Prueba")
-    //   await courseStore.deleteStudent(id);
+    if (!confirm(`¿Estás seguro de que quieres eliminar el estudiante con DNI ${studentDni} del curso ${cursoSeleccionado.value.name}?`)) {
+        return;
+    }
 
-    //   estudiantes.value.splice(index, 1);
+    const courseId = cursoSeleccionado.value.id;
 
-    //   successMessage.value = `Estudiante ID ${id} eliminado correctamente.`;
-    // } catch (error) {
-    //     console.error("Error al eliminar el estudiante desde el componente:", error);
-    //     errorMessage.value = `No se pudo eliminar el estudiante ID ${id}. Revisa los detalles en la consola.`;
-    // }
+    try {
+      const success = await courseStore.deleteStudent(studentDni, courseId);
+
+      if (success) {
+        estudiantes.value.splice(index, 1);
+        successMessage.value = `Estudiante DNI ${studentDni} eliminado correctamente del curso ${courseId}.`;
+        alert(`✅ ${successMessage.value}`);
+      }
+    } catch {
+      errorMessage.value = `No se pudo eliminar el estudiante DNI ${studentDni}.`;
+      alert("❌ Error: " + errorMessage.value);
+    }
 };
 
 </script>

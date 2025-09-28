@@ -1,6 +1,9 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
+
+
+
 export const useCourseStore = defineStore("course", {
   state: () => ({
     courseList: [],
@@ -45,7 +48,6 @@ export const useCourseStore = defineStore("course", {
         const data = response.data;
         if (data) {
           this.courseList = data;
-          console.log(this.courseList);
         }
 
       } catch (error) {
@@ -74,22 +76,6 @@ export const useCourseStore = defineStore("course", {
         }
       } catch (error) {
         console.error("Error al actualizar el estudiante:", error);
-      }
-    },
-
-    async deleteStudent(id) {
-      const token = sessionStorage.getItem('token')
-      console.log(token)
-      try {
-        const response = await axios.delete(`http://34.176.250.35:8080/system/api/v1/studnet/${id}`,
-        { headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` } }
-        )
-        const data = response.data;
-        if(data) {
-          console.log("data: " + data)
-        }
-      } catch(error) {
-        console.log("Error eliminando estudiante", error);
       }
     },
 
@@ -164,7 +150,29 @@ export const useCourseStore = defineStore("course", {
         console.error('Error al crear el curso:', error.response?.data || error.message);
         throw error;
       }
-    }
+    },
+
+    async deleteStudent(studentDni, courseId) {
+      const token = sessionStorage.getItem('token')
+      console.log(token)
+      try {
+        const response = await axios.delete(`http://34.176.250.35:8080/system/api/v1/courses/${courseId}/students/${studentDni}`,
+        {
+          headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` },
+        }
+        )
+        if (response.status === 200 || response.status === 204) {
+          const curso = this.courseList.find(c => c.id === courseId);
+          if (curso) {
+            curso.students = curso.students.filter(s => s.dni !== studentDni);
+          }
+          return true;
+        }
+      } catch(error) {
+        console.error("Error eliminando estudiante:", error.response?.data || error.message);
+        throw error;
+      }
+    },
 
   }
 });

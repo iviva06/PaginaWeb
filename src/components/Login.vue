@@ -37,10 +37,10 @@ const autenticacionStore = useAutenticacionStore();
 const { usuario, password } = storeToRefs(autenticacionStore);
 const router = useRouter();
 
+
 const login = async () => {
-  await autenticacionStore.iniciarSesion();   
+  await autenticacionStore.iniciarSesion();
   if (autenticacionStore.autenticacion) {
-    console.log("Antes del router");
     router.push({ name: 'HomePrincipal' });
     console.log("Login exitoso");
   } else {
