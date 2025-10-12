@@ -125,7 +125,7 @@ const generarCodigo = async () => {
   }
 
   try {
-    const response = await fetch('http://localhost:8080/system/api/v1/access-code', {
+    const response = await fetch('http://34.176.250.35:8080/system/api/v1/access-code', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -144,6 +144,7 @@ const generarCodigo = async () => {
   } catch {
     mensajeError.value = '❌ Error al generar o enviar el código. Inténtelo nuevamente.'
     mostrarPopupError.value = true
+    console.log(decoded)
   }
 }
 

@@ -2,7 +2,7 @@
   <select v-model="cursoSeleccionado" @change="clickCurso(cursoSeleccionado)">
     <option disabled value="">Seleccioná un curso</option>
     <option v-for="curso in cursos" :key="curso.id" :value="curso">
-      {{ curso.name}}
+      {{ curso.name }}
     </option>
   </select>
 
@@ -68,17 +68,59 @@
     <div v-if="mostrarEdicionEstudiante" class="modal">
       <div class="modal-content">
         <h3>Editar estudiante</h3>
-        <input v-model="courseStore.estudianteActualizado.name" placeholder="Nombre" class="input-modal" />
-        <input v-model="courseStore.estudianteActualizado.lastName" placeholder="Apellido" class="input-modal" />
-        <input v-model="courseStore.estudianteActualizado.dni" placeholder="DNI" class="input-modal" />
-        <input v-model="courseStore.estudianteActualizado.numSemester" placeholder="Semestre" class="input-modal" />
-        <input
-          type="number"
-          step="0.1"
-          placeholder="Promedio"
-          class="input-modal"
-          value="1"
-        />
+
+        <div class="input-group">
+          <label for="name">Nombre</label>
+          <input
+            id="name"
+            v-model="courseStore.estudianteActualizado.name"
+            placeholder="Nombre"
+            class="input-modal"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="lastName">Apellido</label>
+          <input
+            id="lastName"
+            v-model="courseStore.estudianteActualizado.lastName"
+            placeholder="Apellido"
+            class="input-modal"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="dni">DNI</label>
+          <input
+            id="dni"
+            v-model="courseStore.estudianteActualizado.dni"
+            placeholder="DNI"
+            class="input-modal"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="numSemester">Semestre</label>
+          <input
+            id="numSemester"
+            v-model="courseStore.estudianteActualizado.numSemester"
+            placeholder="Semestre"
+            class="input-modal"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="promedio">Promedio</label>
+          <input
+            id="promedio"
+            type="number"
+            step="0.1"
+            placeholder="Promedio"
+            class="input-modal"
+            value="1"
+          />
+        </div>
+
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
           <button class="cancelar" @click="cerrarEdicionEstudiante">❌ Cancelar</button>
@@ -92,7 +134,6 @@
 import { computed, ref, onMounted } from "vue";
 import { useCourseStore } from "@/stores/courseStore";
 
-
 const courseStore = useCourseStore();
 const cursos = computed(() => courseStore.courseList);
 const cursoSeleccionado = ref();
@@ -103,7 +144,7 @@ const nombreEditado = ref("");
 
 const clickCurso = (cursoSeleccionado) => {
   console.log(courseStore.courseList.length);
-  courseStore.courseList.forEach(course => {
+  courseStore.courseList.forEach((course) => {
     console.log(course.id, cursoSeleccionado.id);
     if (course.id === cursoSeleccionado.id) {
       if (course.students.length === 0) {
@@ -122,7 +163,9 @@ onMounted(async () => {
 
 // Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref([]);
-const countStudents = computed(() => Array.isArray(estudiantes.value) && estudiantes.value.length > 0);
+const countStudents = computed(
+  () => Array.isArray(estudiantes.value) && estudiantes.value.length > 0
+);
 
 // Estado modal estudiante
 const mostrarEdicionEstudiante = ref(false);
@@ -147,12 +190,11 @@ const abrirEdicionCurso = (curso) => {
 // Guardar cambios estudiante
 const guardarCambiosEstudiante = async () => {
   await courseStore.updateStudent();
-  if(courseStore.isUpdated) {
+  if (courseStore.isUpdated) {
     cerrarEdicionEstudiante();
   }
   console.log();
 };
-
 
 // Cerrar modal estudiante
 const cerrarEdicionEstudiante = () => {
@@ -172,7 +214,6 @@ const guardarCambios = async () => {
   const success = await courseStore.updateCourse();
 
   if (success) {
-
     cursoSeleccionado.value.name = nombreEditado.value;
     cerrarEdicion();
   } else {
@@ -180,66 +221,71 @@ const guardarCambios = async () => {
   }
 };
 
-
- // Cerrar modal
+// Cerrar modal
 const cerrarEdicion = () => {
   mostrarEdicion.value = false;
   nombreEditado.value = "";
   courseStore.cursoActualizado.id = null;
 };
 
-
-const successMessage = ref('');
-const errorMessage = ref('');
+const successMessage = ref("");
+const errorMessage = ref("");
 
 const eliminarCurso = async () => {
-    if (!confirm(`¿Estás seguro de que quieres eliminar el curso: ${courseStore.cursoActualizado.name} (ID: ${courseStore.cursoActualizado.id})? Esta acción es irreversible.`)) {
-        return;
-    }
+  if (
+    !confirm(
+      `¿Estás seguro de que quieres eliminar el curso: ${courseStore.cursoActualizado.name} (ID: ${courseStore.cursoActualizado.id})? Esta acción es irreversible.`
+    )
+  ) {
+    return;
+  }
 
-    const idAEliminar = courseStore.cursoActualizado.id;
-    const success = await courseStore.deleteCourse(idAEliminar);
+  const idAEliminar = courseStore.cursoActualizado.id;
+  const success = await courseStore.deleteCourse(idAEliminar);
 
-    if (success) {
-        alert(`✅ Curso ID ${idAEliminar} eliminado correctamente.`);
+  if (success) {
+    alert(`✅ Curso ID ${idAEliminar} eliminado correctamente.`);
 
-        cursoSeleccionado.value = null;
-        cerrarEdicion();
-    } else {
-        alert("❌ Hubo un error al eliminar el curso. Revisa la consola para más detalles.");
-    }
+    cursoSeleccionado.value = null;
+    cerrarEdicion();
+  } else {
+    alert("❌ Hubo un error al eliminar el curso. Revisa la consola para más detalles.");
+  }
 };
 
 const eliminarEstudiante = async (index, studentDni) => {
-    successMessage.value = '';
-    errorMessage.value = '';
+  successMessage.value = "";
+  errorMessage.value = "";
 
-    if (!cursoSeleccionado.value || !cursoSeleccionado.value.id) {
-        errorMessage.value = "No se ha seleccionado un curso o el curso no tiene un ID válido.";
-        alert("❌ Error: " + errorMessage.value);
-        return;
+  if (!cursoSeleccionado.value || !cursoSeleccionado.value.id) {
+    errorMessage.value = "No se ha seleccionado un curso o el curso no tiene un ID válido.";
+    alert("❌ Error: " + errorMessage.value);
+    return;
+  }
+
+  if (
+    !confirm(
+      `¿Estás seguro de que quieres eliminar el estudiante con DNI ${studentDni} del curso ${cursoSeleccionado.value.name}?`
+    )
+  ) {
+    return;
+  }
+
+  const courseId = cursoSeleccionado.value.id;
+
+  try {
+    const success = await courseStore.deleteStudent(studentDni, courseId);
+
+    if (success) {
+      estudiantes.value.splice(index, 1);
+      successMessage.value = `Estudiante DNI ${studentDni} eliminado correctamente del curso ${courseId}.`;
+      alert(`✅ ${successMessage.value}`);
     }
-
-    if (!confirm(`¿Estás seguro de que quieres eliminar el estudiante con DNI ${studentDni} del curso ${cursoSeleccionado.value.name}?`)) {
-        return;
-    }
-
-    const courseId = cursoSeleccionado.value.id;
-
-    try {
-      const success = await courseStore.deleteStudent(studentDni, courseId);
-
-      if (success) {
-        estudiantes.value.splice(index, 1);
-        successMessage.value = `Estudiante DNI ${studentDni} eliminado correctamente del curso ${courseId}.`;
-        alert(`✅ ${successMessage.value}`);
-      }
-    } catch {
-      errorMessage.value = `No se pudo eliminar el estudiante DNI ${studentDni}.`;
-      alert("❌ Error: " + errorMessage.value);
-    }
+  } catch {
+    errorMessage.value = `No se pudo eliminar el estudiante DNI ${studentDni}.`;
+    alert("❌ Error: " + errorMessage.value);
+  }
 };
-
 </script>
 
 <style>
@@ -482,6 +528,19 @@ select {
 .modal-buttons .cancelar {
   background: #d9534f;
   color: white;
+  font-family: "Questrial", sans-serif;
+}
+.input-group label {
+  font-weight: 200;
+  font-size: medium;
+  margin-right: 1rem;
+  font-family: "Questrial", sans-serif;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   font-family: "Questrial", sans-serif;
 }
 </style>
