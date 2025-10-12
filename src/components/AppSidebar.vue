@@ -17,14 +17,47 @@
       <router-link @click="clickCurso" to="/app/mostrarcursos" class="botonesNav">
         <button class="SidebarButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
       </router-link>
+      <router-link  class="botonesNav">
+        <button  @click="abrirPopup" class="SidebarButton"><i class='bx  bx-qr'  ></i> Generar código de acceso</button>
+      </router-link>
     </nav>
   </aside>
+
+    <!-- Popup para ingresar mail -->
+  <div v-if="mostrarPopup" class="modal" @click.self="cerrarPopup">
+    <div class="modal-content">
+      <p>📧 Escriba el mail al cual quiere que le llegue el código generado:</p>
+      <input type="email" v-model="emailDestino" placeholder="Ingrese el correo" />
+      <div class="botones">
+        <button @click="generarCodigo">Enviar</button>
+        <button @click="cerrarPopup">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de éxito -->
+  <div v-if="mostrarPopupExito" class="modal" @click.self="cerrarPopupExito">
+    <div class="modal-content success-content">
+      <p>{{ mensajeExito }}</p>
+      <button @click="cerrarPopupExito">Aceptar</button>
+    </div>
+  </div>
+
+  <!-- Popup de error -->
+  <div v-if="mostrarPopupError" class="modal" @click.self="cerrarPopupError">
+    <div class="modal-content error-content">
+      <p>{{ mensajeError }}</p>
+      <button @click="cerrarPopupError">Aceptar</button>
+    </div>
+  </div>
+
 </template>
 
 <script setup>
 import { useCourseStore } from '@/stores/courseStore';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'vue-router';
+import {ref} from 'vue';
 
 const router = useRouter();
 
@@ -42,6 +75,78 @@ const clickCurso = async () => {
     router.push("/app/mostrarcursos")
   }
 };
+
+
+const mostrarPopup = ref(false)
+const mostrarPopupError = ref(false)
+const mostrarPopupExito = ref(false)
+const emailDestino = ref('')
+const mensajeError = ref('')
+const mensajeExito = ref('')
+
+const abrirPopup = () => {
+  mostrarPopup.value = true
+}
+
+const cerrarPopup = () => {
+  mostrarPopup.value = false
+  emailDestino.value = ''
+}
+
+const cerrarPopupError = () => {
+  mostrarPopupError.value = false
+}
+
+const cerrarPopupExito = () => {
+  mostrarPopupExito.value = false
+}
+
+const generarCodigo = async () => {
+  const token = sessionStorage.getItem('token')
+  const decoded = jwtDecode(token)
+
+  if (decoded.role[0] !== 'ROLE_SUPER_ADMIN') {
+    mensajeError.value = '❌ No tiene permisos para generar el código.'
+    mostrarPopupError.value = true
+    cerrarPopup()
+    return
+  }
+
+  if (!emailDestino.value) {
+    mensajeError.value = 'Por favor, ingrese un correo válido.'
+    mostrarPopupError.value = true
+    return
+  }
+
+  const body = {
+    emailRecipient: emailDestino.value,
+    emailCreator: decoded.sub || decoded.email || 'superadmin@dominio.com',
+    rolType: 'ROLE_SUPER_ADMIN'
+  }
+
+  try {
+    const response = await fetch('http://localhost:8080/system/api/v1/access-code', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    })
+
+    if (!response.ok) {
+      throw new Error('Error al generar el código')
+    }
+
+    mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`
+    mostrarPopupExito.value = true
+    cerrarPopup()
+  } catch {
+    mensajeError.value = '❌ Error al generar o enviar el código. Inténtelo nuevamente.'
+    mostrarPopupError.value = true
+  }
+}
+
 
 defineEmits(["close"]);
 </script>
@@ -115,7 +220,7 @@ defineEmits(["close"]);
 }
 .botonesNav {
   text-decoration: none;
-  color: inherit; /* mantiene el color del texto del padre */
+  color: inherit;
 }
 .sb-link {
   display: flex;
@@ -177,6 +282,60 @@ select {
   border: 1px solid #464141;
   background: rgba(123, 115, 115, 0.12);
   border-radius: 16px;
-  font-family: Questrial, system-ui, sans-serif;
+  font-family: "Questrial", sans-serif;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 20px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-size: 18px;
+  font-family: "Questrial", sans-serif;
+}
+
+.modal-content button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  background-color: #890f16;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  margin-right: 1rem;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  font-family: "Questrial", sans-serif;
+}
+
+.modal-content button:hover {
+  background-color: #6f1515;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content p {
+  font-size: 22px;
+  font-family: "Questrial", sans-serif;
+}
+
+input {
+  width: 90%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: "Questrial", sans-serif;
 }
 </style>

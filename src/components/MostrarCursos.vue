@@ -48,10 +48,15 @@
     <div v-if="mostrarEdicionEstudiante" class="modal">
       <div class="modal-content">
         <h3>Editar estudiante</h3>
+        <p>Nombre: </p>
         <input v-model="courseStore.estudianteActualizado.name" placeholder="Nombre" class="input-modal" />
+        <p>Apellido: </p>
         <input v-model="courseStore.estudianteActualizado.lastName" placeholder="Apellido" class="input-modal" />
+        <p>DNI: </p>
         <input v-model="courseStore.estudianteActualizado.dni" placeholder="DNI" class="input-modal" />
+        <p>Semestre: </p>
         <input v-model="courseStore.estudianteActualizado.numSemester" placeholder="Semestre" class="input-modal" />
+        <p>Promedio: </p>
         <input
           type="number"
           step="0.1"
@@ -135,7 +140,7 @@ main {
   flex-direction: column;
   padding: 20px;
   color: #000;
-  font-family: questrial, sans-serif;
+  font-family: "Questrial", sans-serif;
   max-width: 100%;
   min-width: 0;
   font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
@@ -323,15 +328,22 @@ select {
   align-items: center;
   z-index: 999;
 }
+.modal-content p {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
 .modal-content {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  text-align: center;
+  background: #fff;
+  color: #000;
+  padding: 24px;
+  border-radius: 12px;
+  width: 380px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  text-align: left;
 }
 .modal-content h3 {
   margin-bottom: 10px;

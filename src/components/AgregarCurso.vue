@@ -169,29 +169,41 @@ form input {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
   font-size: 18px;
+  font-family: "Questrial", sans-serif;
 }
 
 .modal-content button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
-  background-color: #890f16; /* normal */
+  background-color: #890f16;
   border-radius: 10px;
   border: none;
   cursor: pointer;
   color: white;
   margin-right: 1rem;
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  font-family: "Questrial", sans-serif;
 }
 
 .modal-content button:hover {
-  background-color: #6f1515; /* distinto al normal */
+  background-color: #6f1515;
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .modal-content p {
   font-size: 22px;
+  font-family: "Questrial", sans-serif;
+}
+
+input {
+  width: 90%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: "Questrial", sans-serif;
 }
 </style>
 
