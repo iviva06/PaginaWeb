@@ -17,7 +17,6 @@
       </div>
     </div>
 
-    <!-- Modal edición -->
     <div v-if="mostrarEdicion" class="modal">
       <div class="modal-content">
         <h3>Editar curso</h3>
@@ -31,7 +30,6 @@
       </div>
     </div>
 
-    <!-- Modal edición -->
     <div class="tablaEstudiantesCurso">
       <table>
         <thead>
@@ -64,7 +62,6 @@
       </table>
     </div>
 
-    <!-- Modal edición estudiante -->
     <div v-if="mostrarEdicionEstudiante" class="modal">
       <div class="modal-content">
         <h3>Editar estudiante</h3>
@@ -117,13 +114,96 @@
             step="0.1"
             placeholder="Promedio"
             class="input-modal"
-            value="1"
+            v-model="courseStore.estudianteActualizado.average"
           />
         </div>
 
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
           <button class="cancelar" @click="cerrarEdicionEstudiante">❌ Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="mostrarEliminacionEstudiante" class="modal">
+      <div class="modal-content">
+        <h3>⚠️ Confirmar eliminación</h3>
+
+        <p>
+          ¿Estás seguro de que quieres eliminar al estudiante
+          <br />
+          <strong>{{ estudianteAEliminar.name }} {{ estudianteAEliminar.lastName }}</strong>
+          (DNI: <strong>{{ estudianteAEliminar.dni }}</strong
+          >)
+          <br />
+          del curso <strong>{{ cursoSeleccionado.name }}</strong
+          >?
+        </p>
+        <p style="font-size: small; color: #d9534f">Esta acción es irreversible.</p>
+
+        <div class="modal-buttons">
+          <button class="eliminar" @click="confirmarEliminacionEstudiante">
+            🗑 Eliminar definitivamente
+          </button>
+          <button class="cancelar" @click="cerrarEliminacionEstudiante">❌ Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="mostrarResultado" class="modal">
+      <div class="modal-content">
+        <h3 :style="{ color: tipoResultado === 'success' ? '#28a745' : '#d9534f' }">
+          {{ tituloResultado }}
+        </h3>
+        <p>{{ mensajeResultado }}</p>
+
+        <div class="modal-buttons">
+          <button
+            :class="tipoResultado === 'success' ? 'guardar' : 'eliminar'"
+            @click="cerrarModalResultado"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+    <div v-if="mostrarEliminacionCurso" class="modal">
+      <div class="modal-content">
+        <h3>⚠️ Eliminar Curso</h3>
+
+        <p>
+          ¿Estás seguro de que quieres eliminar el curso:
+          <br />
+          <strong>{{ courseStore.cursoActualizado.name }}</strong>
+          (ID: <strong>{{ courseStore.cursoActualizado.id }}</strong
+          >)?
+        </p>
+        <p style="font-size: small; color: #d9534f">
+          Esta acción es irreversible y eliminará todos sus estudiantes asociados.
+        </p>
+
+        <div class="modal-buttons">
+          <button class="eliminar" @click="confirmarEliminacionCurso">
+            🗑 Eliminar definitivamente
+          </button>
+          <button class="cancelar" @click="cerrarEliminacionCurso">❌ Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <div v-if="mostrarResultado" class="modal">
+      <div class="modal-content">
+        <h3 :style="{ color: tipoResultado === 'success' ? '#28a745' : '#d9534f' }">
+          {{ tituloResultado }}
+        </h3>
+        <p>{{ mensajeResultado }}</p>
+
+        <div class="modal-buttons">
+          <button
+            :class="tipoResultado === 'success' ? 'guardar' : 'eliminar'"
+            @click="cerrarModalResultado"
+          >
+            Aceptar
+          </button>
         </div>
       </div>
     </div>
@@ -138,9 +218,12 @@ const courseStore = useCourseStore();
 const cursos = computed(() => courseStore.courseList);
 const cursoSeleccionado = ref();
 
-// Estado del modal
+// Estado del modal curso
 const mostrarEdicion = ref(false);
 const nombreEditado = ref("");
+
+// Estado modal curso (Eliminación/Confirmación de Curso) - ¡NUEVO ESTADO!
+const mostrarEliminacionCurso = ref(false);
 
 const clickCurso = (cursoSeleccionado) => {
   console.log(courseStore.courseList.length);
@@ -167,9 +250,33 @@ const countStudents = computed(
   () => Array.isArray(estudiantes.value) && estudiantes.value.length > 0
 );
 
-// Estado modal estudiante
+// Estado modal estudiante (Edición)
 const mostrarEdicionEstudiante = ref(false);
 const estudianteEditado = ref({});
+
+// ESTADO MODAL ELIMINACIÓN (Confirmación de Estudiante)
+const mostrarEliminacionEstudiante = ref(false);
+const estudianteAEliminar = ref({ index: null, dni: null, name: "", lastName: "" });
+
+// ESTADO MODAL RESULTADO
+const mostrarResultado = ref(false);
+const tituloResultado = ref("");
+const mensajeResultado = ref("");
+const tipoResultado = ref(""); // 'success' o 'error'
+
+const mostrarModalResultado = (tipo, titulo, mensaje) => {
+  tituloResultado.value = titulo;
+  mensajeResultado.value = mensaje;
+  tipoResultado.value = tipo;
+  mostrarResultado.value = true;
+};
+
+const cerrarModalResultado = () => {
+  mostrarResultado.value = false;
+  tituloResultado.value = "";
+  mensajeResultado.value = "";
+  tipoResultado.value = "";
+};
 
 // Editar estudiante
 const editarEstudiante = (index, id) => {
@@ -177,14 +284,15 @@ const editarEstudiante = (index, id) => {
   courseStore.estudianteActualizado.lastName = estudiantes.value[index].lastName;
   courseStore.estudianteActualizado.dni = estudiantes.value[index].dni;
   courseStore.estudianteActualizado.numSemester = estudiantes.value[index].numSemester;
+  courseStore.estudianteActualizado.average = estudiantes.value[index].average;
   mostrarEdicionEstudiante.value = true;
   courseStore.setIdEstudiante(id);
 };
 
 const abrirEdicionCurso = (curso) => {
   courseStore.setCursoAEditar(curso);
-  nombreEditado.value = curso.name; // <--- Carga el nombre actual del curso en el input del modal
-  mostrarEdicion.value = true; // <--- Abre el modal
+  nombreEditado.value = curso.name;
+  mostrarEdicion.value = true;
 };
 
 // Guardar cambios estudiante
@@ -193,10 +301,9 @@ const guardarCambiosEstudiante = async () => {
   if (courseStore.isUpdated) {
     cerrarEdicionEstudiante();
   }
-  console.log();
 };
 
-// Cerrar modal estudiante
+// Cerrar modal estudiante (Edición)
 const cerrarEdicionEstudiante = () => {
   mostrarEdicionEstudiante.value = false;
   estudianteEditado.value = {};
@@ -205,7 +312,12 @@ const cerrarEdicionEstudiante = () => {
 // Guardar cambios del curso!!
 const guardarCambios = async () => {
   if (nombreEditado.value.trim() === "") {
-    alert("El nombre no puede estar vacío.");
+    // Reemplazado alert por modal de error
+    mostrarModalResultado(
+      "error",
+      "Error de Validación",
+      "El nombre del curso no puede estar vacío."
+    );
     return;
   }
 
@@ -217,74 +329,123 @@ const guardarCambios = async () => {
     cursoSeleccionado.value.name = nombreEditado.value;
     cerrarEdicion();
   } else {
-    alert("Hubo un error al guardar los cambios del curso.");
+    // Reemplazado alert por modal de error
+    mostrarModalResultado("error", "Error", "Hubo un error al guardar los cambios del curso.");
   }
 };
 
-// Cerrar modal
+// Cerrar modal curso (Edición)
 const cerrarEdicion = () => {
   mostrarEdicion.value = false;
   nombreEditado.value = "";
   courseStore.cursoActualizado.id = null;
 };
 
-const successMessage = ref("");
-const errorMessage = ref("");
+// 👇 LÓGICA DE ELIMINACIÓN DE CURSO (SIN ALERTS NI CONFIRMS) 👇
 
-const eliminarCurso = async () => {
-  if (
-    !confirm(
-      `¿Estás seguro de que quieres eliminar el curso: ${courseStore.cursoActualizado.name} (ID: ${courseStore.cursoActualizado.id})? Esta acción es irreversible.`
-    )
-  ) {
+// 1. Abre el modal de confirmación de curso
+const eliminarCurso = () => {
+  if (!courseStore.cursoActualizado.id) {
+    mostrarModalResultado("error", "Error", "No hay un curso seleccionado para eliminar.");
     return;
   }
+  // Abre el modal de confirmación de curso
+  mostrarEliminacionCurso.value = true;
+};
+
+// 2. Ejecuta la eliminación si se confirma en el modal
+const confirmarEliminacionCurso = async () => {
+  mostrarEliminacionCurso.value = false; // Cierra el modal de confirmación
 
   const idAEliminar = courseStore.cursoActualizado.id;
-  const success = await courseStore.deleteCourse(idAEliminar);
+  const nombreCurso = courseStore.cursoActualizado.name;
 
-  if (success) {
-    alert(`✅ Curso ID ${idAEliminar} eliminado correctamente.`);
+  try {
+    const success = await courseStore.deleteCourse(idAEliminar);
 
-    cursoSeleccionado.value = null;
-    cerrarEdicion();
-  } else {
-    alert("❌ Hubo un error al eliminar el curso. Revisa la consola para más detalles.");
+    if (success) {
+      const mensaje = `Curso "${nombreCurso}" (ID ${idAEliminar}) eliminado correctamente.`;
+      // Reemplazado alert por modal de éxito
+      mostrarModalResultado("success", "¡Éxito!", mensaje);
+
+      cursoSeleccionado.value = null;
+      cerrarEdicion();
+    } else {
+      const mensaje = "Hubo un error al eliminar el curso. Revisa la consola para más detalles.";
+      // Reemplazado alert por modal de error
+      mostrarModalResultado("error", "Error en la Eliminación", mensaje);
+    }
+  } catch (error) {
+    const mensaje = `Error al intentar eliminar el curso: ${error.message}`;
+    // Reemplazado alert por modal de error
+    mostrarModalResultado("error", "Error de Conexión/API", mensaje);
   }
 };
 
-const eliminarEstudiante = async (index, studentDni) => {
-  successMessage.value = "";
-  errorMessage.value = "";
+// 3. Cierra el modal de confirmación de curso
+const cerrarEliminacionCurso = () => {
+  mostrarEliminacionCurso.value = false;
+};
 
+// LÓGICA DE MODAL DE ELIMINACIÓN DE ESTUDIANTE (Mantenida)
+
+// Abre el modal y guarda los datos temporalmente
+const eliminarEstudiante = (index, studentDni) => {
   if (!cursoSeleccionado.value || !cursoSeleccionado.value.id) {
-    errorMessage.value = "No se ha seleccionado un curso o el curso no tiene un ID válido.";
-    alert("❌ Error: " + errorMessage.value);
+    // Reemplazado alert por modal de error
+    mostrarModalResultado(
+      "error",
+      "Error de Curso",
+      "No se ha seleccionado un curso o el curso no tiene un ID válido."
+    );
     return;
   }
 
-  if (
-    !confirm(
-      `¿Estás seguro de que quieres eliminar el estudiante con DNI ${studentDni} del curso ${cursoSeleccionado.value.name}?`
-    )
-  ) {
-    return;
-  }
+  // Guardamos los datos del estudiante para mostrarlos en el modal
+  estudianteAEliminar.value = {
+    index: index,
+    dni: studentDni,
+    name: estudiantes.value[index].name,
+    lastName: estudiantes.value[index].lastName,
+  };
 
+  mostrarEliminacionEstudiante.value = true; // Abre el modal de confirmación
+};
+
+// Ejecuta la eliminación si se confirma en el modal
+const confirmarEliminacionEstudiante = async () => {
+  mostrarEliminacionEstudiante.value = false; // Cierra el modal de confirmación
+
+  const { index, dni } = estudianteAEliminar.value;
   const courseId = cursoSeleccionado.value.id;
 
   try {
-    const success = await courseStore.deleteStudent(studentDni, courseId);
+    const success = await courseStore.deleteStudent(dni, courseId);
 
     if (success) {
       estudiantes.value.splice(index, 1);
-      successMessage.value = `Estudiante DNI ${studentDni} eliminado correctamente del curso ${courseId}.`;
-      alert(`✅ ${successMessage.value}`);
+      const mensaje = `Estudiante DNI ${dni} eliminado correctamente del curso ${courseId}.`;
+      // Reemplazado alert por modal de éxito
+      mostrarModalResultado("success", "¡Éxito!", mensaje);
+    } else {
+      const mensaje = `No se pudo eliminar el estudiante DNI ${dni}.`;
+      // Reemplazado alert por modal de error
+      mostrarModalResultado("error", "Error en la Eliminación", mensaje);
     }
-  } catch {
-    errorMessage.value = `No se pudo eliminar el estudiante DNI ${studentDni}.`;
-    alert("❌ Error: " + errorMessage.value);
+  } catch (error) {
+    const mensaje = `Error al intentar eliminar el estudiante DNI ${dni}: ${error.message}`;
+    // Reemplazado alert por modal de error
+    mostrarModalResultado("error", "Error de Conexión/API", mensaje);
+  } finally {
+    // Limpia los datos temporales
+    estudianteAEliminar.value = { index: null, dni: null, name: "", lastName: "" };
   }
+};
+
+// Cierra el modal de eliminación (si el usuario cancela)
+const cerrarEliminacionEstudiante = () => {
+  mostrarEliminacionEstudiante.value = false;
+  estudianteAEliminar.value = { index: null, dni: null, name: "", lastName: "" };
 };
 </script>
 
@@ -521,13 +682,15 @@ select {
   font-family: "Questrial", sans-serif;
 }
 .modal-buttons .eliminar {
-  background: #d9534f;
-  color: white;
+  background: #6f1515;
+  color: rgb(255, 255, 255);
+  font-weight: lighter;
   font-family: "Questrial", sans-serif;
 }
 .modal-buttons .cancelar {
-  background: #d9534f;
+  background: #6f1515;
   color: white;
+  font-weight: lighter;
   font-family: "Questrial", sans-serif;
 }
 .input-group label {
