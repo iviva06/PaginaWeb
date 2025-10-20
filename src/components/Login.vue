@@ -5,11 +5,11 @@
     <img src="/src/assets/logo_login.jpg" alt="logo_login" />
     <form @submit.prevent="login">
       <div class="user">
-        <label for="user">Username: </label>
+        <label for="user">Usuario: </label>
         <input v-model="usuario" type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
       </div>
       <div class="password">
-        <label for="password">Password: </label>
+        <label for="password">Contraseña: </label>
         <input v-model="password"
           type="password"
           placeholder="Ingrese su contraseña"
