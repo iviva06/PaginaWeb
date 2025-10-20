@@ -96,11 +96,12 @@ const cerrarPopupError = () => {
 
 const cerrarPopupExito = () => {
   mostrarPopupExito.value = false;
-};
+}
 
 const generarCodigo = async () => {
   const token = sessionStorage.getItem("token");
   const decoded = jwtDecode(token);
+  console.log("role: " + decoded.role[0])
 
   if (decoded.role[0] !== "ROLE_SUPER_ADMIN") {
     mensajeError.value = "❌ No tiene permisos para generar el código.";
@@ -121,18 +122,28 @@ const generarCodigo = async () => {
     rolType: "ROLE_SUPER_ADMIN",
   };
 
-  try {
-    const response = await fetch("http://34.176.250.35:8080/system/api/v1/access-code", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    });
+  console.log("recipient: " + body.emailRecipient)
+  console.log("creator: " + body.emailCreator)
+  console.log("role: " + body.rolType)
 
-    if (!response.ok) {
-      throw new Error("Error al generar el código");
+
+  try {
+    const response = await axios.post("http://34.176.250.35:8080/system/api/v1/access-code",
+      body,
+      {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+
+    const data = response.data;
+    if (data) {
+      console.log("data: " + data);
+    }
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
     }
 
     mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`;
