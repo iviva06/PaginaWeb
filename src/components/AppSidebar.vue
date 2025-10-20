@@ -17,13 +17,13 @@
       <router-link @click="clickCurso" to="/app/mostrarcursos" class="botonesNav">
         <button class="SidebarButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
       </router-link>
-      <router-link  class="botonesNav">
-        <button  @click="abrirPopup" class="SidebarButton"><i class='bx  bx-qr'  ></i> Generar código de acceso</button>
-      </router-link>
+      <button @click="abrirPopup" class="SidebarButton">
+        <i class="bx bx-qr"></i> Generar código de acceso
+      </button>
     </nav>
   </aside>
 
-    <!-- Popup para ingresar mail -->
+  <!-- Popup para ingresar mail -->
   <div v-if="mostrarPopup" class="modal" @click.self="cerrarPopup">
     <div class="modal-content">
       <p>📧 Escriba el mail al cual quiere que le llegue el código generado:</p>
@@ -50,104 +50,100 @@
       <button @click="cerrarPopupError">Aceptar</button>
     </div>
   </div>
-
 </template>
 
 <script setup>
-import { useCourseStore } from '@/stores/courseStore';
-import { jwtDecode } from 'jwt-decode';
-import { useRouter } from 'vue-router';
-import {ref} from 'vue';
+import { useCourseStore } from "@/stores/courseStore";
+import { jwtDecode } from "jwt-decode";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
 
 const router = useRouter();
 
 defineProps({ open: { type: Boolean, default: false } });
 const courseStore = useCourseStore();
 const clickCurso = async () => {
-  await courseStore.fetchCourses()
-  const token = sessionStorage.getItem(`token`)
+  await courseStore.fetchCourses();
+  const token = sessionStorage.getItem(`token`);
   const decoded = jwtDecode(token);
-  console.log("Rol: " + decoded.role[0])
-  if(decoded.role[0] === "ROLE_SUPER_ADMIN"){
-    router.push("/app/mostrarcursosSuperAdmin")
-  }
-  else if(decoded.role[0] === "ROLE_ADMIN"){
-    router.push("/app/mostrarcursos")
+  console.log("Rol: " + decoded.role[0]);
+  if (decoded.role[0] === "ROLE_SUPER_ADMIN") {
+    router.push("/app/mostrarcursosSuperAdmin");
+  } else if (decoded.role[0] === "ROLE_ADMIN") {
+    router.push("/app/mostrarcursos");
   }
 };
 
-
-const mostrarPopup = ref(false)
-const mostrarPopupError = ref(false)
-const mostrarPopupExito = ref(false)
-const emailDestino = ref('')
-const mensajeError = ref('')
-const mensajeExito = ref('')
+const mostrarPopup = ref(false);
+const mostrarPopupError = ref(false);
+const mostrarPopupExito = ref(false);
+const emailDestino = ref("");
+const mensajeError = ref("");
+const mensajeExito = ref("");
 
 const abrirPopup = () => {
-  mostrarPopup.value = true
-}
+  mostrarPopup.value = true;
+};
 
 const cerrarPopup = () => {
-  mostrarPopup.value = false
-  emailDestino.value = ''
-}
+  mostrarPopup.value = false;
+  emailDestino.value = "";
+};
 
 const cerrarPopupError = () => {
-  mostrarPopupError.value = false
-}
+  mostrarPopupError.value = false;
+};
 
 const cerrarPopupExito = () => {
-  mostrarPopupExito.value = false
-}
+  mostrarPopupExito.value = false;
+};
 
 const generarCodigo = async () => {
-  const token = sessionStorage.getItem('token')
-  const decoded = jwtDecode(token)
+  const token = sessionStorage.getItem("token");
+  const decoded = jwtDecode(token);
 
-  if (decoded.role[0] !== 'ROLE_SUPER_ADMIN') {
-    mensajeError.value = '❌ No tiene permisos para generar el código.'
-    mostrarPopupError.value = true
-    cerrarPopup()
-    return
+  if (decoded.role[0] !== "ROLE_SUPER_ADMIN") {
+    mensajeError.value = "❌ No tiene permisos para generar el código.";
+    mostrarPopupError.value = true;
+    cerrarPopup();
+    return;
   }
 
   if (!emailDestino.value) {
-    mensajeError.value = 'Por favor, ingrese un correo válido.'
-    mostrarPopupError.value = true
-    return
+    mensajeError.value = "Por favor, ingrese un correo válido.";
+    mostrarPopupError.value = true;
+    return;
   }
 
   const body = {
     emailRecipient: emailDestino.value,
-    emailCreator: decoded.sub || decoded.email || 'superadmin@dominio.com',
-    rolType: 'ROLE_SUPER_ADMIN'
-  }
+    emailCreator: decoded.sub || decoded.email || "superadmin@dominio.com",
+    rolType: "ROLE_SUPER_ADMIN",
+  };
 
   try {
-    const response = await fetch('http://34.176.250.35:8080/system/api/v1/access-code', {
-      method: 'POST',
+    const response = await fetch("http://34.176.250.35:8080/system/api/v1/access-code", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(body)
-    })
+      body: JSON.stringify(body),
+    });
 
     if (!response.ok) {
-      throw new Error('Error al generar el código')
+      throw new Error("Error al generar el código");
     }
 
-    mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`
-    mostrarPopupExito.value = true
-    cerrarPopup()
+    mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`;
+    mostrarPopupExito.value = true;
+    cerrarPopup();
   } catch {
-    mensajeError.value = '❌ Error al generar o enviar el código. Inténtelo nuevamente.'
-    mostrarPopupError.value = true
-    console.log(decoded)
+    mensajeError.value = "❌ Error al generar o enviar el código. Inténtelo nuevamente.";
+    mostrarPopupError.value = true;
+    console.log(decoded);
   }
-}
-
+};
 
 defineEmits(["close"]);
 </script>
