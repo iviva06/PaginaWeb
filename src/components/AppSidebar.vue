@@ -57,6 +57,7 @@ import { useCourseStore } from "@/stores/courseStore";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import axios from "axios";
 
 const router = useRouter();
 
@@ -102,6 +103,7 @@ const generarCodigo = async () => {
   const token = sessionStorage.getItem("token");
   const decoded = jwtDecode(token);
   console.log("role: " + decoded.role[0])
+  console.log("token: "  + token)
 
   if (decoded.role[0] !== "ROLE_SUPER_ADMIN") {
     mensajeError.value = "❌ No tiene permisos para generar el código.";
@@ -126,7 +128,6 @@ const generarCodigo = async () => {
   console.log("creator: " + body.emailCreator)
   console.log("role: " + body.rolType)
 
-
   try {
     const response = await axios.post("http://34.176.250.35:8080/system/api/v1/access-code",
       body,
@@ -138,23 +139,23 @@ const generarCodigo = async () => {
         }
       )
 
-    const data = response.data;
-    if (data) {
-      console.log("data: " + data);
-    }
+      const data = response.data;
+      if (data) {
+        console.log("data: " + data);
+      }
+
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
+      console.log("error: " + error);
+      mensajeError.value = "❌ Error al generar o enviar el código. Inténtelo nuevamente.";
+      mostrarPopupError.value = true;
+      console.log(decoded);
     }
 
     mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`;
     mostrarPopupExito.value = true;
     cerrarPopup();
-  } catch {
-    mensajeError.value = "❌ Error al generar o enviar el código. Inténtelo nuevamente.";
-    mostrarPopupError.value = true;
-    console.log(decoded);
-  }
-};
+
+}
 
 defineEmits(["close"]);
 </script>
