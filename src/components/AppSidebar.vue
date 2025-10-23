@@ -120,23 +120,25 @@ const generarCodigo = async () => {
 
   const body = {
     emailRecipient: emailDestino.value,
-    emailCreator: decoded.sub || decoded.email || "superadmin@dominio.com",
-    rolType: "ROLE_SUPER_ADMIN",
+    emailCreator: "superadmin@gmail.com",
+    rolType: "ADMIN",
   };
+  
 
   console.log("recipient: " + body.emailRecipient)
   console.log("creator: " + body.emailCreator)
   console.log("role: " + body.rolType)
+  console.log(body)
 
   try {
     const response = await axios.post("http://34.176.250.35:8080/system/api/v1/access-code",
       body,
       {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
+      }
       )
 
       const data = response.data;
@@ -154,7 +156,6 @@ const generarCodigo = async () => {
     mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`;
     mostrarPopupExito.value = true;
     cerrarPopup();
-
 }
 
 defineEmits(["close"]);

@@ -42,7 +42,8 @@ export const useCourseStore = defineStore("course", {
 
     async fetchCourses() {
       try {
-        const response = await axios.get('http://34.176.250.35:8080/system/api/v1/courses',
+        // 'http://34.176.250.35:8080/system/api/v1/courses
+        const response = await axios.get('/api/v1/courses',
           { headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` } }
         );
         const data = response.data;
@@ -57,7 +58,8 @@ export const useCourseStore = defineStore("course", {
 
     async updateStudent() {
       try {
-        const response = await axios.patch(`http://34.176.250.35:8080/system/api/v1/students/${this.idEditStudent}`,
+        // http://34.176.250.35:8080/system/api/v1/students/${this.idEditStudent}
+        const response = await axios.patch(`/api/v1/students/${this.idEditStudent}`,
           this.estudianteActualizado,
           { headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` } }
         );
@@ -81,8 +83,9 @@ export const useCourseStore = defineStore("course", {
 
     async updateCourse() {
       try {
+        //  `http://34.176.250.35:8080/system/api/v1/courses`,
         const response = await axios.patch(
-        `http://34.176.250.35:8080/system/api/v1/courses`,
+        `/api/v1/courses`,
         this.cursoActualizado,
         {
           headers: {
@@ -108,7 +111,7 @@ export const useCourseStore = defineStore("course", {
     async deleteCourse(id) {
       const token = sessionStorage.getItem('token');
       try {
-        const url = `http://34.176.250.35:8080/system/api/v1/courses/${id}`;
+        const url = `/api/v1/courses/${id}`;
         const response = await axios.delete(url,
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
@@ -131,7 +134,7 @@ export const useCourseStore = defineStore("course", {
 
       try {
         const { data } = await axios.post(
-          'http://34.176.250.35:8080/system/api/v1/courses',
+          '/api/v1/courses',
           { name, shift },
           {
             headers: {
@@ -156,7 +159,7 @@ export const useCourseStore = defineStore("course", {
       const token = sessionStorage.getItem('token')
       console.log(token)
       try {
-        const response = await axios.delete(`http://34.176.250.35:8080/system/api/v1/courses/${courseId}/students/${studentDni}`,
+        const response = await axios.delete(`/api/v1/courses/${courseId}/students/${studentDni}`,
         {
           headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` },
         }
