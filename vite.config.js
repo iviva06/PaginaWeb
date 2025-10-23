@@ -5,9 +5,15 @@ import vue from "@vitejs/plugin-vue";
 import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: '/PaginaWeb/',
-  plugins: [vue(), vueDevTools()],
+export default defineConfig(({ mode }) => ({
+  // Base dinámico: '/' en desarrollo, '/nombre-del-repositorio/' en producción
+  base: mode === "development" ? "/" : "/PaginaWeb/",
+
+  plugins: [
+    vue(),
+    vueDevTools()
+  ],
+
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -15,4 +21,4 @@ export default defineConfig({
       "@layouts": fileURLToPath(new URL("./src/layouts", import.meta.url)),
     },
   },
-});
+}));
