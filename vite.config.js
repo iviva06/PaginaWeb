@@ -6,7 +6,7 @@ import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
-  // Base dinámico: '/' en desarrollo, '/nombre-del-repositorio/' en producción
+
   base: mode === "development" ? "/" : "/PaginaWeb/",
 
   plugins: [
