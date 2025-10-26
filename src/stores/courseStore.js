@@ -134,7 +134,7 @@ export const useCourseStore = defineStore("course", {
 
       try {
         const { data } = await axios.post(
-          '/api/v1/courses',
+          'https://ubelgrano.diegodev.net/api/v1/courses',
           { name, shift },
           {
             headers: {

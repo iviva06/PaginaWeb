@@ -23,12 +23,13 @@ import logo from "@/assets/logo_header.jpg";
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: #6f1515;
+  /* background: #6f1515; */
+  background: orange;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.08); */
 }
 .brand {
   display: inline-flex;

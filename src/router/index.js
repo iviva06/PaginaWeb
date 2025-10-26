@@ -1,5 +1,5 @@
 // src/router/index.js
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory} from "vue-router";
 
 // Usa alias @ (recomendado) o rutas relativas ../
 import Login from "@/components/Login.vue";
@@ -36,4 +36,4 @@ const routes = [
   { path: "/:pathMatch(.*)*", redirect: "/" },
 ];
 
-export default createRouter({ history: createWebHistory(), routes });
+export default createRouter({ history: createWebHashHistory(), routes });

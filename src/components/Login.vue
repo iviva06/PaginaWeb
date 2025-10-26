@@ -60,6 +60,7 @@ const login = async () => {
   border-radius: 10px;
   box-sizing: border-box;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 100;
 }
 
 
