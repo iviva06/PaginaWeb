@@ -36,7 +36,7 @@ const autenticacionStore = useAutenticacionStore();
 const { usuario, password } = storeToRefs(autenticacionStore);
 const router = useRouter();
 
-
+// login
 const login = async () => {
   await autenticacionStore.iniciarSesion();
   if (autenticacionStore.autenticacion) {
