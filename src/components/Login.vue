@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="login">
+  <div class="container-animation">
+    <div class="login">
     <img src="/src/assets/logo_login.jpg" alt="logo_login" />
     <form @submit.prevent="login">
       <div class="user">
@@ -23,6 +24,7 @@
         <router-link to="register"><button>Registrarse</button> </router-link>
       </div>
     </form>
+  </div>
   </div>
 </template>
 
@@ -61,7 +63,109 @@ const login = async () => {
   box-sizing: border-box;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
+
+.container-animation {
+  margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--color-text);
+  background-color: #890f16;
+  background-image:
+    radial-gradient(transparent 0.6em, #890f16 0.6em),
+    conic-gradient(at 1em 1em, transparent 270deg, #890f16 270deg),
+    conic-gradient(at 1em 1em, transparent 270deg, #4204 270deg),
+    conic-gradient(at 1em 1em, transparent 270deg, #4205 270deg),
+    conic-gradient(at 1em 1em, transparent 270deg, #4206 270deg);
+  background-size: 1em 1em, 4em 4em, 4em 4em, 4em 4em, 4em 4em;
+  animation: bpx 20s infinite, bpy 20s -3.75s infinite;
+  min-height: 100vh;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: color 0.5s, background-color 0.5s;
+  /* eliminamos el flex centering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+@keyframes bpx {
+  0%,
+  7.5%,
+  100% {
+    background-position-x: 0, 0em, 1em, 2em, 3em;
+  }
+  12.5%,
+  20% {
+    background-position-x: 0, 1em, 0, 3em, 2em;
+  }
+  25%,
+  32.5% {
+    background-position-x: 0, -1em, -2em, 5em, 4em;
+  }
+  37.5%,
+  45% {
+    background-position-x: 0, -2em, -1em, 4em, 3em;
+  }
+  50%,
+  57.5% {
+    background-position-x: 0, -2em, -5em, 5em, 0;
+  }
+  62.5%,
+  70% {
+    background-position-x: 0, -3em, -4em, 7em, 6em;
+  }
+  75%,
+  82.5% {
+    background-position-x: 0, -2em, -1em, 2em, 5em;
+  }
+  87.5%,
+  95% {
+    background-position-x: 0, -3em, 0, 3em, 6em;
+  }
+}
+
+@keyframes bpy {
+  0%,
+  7.5%,
+  100% {
+    background-position-y: 0, 0em, 1em, 2em, 3em;
+  }
+  12.5%,
+  20% {
+    background-position-y: 0, 1em, 0, 3em, 2em;
+  }
+  25%,
+  32.5% {
+    background-position-y: 0, -1em, -2em, 5em, 4em;
+  }
+  37.5%,
+  45% {
+    background-position-y: 0, -2em, -1em, 4em, 3em;
+  }
+  50%,
+  57.5% {
+    background-position-y: 0, -2em, -5em, 5em, 0;
+  }
+  62.5%,
+  70% {
+    background-position-y: 0, -3em, -4em, 7em, 6em;
+  }
+  75%,
+  82.5% {
+    background-position-y: 0, -2em, -1em, 2em, 5em;
+  }
+  87.5%,
+  95% {
+    background-position-y: 0, -3em, 0, 3em, 6em;
+  }
+} 
 
 
 .login img {

@@ -38,7 +38,7 @@ const sidebarOpen = ref(false);
 
 .container-layout {
   position: relative;
-  background-color: white;
+  /* background-color: green; */
   padding: 0;
   height: 100%;
   width: 100%;
