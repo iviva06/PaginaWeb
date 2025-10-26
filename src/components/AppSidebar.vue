@@ -180,14 +180,14 @@ defineEmits(["close"]);
   bottom: 0;
   background-color: #e9e9e9;
 
-  width: 88%;
-  max-width: 180px;
+  width: 14%;
+  /* max-width: 180px; */
   padding: 0.8rem;
 
   box-shadow: rgba(0, 0, 0, 0.18) 0 10px 30px;
   transform: translateX(-100%);
   transition: transform 0.24s ease-out;
-  z-index: 999;
+  z-index: 2000;
   overflow-y: auto;
 }
 

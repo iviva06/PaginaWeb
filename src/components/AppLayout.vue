@@ -1,14 +1,16 @@
 <!-- src/layouts/AppLayout.vue -->
 <template>
-  <AppHeader @toggle-sidebar="sidebarOpen = !sidebarOpen" />
+  <div class="container-layout">
+    <AppHeader @toggle-sidebar="sidebarOpen = !sidebarOpen" />
 
-  <div class="app-shell" :class="{ 'with-sidebar': sidebarOpen }">
-    <!-- 👇 solo existe cuando está abierta -->
-    <AppSidebar v-if="sidebarOpen" :open="sidebarOpen" @close="sidebarOpen = false" />
+    <div class="app-shell" :class="{ 'with-sidebar': sidebarOpen }">
+      <!-- 👇 solo existe cuando está abierta -->
+      <AppSidebar v-if="sidebarOpen" :open="sidebarOpen" @close="sidebarOpen = false" />
 
-    <main class="shell__content">
-      <RouterView />
-    </main>
+      <main class="shell__content">
+        <RouterView />
+      </main>
+    </div>
   </div>
 </template>
 
@@ -32,5 +34,13 @@ const sidebarOpen = ref(false);
 
 .shell__content {
   min-width: 0;
+}
+
+.container-layout {
+  position: relative;
+  background-color: white;
+  padding: 0;
+  height: 100%;
+  width: 100%;
 }
 </style>

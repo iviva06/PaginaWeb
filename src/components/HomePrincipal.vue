@@ -28,6 +28,7 @@ main {
   font-size: xx-large;
   color: lightslategray;
   font-family: questrial, sans-serif;
+  z-index: 100;
 }
 </style>
 

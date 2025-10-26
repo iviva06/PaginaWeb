@@ -64,39 +64,10 @@
 }
 
 body {
-
-  min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  background-color: #890f16;
   margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 1rem;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--color-text);
+  background-color: #890f16;
   background-image:
     radial-gradient(transparent 0.6em, #890f16 0.6em),
     conic-gradient(at 1em 1em, transparent 270deg, #890f16 270deg),
@@ -105,7 +76,19 @@ body {
     conic-gradient(at 1em 1em, transparent 270deg, #4206 270deg);
   background-size: 1em 1em, 4em 4em, 4em 4em, 4em 4em, 4em 4em;
   animation: bpx 20s infinite, bpy 20s -3.75s infinite;
+  min-height: 100vh;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: color 0.5s, background-color 0.5s;
+
+  /* eliminamos el flex centering */
+  display: block;
+  padding: 0;
+  z-index: 50;
 }
+
 
 @keyframes bpx {
   0%,

@@ -24,7 +24,7 @@ import logo from "@/assets/logo_header.jpg";
   top: 0;
   z-index: 1000;
   /* background: #6f1515; */
-  background: orange;
+  background: #6f1515;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.75rem;
