@@ -1,6 +1,5 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <link rel="stylesheet" href=".\src\assets\fondo.css" />
   <div class="login">
     <img src="/src/assets/logo_login.jpg" alt="logo_login" />
     <form @submit.prevent="login">
