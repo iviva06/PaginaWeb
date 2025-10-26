@@ -19,7 +19,7 @@ export const useStudentStore = defineStore("student", {
     async createStudent() {
       try {
         const token = sessionStorage.getItem('token');
-        const response = await axios.post(`http://34.176.250.35:8080/system/api/v1/students`,
+        const response = await axios.post(`https://ubelgrano.diegodev.net/api/v1/students`,
           this.nuevoEstudiante,
           { headers: { Authorization: `Bearer ${token}`}}
         );

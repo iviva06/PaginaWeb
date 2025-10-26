@@ -131,7 +131,7 @@ const generarCodigo = async () => {
   console.log(body)
 
   try {
-    const response = await axios.post("http://34.176.250.35:8080/system/api/v1/access-code",
+    const response = await axios.post("https://ubelgrano.diegodev.net/api/v1/access-code",
       body,
       {
         headers: {

@@ -10,7 +10,7 @@
     <form>
       <div class="name">
         <label for="name">Name: </label>
-        <input type="text" v-model="name" placeholder="Ingrese su nombre" id="name" name="name" required /><br />
+        <input type="text" v-model="userEntityDTO.name" placeholder="Ingrese su nombre" id="name" name="name" required /><br />
       </div>
 
 
@@ -22,14 +22,14 @@
           max="99999999"
           id="dni"
           name="dni"
-          v-model="dni"
+          v-model="userEntityDTO.dni"
           required
         /><br />
       </div>
 
       <div class="email">
         <label for="email">Email: </label>
-        <input type="email" v-model="email" placeholder="Ingrese su email" id="email" name="email" required /><br />
+        <input type="email" v-model="userEntityDTO.email" placeholder="Ingrese su email" id="email" name="email" required /><br />
       </div>
 
 
@@ -40,7 +40,7 @@
           placeholder="Ingrese su contraseña"
           id="password"
           name="password"
-          v-model="password"
+          v-model="userEntityDTO.password"
           required
         /><br />
       </div>
@@ -53,16 +53,14 @@
           placeholder="Ingrese el código de acceso"
           id="accessID"
           name="accessID"
-          v-model="accessID"
+          v-model="userEntityDTO.accessCode"
           required
         /><br />
       </div>
 
 
       <div class="buttons">
-        <router-link to="/">
-          <button type="button">Registrarse</button>
-        </router-link>
+        <button @click="register" type="button">Registrarse</button>
 
         <router-link to="/">
           <button type="sign in">Cancelar</button>
@@ -73,56 +71,24 @@
 </template>
 
 
-<script>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useAutenticacionStore } from "@/stores/autenticacionStore";
+<script setup>
 
-export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "Register",
-  setup() {
-    const name = ref("");
-    const email = ref("");
-    const password = ref("");
-    const dni = ref("");
-    const accessCode = ref("");
+import { useAutenticacionStore } from '@/stores/autenticacionStore';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
-    const authStore = useAutenticacionStore();
-    const router = useRouter();
 
-    const handleRegister = async () => {
+const router = useRouter();
+const authenticationStore = useAutenticacionStore();
 
-      const userData = {
-        name: name.value,
-        email: email.value,
-        password: password.value,
-        dni: Number(dni.value),
-        accessCode: Number(accessCode.value)
-      };
+const { userEntityDTO } = storeToRefs(authenticationStore);
 
-      try {
-        const response = await authStore.registrarUsuario(userData);
-        console.log("Usuario registrado:", response);
+const register = () => {
+  if(authenticationStore.register()) {
+    router.push('/login')
+  }
+}
 
-        alert("Registro exitoso");
-        router.push("/");
-      } catch (error) {
-        console.error("Error al registrar:", error);
-        alert("Hubo un error al registrarse. Revisa la consola para más detalles.");
-      }
-    };
-
-    return {
-      name,
-      email,
-      password,
-      dni,
-      accessCode,
-      handleRegister,
-    };
-  },
-};
 </script>
 
 

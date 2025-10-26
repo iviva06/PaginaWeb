@@ -42,8 +42,8 @@ export const useCourseStore = defineStore("course", {
 
     async fetchCourses() {
       try {
-        // 'http://34.176.250.35:8080/system/api/v1/courses
-        const response = await axios.get('/api/v1/courses',
+        // 'http://34.176.250.35:8080/system/api/v1/courses https://ubelgrano.diegodev.net/api/login
+        const response = await axios.get('https://ubelgrano.diegodev.net/api/v1/courses',
           { headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` } }
         );
         const data = response.data;
@@ -59,7 +59,7 @@ export const useCourseStore = defineStore("course", {
     async updateStudent() {
       try {
         // http://34.176.250.35:8080/system/api/v1/students/${this.idEditStudent}
-        const response = await axios.patch(`/api/v1/students/${this.idEditStudent}`,
+        const response = await axios.patch(`https://ubelgrano.diegodev.net/api/v1/students/${this.idEditStudent}`,
           this.estudianteActualizado,
           { headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` } }
         );
@@ -85,7 +85,7 @@ export const useCourseStore = defineStore("course", {
       try {
         //  `http://34.176.250.35:8080/system/api/v1/courses`,
         const response = await axios.patch(
-        `/api/v1/courses`,
+        `https://ubelgrano.diegodev.net/api/v1/courses`,
         this.cursoActualizado,
         {
           headers: {
@@ -111,7 +111,7 @@ export const useCourseStore = defineStore("course", {
     async deleteCourse(id) {
       const token = sessionStorage.getItem('token');
       try {
-        const url = `/api/v1/courses/${id}`;
+        const url = `https://ubelgrano.diegodev.net/api/v1/courses/${id}`;
         const response = await axios.delete(url,
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
@@ -159,7 +159,7 @@ export const useCourseStore = defineStore("course", {
       const token = sessionStorage.getItem('token')
       console.log(token)
       try {
-        const response = await axios.delete(`/api/v1/courses/${courseId}/students/${studentDni}`,
+        const response = await axios.delete(`https://ubelgrano.diegodev.net/api/v1/courses/${courseId}/students/${studentDni}`,
         {
           headers: {  'Authorization': `Bearer ${sessionStorage.getItem('token')}` },
         }
