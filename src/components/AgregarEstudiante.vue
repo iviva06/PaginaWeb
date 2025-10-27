@@ -86,6 +86,8 @@ const guardarEstudiante = async () => {
   if (studentStore.isCreated) {
     mostrarPopup.value = true;
     studentStore.isCreated = false;
+  } else {
+    // mostrar popup 
   }
 };
 
