@@ -5,96 +5,128 @@
       <img src="../assets/logo_circulo.jpg" alt="Logo" />
       <h1>Registro de usuario</h1>
     </div>
+  <form @submit.prevent="submitForm" novalidate>
+    <div class="name">
+      <label for="name">Nombre: </label>
+      <input
+        type="text"
+        v-model="userEntityDTO.name"
+        placeholder="Ingrese su nombre"
+        id="name"
+        name="name"
+        required
+      /><br />
+    </div>
 
+    <div class="dni">
+      <label for="dni">DNI: </label>
+      <input
+        type="text"
+        id="dni"
+        name="dni"
+        v-model="userEntityDTO.dni"
+        maxlength="8"
+        @input="dniOnly"
+        placeholder="Ingrese su DNI"
+        required
+      /><br />
+      <span v-if="errors.dni" class="error">{{ errors.dni }}</span>
+    </div>
 
-    <form>
-      <div class="name">
-        <label for="name">Name: </label>
-        <input type="text" v-model="userEntityDTO.name" placeholder="Ingrese su nombre" id="name" name="name" required /><br />
-      </div>
+    <div class="email">
+      <label for="email">Email: </label>
+      <input
+        type="email"
+        v-model="userEntityDTO.email"
+        placeholder="Ingrese su email"
+        id="email"
+        name="email"
+        required
+      /><br />
+      <span v-if="errors.email" class="error">{{ errors.email }}</span>
+    </div>
 
+    <div class="password">
+      <label for="password">Contraseña: </label>
+      <input
+        type="password"
+        v-model="userEntityDTO.password"
+        placeholder="Ingrese su contraseña"
+        id="password"
+        name="password"
+        required
+      /><br />
+    </div>
 
-      <div class="dni">
-        <label for="dni">DNI: </label>
-        <input
-          type="number"
-          placeholder="Ingrese su DNI"
-          max="99999999"
-          id="dni"
-          name="dni"
-          v-model="userEntityDTO.dni"
-          required
-        /><br />
-      </div>
+    <div class="accessCode">
+      <label for="accessCode">Código de acceso:</label>
+      <input
+        type="text"
+        v-model="userEntityDTO.accessCode"
+        id="accessCode"
+        name="accessCode"
+        placeholder="Ingrese el código de acceso"
+        required
+      /><br />
+      <span v-if="errors.accessCode" class="error">{{ errors.accessCode }}</span>
+    </div>
 
-      <div class="email">
-        <label for="email">Email: </label>
-        <input type="email" v-model="userEntityDTO.email" placeholder="Ingrese su email" id="email" name="email" required /><br />
-      </div>
-
-
-      <div class="password">
-        <label for="password">Password: </label>
-        <input
-          type="text"
-          placeholder="Ingrese su contraseña"
-          id="password"
-          name="password"
-          v-model="userEntityDTO.password"
-          required
-        /><br />
-      </div>
-
-
-      <div class="accessID">
-        <label for="accessID">Access code: </label>
-        <input
-          type="text"
-          placeholder="Ingrese el código de acceso"
-          id="accessID"
-          name="accessID"
-          v-model="userEntityDTO.accessCode"
-          required
-        /><br />
-      </div>
-
-
-      <div class="buttons">
-        <button @click="register" type="button">Registrarse</button>
-
-        <router-link to="/">
-          <button type="sign in">Cancelar</button>
-        </router-link>
-      </div>
-    </form>
+    <div class="buttons">
+      <button type="submit">Registrarse</button>
+      <router-link to="/">
+        <button type="button">Cancelar</button>
+      </router-link>
+    </div>
+  </form>
   </div>
   </div>
 </template>
 
 
 <script setup>
-
-import { useAutenticacionStore } from '@/stores/autenticacionStore';
-import { storeToRefs } from 'pinia';
-import { useRouter } from 'vue-router';
-
+import { ref, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useAutenticacionStore } from "@/stores/autenticacionStore";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const authenticationStore = useAutenticacionStore();
-
 const { userEntityDTO } = storeToRefs(authenticationStore);
 
-const register = () => {
-  if(authenticationStore.register()) {
-    router.push('/login')
-  }
-}
+const errors = reactive({
+  email: "",
+  dni: "",
+});
 
+const dniOnly = (e) => {
+  e.target.value = e.target.value.replace(/\D/g, "").slice(0, 8);
+  userEntityDTO.value.dni = e.target.value;
+};
+
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+const submitForm = () => {
+  errors.email = "";
+  errors.dni = "";
+
+  if (!/^\d{1,8}$/.test(userEntityDTO.value.dni)) {
+    errors.dni = "El DNI debe tener solo números (máx. 8).";
+    return;
+  }
+
+  if (!validateEmail(userEntityDTO.value.email)) {
+    errors.email = "Ingrese un correo válido.";
+    return;
+  }
+
+  if (authenticationStore.register()) {
+    router.push("/login");
+  }
+};
 </script>
 
 
 <style scoped>
-
 
 .container-animation-register {
     margin: 0;
@@ -217,7 +249,6 @@ const register = () => {
   box-sizing: border-box;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
-
 
 .register form {
   padding: 2px;
