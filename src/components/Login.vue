@@ -2,54 +2,69 @@
 <template>
   <div class="container-animation">
     <div class="login">
-    <img src="/src/assets/logo_login.jpg" alt="logo_login" />
-    <form @submit.prevent="login">
-      <div class="user">
-        <label for="user">Usuario: </label>
-        <input v-model="usuario" type="text" placeholder="Ingrese su usuario" id="user" name="user" required /><br />
-      </div>
-      <div class="password">
-        <label for="password">Contraseña: </label>
-        <input v-model="password"
-          type="password"
-          placeholder="Ingrese su contraseña"
-          id="password"
-          name="password"
-          required
-        /><br />
-      </div>
+      <img src="/src/assets/logo_login.jpg" alt="logo_login" />
+      <form @submit.prevent="login">
+        <div class="user">
+          <label for="user">Usuario: </label>
+          <input
+            v-model="usuario"
+            type="text"
+            placeholder="Ingrese su usuario"
+            id="user"
+            name="user"
+            required
+          /><br />
+        </div>
+        <div class="password">
+          <label for="password">Contraseña: </label>
+          <input
+            v-model="password"
+            type="password"
+            placeholder="Ingrese su contraseña"
+            id="password"
+            name="password"
+            required
+          /><br />
+        </div>
 
-      <div class="buttons">
-        <button class="btn" type="submit" @click="login">Login</button>
-        <router-link to="register"><button>Registrarse</button> </router-link>
+        <div class="buttons">
+          <button class="btn" type="submit" @click="login">Login</button>
+          <router-link to="register"><button>Registrarse</button> </router-link>
+        </div>
+      </form>
+    </div>
+
+    <div v-if="mostrarError" class="popup">
+      <div class="popup-contenido">
+        <span class="cerrar" @click="mostrarError = false">&times;</span>
+        <p>Usuario o contraseña incorrectos</p>
       </div>
-    </form>
-  </div>
+    </div>
   </div>
 </template>
 
-
 <script setup>
-import { useAutenticacionStore } from '@/stores/autenticacionStore';
-import { storeToRefs } from 'pinia';
-import { useRouter } from 'vue-router';
+import { useAutenticacionStore } from "@/stores/autenticacionStore";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
 
 const autenticacionStore = useAutenticacionStore();
 const { usuario, password } = storeToRefs(autenticacionStore);
 const router = useRouter();
+const mostrarError = ref(false);
 
 // function login
 const login = async () => {
   await autenticacionStore.iniciarSesion();
   if (autenticacionStore.autenticacion) {
-    router.push({ name: 'HomePrincipal' });
+    router.push({ name: "HomePrincipal" });
     console.log("Login exitoso");
   } else {
-    alert("Usuario o contraseña incorrectos");
+    mostrarError.value = true; // 👈 activa el popup
   }
 };
 </script>
-
 
 <style scoped>
 /* Scoped styles ensure that the CSS only applies to this component*/
@@ -71,11 +86,10 @@ const login = async () => {
 
 .container-animation {
   margin: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--color-text);
   background-color: #890f16;
-  background-image:
-    radial-gradient(transparent 0.6em, #890f16 0.6em),
+  background-image: radial-gradient(transparent 0.6em, #890f16 0.6em),
     conic-gradient(at 1em 1em, transparent 270deg, #890f16 270deg),
     conic-gradient(at 1em 1em, transparent 270deg, #4204 270deg),
     conic-gradient(at 1em 1em, transparent 270deg, #4205 270deg),
@@ -93,6 +107,28 @@ const login = async () => {
   align-items: center;
   justify-content: center;
   padding: 0;
+}
+
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+}
+.popup-contenido {
+  background: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  width: 300px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  z-index: 10000;
+}
+
+.cerrar {
+  float: right;
+  cursor: pointer;
 }
 
 @keyframes bpx {
@@ -165,8 +201,7 @@ const login = async () => {
   95% {
     background-position-y: 0, -3em, 0, 3em, 6em;
   }
-} 
-
+}
 
 .login img {
   display: block;
@@ -176,23 +211,19 @@ const login = async () => {
   border-radius: 8px;
 }
 
-
 .login form {
   padding: 2px;
 }
-
 
 .login form input {
   padding: 10px;
   font-size: large;
 }
 
-
 .login form .user {
   padding: 10px;
   font-size: xx-large;
 }
-
 
 .login form .password {
   padding: 10px;
@@ -211,7 +242,6 @@ const login = async () => {
   margin-right: 1rem;
 }
 
-
 .login button:hover {
   background-color: #6f1515;
 }
@@ -222,12 +252,10 @@ const login = async () => {
     font-size: 0.9rem;
   }
 
-
   .login form {
     font-size: 1rem;
   }
 }
-
 
 @media (max-width: 768px) {
   .login {
@@ -235,6 +263,3 @@ const login = async () => {
   }
 }
 </style>
-
-
-
