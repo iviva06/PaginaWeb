@@ -107,6 +107,31 @@
         </div>
 
         <div class="input-group">
+          <label for="nota">Agregar nota</label>
+          <div style="display: flex; gap: 8px;">
+            <input
+              id="nota"
+              type="number"
+              step="0.1"
+              placeholder="Nota"
+              class="input-modal"
+              v-model.number="nuevaNota"
+            />
+            <button @click="agregarNota" class="guardar">➕</button>
+          </div>
+        </div>
+
+        <div v-if="courseStore.estudianteActualizado.notas?.length">
+          <p>Notas actuales:</p>
+          <ul>
+            <li v-for="(nota, i) in courseStore.estudianteActualizado.notas" :key="i">
+              {{ nota }}
+              <button @click="eliminarNota(i)" class="cancelar" style="margin-left: 8px;">❌</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- <div class="input-group">
           <label for="promedio">Promedio</label>
           <input
             id="promedio"
@@ -116,7 +141,7 @@
             class="input-modal"
             v-model="courseStore.estudianteActualizado.average"
           />
-        </div>
+        </div> -->
 
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
@@ -285,9 +310,12 @@ const editarEstudiante = (index, id) => {
   courseStore.estudianteActualizado.dni = estudiantes.value[index].dni;
   courseStore.estudianteActualizado.numSemester = estudiantes.value[index].numSemester;
   courseStore.estudianteActualizado.average = estudiantes.value[index].average;
+  courseStore.estudianteActualizado.notas = estudiantes.value[index].notas || [];
+  calcularPromedio();
   mostrarEdicionEstudiante.value = true;
   courseStore.setIdEstudiante(id);
 };
+
 
 const abrirEdicionCurso = (curso) => {
   courseStore.setCursoAEditar(curso);
@@ -447,6 +475,35 @@ const cerrarEliminacionEstudiante = () => {
   mostrarEliminacionEstudiante.value = false;
   estudianteAEliminar.value = { index: null, dni: null, name: "", lastName: "" };
 };
+
+const nuevaNota = ref(null);
+
+const agregarNota = () => {
+  if (!courseStore.estudianteActualizado.notas) {
+    courseStore.estudianteActualizado.notas = [];
+  }
+  if (typeof nuevaNota.value === 'number') {
+    courseStore.estudianteActualizado.notas.push(nuevaNota.value);
+    calcularPromedio();
+    nuevaNota.value = null;
+  }
+};
+
+const eliminarNota = (index) => {
+  courseStore.estudianteActualizado.notas.splice(index, 1);
+  calcularPromedio();
+};
+
+const calcularPromedio = () => {
+  const notas = courseStore.estudianteActualizado.notas;
+  if (notas && notas.length > 0) {
+    const suma = notas.reduce((acc, n) => acc + n, 0);
+    courseStore.estudianteActualizado.average = parseFloat((suma / notas.length).toFixed(2));
+  } else {
+    courseStore.estudianteActualizado.average = 0;
+  }
+};
+
 </script>
 
 <style>

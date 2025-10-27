@@ -14,6 +14,7 @@ export const useCourseStore = defineStore("course", {
       lastName: null,
       dni: 0,
       numSemester: 0,
+      average: 0,
     },
 
     cursoActualizado: {
@@ -73,6 +74,7 @@ export const useCourseStore = defineStore("course", {
               curso.students[index].lastName = this.estudianteActualizado.lastName;
               curso.students[index].dni = this.estudianteActualizado.dni;
               curso.students[index].numSemester = this.estudianteActualizado.numSemester;
+              curso.students[index].average = this.estudianteActualizado.average;
             }
           });
         }
