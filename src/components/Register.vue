@@ -37,7 +37,7 @@
         <div class="role">
           <label for="role">Rol:</label>
           <select v-model="userEntityDTO.role" id="role" name="role" required>
-            <option value="" disabled selected>Seleccione un rol</option>
+            <option :value="undefined" disabled selected>Seleccione un rol</option>
             <option value="ADMIN">Super Administrador</option>
             <option value="USER">Administrador</option>
           </select><br />
