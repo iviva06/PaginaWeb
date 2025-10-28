@@ -2,7 +2,7 @@
   <select v-model="cursoSeleccionado" @change="clickCurso(cursoSeleccionado)">
     <option disabled value="">Seleccioná un curso</option>
     <option v-for="curso in cursos" :key="curso.id" :value="curso">
-      {{ curso.name}}
+      {{ curso.name }}
     </option>
   </select>
 
@@ -14,7 +14,6 @@
       </div>
     </div>
 
-    <!-- Modal edición -->
     <div class="tablaEstudiantesCurso">
       <table>
         <thead>
@@ -28,7 +27,7 @@
           </tr>
         </thead>
         <tbody v-if="countStudents">
-          <tr  v-for="(estudiante, index) in estudiantes" :key="index">
+          <tr v-for="(estudiante, index) in estudiantes" :key="index">
             <td>{{ estudiante.name }}</td>
             <td>{{ estudiante.lastName }}</td>
             <td>{{ estudiante.dni }}</td>
@@ -44,26 +43,61 @@
       </table>
     </div>
 
-    <!-- Modal edición estudiante -->
     <div v-if="mostrarEdicionEstudiante" class="modal">
       <div class="modal-content">
         <h3>Editar estudiante</h3>
-        <p>Nombre: </p>
-        <input v-model="courseStore.estudianteActualizado.name" placeholder="Nombre" class="input-modal" />
-        <p>Apellido: </p>
-        <input v-model="courseStore.estudianteActualizado.lastName" placeholder="Apellido" class="input-modal" />
-        <p>DNI: </p>
-        <input v-model="courseStore.estudianteActualizado.dni" placeholder="DNI" class="input-modal" />
-        <p>Semestre: </p>
-        <input v-model="courseStore.estudianteActualizado.numSemester" placeholder="Semestre" class="input-modal" />
-        <p>Promedio: </p>
-        <input
-          type="number"
-          step="0.1"
-          placeholder="Promedio"
-          class="input-modal"
-          value="1"
-        />
+
+        <div class="input-group">
+          <label for="name">Nombre</label>
+          <input id="name" v-model="courseStore.estudianteActualizado.name" placeholder="Nombre" class="input-modal"
+            required />
+        </div>
+
+        <div class="input-group">
+          <label for="lastName">Apellido</label>
+          <input id="lastName" v-model="courseStore.estudianteActualizado.lastName" placeholder="Apellido"
+            class="input-modal" required />
+        </div>
+
+        <div class="input-group">
+          <label for="dni">DNI</label>
+          <input id="dni" type="text" v-model="courseStore.estudianteActualizado.dni" placeholder="DNI"
+            class="input-modal" maxlength="8" @keypress="
+              ($event) => {
+                if (
+                  !/[0-9]/.test($event.key) &&
+                  $event.key.length === 1
+                ) {
+                  $event.preventDefault();
+                }
+              }
+            " required />
+        </div>
+
+        <div class="input-group">
+          <label for="numSemester">Semestre</label>
+          <input id="numSemester" type="number" v-model.number="courseStore.estudianteActualizado.numSemester"
+            placeholder="Semestre" class="input-modal" required />
+        </div>
+
+        <div class="input-group">
+          <label for="nota">Agregar nota</label>
+          <div style="display: flex; gap: 8px;">
+            <input id="nota" type="number" step="0.1" placeholder="Nota" class="input-modal"
+              v-model.number="nuevaNota" />
+            <button @click="agregarNota" class="guardar">➕</button>
+          </div>
+        </div>
+
+        <div v-if="courseStore.estudianteActualizado.notas?.length">
+          <p>Notas actuales:</p>
+          <ul>
+            <li v-for="(nota, i) in courseStore.estudianteActualizado.notas" :key="i">
+              {{ nota }}
+              <button @click="eliminarNota(i)" class="cancelar" style="margin-left: 8px;">❌</button>
+            </li>
+          </ul>
+        </div>
 
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
@@ -71,55 +105,40 @@
         </div>
       </div>
     </div>
+
+
+    <div v-if="mostrarResultado" class="modal">
+      <div class="modal-content">
+        <h3 :style="{ color: tipoResultado === 'success' ? '#28a745' : '#d9534f' }">
+          {{ tituloResultado }}
+        </h3>
+        <p>{{ mensajeResultado }}</p>
+
+        <div class="modal-buttons">
+          <button :class="tipoResultado === 'success' ? 'guardar' : 'eliminar'" @click="cerrarModalResultado">
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useCourseStore } from "@/stores/courseStore";
 
 const courseStore = useCourseStore();
 const cursos = computed(() => courseStore.courseList);
 const cursoSeleccionado = ref();
 
-// Lista de estudiantes (mock de ejemplo)
-const estudiantes = ref([]);
-const countStudents = computed(() => Array.isArray(estudiantes.value) && estudiantes.value.length > 0);
+const mostrarEdicion = ref(false);
+const nombreEditado = ref("");
 
-
-// Estado modal estudiante
-const mostrarEdicionEstudiante = ref(false);
-const estudianteEditado = ref({});
-
-
-// Editar estudiante
-const editarEstudiante = (index, id) => {
-  courseStore.estudianteActualizado.name = estudiantes.value[index].name;
-  courseStore.estudianteActualizado.lastName = estudiantes.value[index].lastName;
-  courseStore.estudianteActualizado.dni = estudiantes.value[index].dni;
-  courseStore.estudianteActualizado.numSemester = estudiantes.value[index].numSemester;
-  mostrarEdicionEstudiante.value = true;
-  courseStore.setIdEstudiante(id);
-};
-
-// Guardar cambios estudiante
-const guardarCambiosEstudiante = async () => {
-  await courseStore.updateStudent();
-  if(courseStore.isUpdated) {
-    cerrarEdicionEstudiante();
-  }
-  console.log();
-};
-
-// Cerrar modal estudiante
-const cerrarEdicionEstudiante = () => {
-  mostrarEdicionEstudiante.value = false;
-  estudianteEditado.value = {};
-};
 
 const clickCurso = (cursoSeleccionado) => {
   console.log(courseStore.courseList.length);
-  courseStore.courseList.forEach(course => {
+  courseStore.courseList.forEach((course) => {
     console.log(course.id, cursoSeleccionado.id);
     if (course.id === cursoSeleccionado.id) {
       if (course.students.length === 0) {
@@ -131,6 +150,162 @@ const clickCurso = (cursoSeleccionado) => {
     }
   });
 };
+
+onMounted(async () => {
+  await courseStore.fetchCourses();
+});
+
+const estudiantes = ref([]);
+const countStudents = computed(
+  () => Array.isArray(estudiantes.value) && estudiantes.value.length > 0
+);
+
+const mostrarEdicionEstudiante = ref(false);
+const estudianteEditado = ref({});
+
+const mostrarResultado = ref(false);
+const tituloResultado = ref("");
+const mensajeResultado = ref("");
+const tipoResultado = ref("");
+
+const mostrarModalResultado = (tipo, titulo, mensaje) => {
+  tituloResultado.value = titulo;
+  mensajeResultado.value = mensaje;
+  tipoResultado.value = tipo;
+  mostrarResultado.value = true;
+};
+
+const cerrarModalResultado = () => {
+  if (tipoResultado.value === 'success') {
+    if (mostrarEdicionEstudiante.value) {
+      cerrarEdicionEstudiante();
+    }
+    if (mostrarEdicion.value) {
+      cerrarEdicion();
+    }
+  }
+
+  mostrarResultado.value = false;
+  tituloResultado.value = "";
+  mensajeResultado.value = "";
+  tipoResultado.value = "";
+};
+
+const editarEstudiante = (index, id) => {
+  courseStore.estudianteActualizado.name = estudiantes.value[index].name;
+  courseStore.estudianteActualizado.lastName = estudiantes.value[index].lastName;
+  courseStore.estudianteActualizado.dni = String(estudiantes.value[index].dni);
+  courseStore.estudianteActualizado.numSemester = Number(estudiantes.value[index].numSemester);
+  courseStore.estudianteActualizado.average = estudiantes.value[index].average;
+  courseStore.estudianteActualizado.notas = estudiantes.value[index].notas || [];
+  calcularPromedio();
+  mostrarEdicionEstudiante.value = true;
+  courseStore.setIdEstudiante(id);
+};
+
+
+const validarCamposEstudiante = () => {
+  const estudiante = courseStore.estudianteActualizado;
+  if (
+    !estudiante.name ||
+    !estudiante.lastName ||
+    !estudiante.dni ||
+    !estudiante.numSemester ||
+    estudiante.name.trim() === "" ||
+    estudiante.lastName.trim() === "" ||
+    !String(estudiante.dni).trim() ||
+    !String(estudiante.numSemester).trim()
+  ) {
+    mostrarModalResultado(
+      "error",
+      "Error de Validación",
+      "Todos los campos (Nombre, Apellido, DNI y Semestre) son obligatorios."
+    );
+    return false;
+  }
+
+  if (
+    isNaN(Number(estudiante.dni)) ||
+    isNaN(Number(estudiante.numSemester)) ||
+    Number(estudiante.dni) <= 0 ||
+    Number(estudiante.numSemester) <= 0
+  ) {
+    mostrarModalResultado(
+      "error",
+      "Error de Validación",
+      "DNI y Semestre deben ser números válidos y mayores a cero."
+    );
+    return false;
+  }
+  return true;
+};
+
+
+const guardarCambiosEstudiante = async () => {
+  if (!validarCamposEstudiante()) {
+    return;
+  }
+
+  const dniNumerico = Number(courseStore.estudianteActualizado.dni);
+  courseStore.estudianteActualizado.dni = dniNumerico;
+
+  await courseStore.updateStudent();
+
+  if (courseStore.isUpdated) {
+
+    mostrarModalResultado(
+      "success",
+      "¡Éxito!",
+      "Los datos del estudiante se han guardado correctamente."
+    );
+  } else {
+    mostrarModalResultado("error", "Error", "Hubo un error al actualizar el estudiante.");
+  }
+};
+
+
+const cerrarEdicionEstudiante = () => {
+  mostrarEdicionEstudiante.value = false;
+  estudianteEditado.value = {};
+};
+
+
+const cerrarEdicion = () => {
+  mostrarEdicion.value = false;
+  nombreEditado.value = "";
+  courseStore.cursoActualizado.id = null;
+};
+
+const nuevaNota = ref(null);
+
+const agregarNota = () => {
+  if (!courseStore.estudianteActualizado.notas) {
+    courseStore.estudianteActualizado.notas = [];
+  }
+  if (typeof nuevaNota.value === 'number') {
+    courseStore.estudianteActualizado.notas.push(nuevaNota.value);
+    calcularPromedio();
+    nuevaNota.value = null;
+  } else if (nuevaNota.value !== null) {
+    mostrarModalResultado("error", "Error de Nota", "La nota debe ser un valor numérico.");
+  }
+};
+
+const eliminarNota = (index) => {
+  courseStore.estudianteActualizado.notas.splice(index, 1);
+  calcularPromedio();
+};
+
+const calcularPromedio = () => {
+  const notas = courseStore.estudianteActualizado.notas;
+  if (notas && notas.length > 0) {
+    const suma = notas.reduce((acc, n) => acc + n, 0);
+    courseStore.estudianteActualizado.average = parseFloat((suma / notas.length).toFixed(2));
+  } else {
+    courseStore.estudianteActualizado.average = 0;
+  }
+};
+
 </script>
 
 <style>
@@ -140,7 +315,7 @@ main {
   flex-direction: column;
   padding: 20px;
   color: #000;
-  font-family: "Questrial", sans-serif;
+  font-family: questrial, sans-serif;
   max-width: 100%;
   min-width: 0;
   font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
@@ -151,7 +326,12 @@ select {
   font-size: clamp(1rem, 0.7vw + 0.9rem, 1.25rem);
   border-radius: 12px;
   border: 1px solid #ccc;
-  margin-bottom: 20px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .tablaEstudiantesCurso th {
@@ -186,22 +366,16 @@ select {
 .infoCurso {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 8px;
+
   align-items: start;
   margin-bottom: 20px;
-}
-
-.infoCursoText {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  height: 200px;
 }
 
 .infoCursoText h2 {
   font-size: clamp(2rem, 2vw + 1.5rem, 2.5rem);
   line-height: 1.2;
 }
+
 .infoCursoText p {
   font-size: clamp(1.5rem, 1.5vw + 1.5rem, 2rem);
 }
@@ -213,21 +387,30 @@ select {
   background-color: #890f16;
   color: white;
   border: none;
+  display: flex;
+  flex-direction: row;
+  justify-items: end;
+  margin-bottom: 30px;
+}
+
+.infoCursoButton {
+  align-self: end;
 }
 
 .infoCursoButton button:hover {
   background-color: #6f1515;
 }
+
 @media (max-width: 768px) {
   .infoCurso {
     grid-template-columns: 1fr;
   }
+
   .infoCursoButton {
     justify-self: start;
   }
 }
 
-/* --- TABLA RESPONSIVA --- */
 .tablaEstudiantesCurso {
   width: 100%;
   overflow-x: auto;
@@ -262,9 +445,11 @@ select {
   .tablaEstudiantesCurso table {
     min-width: 0;
   }
+
   .tablaEstudiantesCurso thead {
     display: none;
   }
+
   .tablaEstudiantesCurso tbody tr {
     display: grid;
     grid-template-columns: 1fr;
@@ -273,6 +458,7 @@ select {
     margin-bottom: 10px;
     padding: 8px;
   }
+
   .tablaEstudiantesCurso td {
     display: flex;
     justify-content: space-between;
@@ -280,6 +466,7 @@ select {
     background-color: transparent;
     padding: 6px 4px;
   }
+
   .tablaEstudiantesCurso td::before {
     content: attr(data-label);
     font-weight: 600;
@@ -297,7 +484,7 @@ select {
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.tablaEstudiantesCurso tr + tr td {
+.tablaEstudiantesCurso tr+tr td {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -308,6 +495,7 @@ select {
 }
 
 @media (max-width: 480px) {
+
   .tablaEstudiantesCurso th,
   .tablaEstudiantesCurso td {
     border-right: none;
@@ -315,7 +503,7 @@ select {
   }
 }
 
-/* --- Modal básico --- */
+
 .modal {
   position: fixed;
   top: 0;
@@ -328,36 +516,34 @@ select {
   align-items: center;
   z-index: 999;
 }
-.modal-content p {
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #333;
-}
+
 .modal-content {
-  background: #fff;
-  color: #000;
-  padding: 24px;
-  border-radius: 12px;
-  width: 380px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  text-align: left;
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
 }
+
 .modal-content h3 {
   margin-bottom: 10px;
 }
+
 .input-modal {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
+
 .modal-buttons {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .modal-buttons button {
   padding: 10px;
   border-radius: 8px;
@@ -365,15 +551,38 @@ select {
   cursor: pointer;
   font-weight: bold;
 }
+
 .modal-buttons .guardar {
   background: #28a745;
   color: white;
   font-family: "Questrial", sans-serif;
 }
 
+.modal-buttons .eliminar {
+  background: #6f1515;
+  color: rgb(255, 255, 255);
+  font-weight: lighter;
+  font-family: "Questrial", sans-serif;
+}
+
 .modal-buttons .cancelar {
-  background: #d9534f;
+  background: #6f1515;
   color: white;
+  font-weight: lighter;
+  font-family: "Questrial", sans-serif;
+}
+
+.input-group label {
+  font-weight: 200;
+  font-size: medium;
+  margin-right: 1rem;
+  font-family: "Questrial", sans-serif;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   font-family: "Questrial", sans-serif;
 }
 </style>
