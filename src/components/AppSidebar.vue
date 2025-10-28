@@ -17,10 +17,10 @@
       <router-link @click="clickCurso" to="/app/mostrarcursos" class="botonesNav">
         <button class="SidebarButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
       </router-link>
-      <button @click="abrirPopup" class="SidebarButton">
+      <button v-if="isSuperAdmin" @click="abrirPopup" class="SidebarButton">
         <i class="bx bx-qr"></i> Generar código de acceso
       </button>
-      <router-link to="/app/mostrarcursos" class="botonesNav">
+      <router-link v-if="isSuperAdmin" to="/app/mostrarcursos" class="botonesNav">
         <button class="SidebarButton"><i class='bx  bx-list-ul'  ></i>  Ver lista de usuarios</button>
       </router-link>
     </nav>
@@ -31,6 +31,15 @@
     <div class="modal-content">
       <p>📧 Escriba el mail al cual quiere que le llegue el código generado:</p>
       <input type="email" v-model="emailDestino" placeholder="Ingrese el correo" />
+      <div class="role">
+          <label for="role">Rol </label>
+          <select v-model="role" id="role" name="role" required>
+            <option :value="undefined" disabled selected>Seleccione un rol</option>
+            <option value="SUPER_ADMIN">Super Administrador</option>
+            <option value="ADMIN">Administrador</option>
+          </select><br />
+          <!-- <span class="error">{{  }}</span> -->
+        </div>
       <div class="botones">
         <button @click="generarCodigo">Enviar</button>
         <button @click="cerrarPopup">Cancelar</button>
@@ -59,18 +68,36 @@
 import { useCourseStore } from "@/stores/courseStore";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import axios from "axios";
 
+import { useAutenticacionStore } from "@/stores/autenticacionStore";
+
 const router = useRouter();
+const authenticationStore = useAutenticacionStore();
 
 defineProps({ open: { type: Boolean, default: false } });
 const courseStore = useCourseStore();
+
+const isSuperAdmin = computed(() => {
+  const role = sessionStorage.getItem('role')
+
+  if(role === 'ROLE_SUPER_ADMIN') {
+    authenticationStore.isSuperAdmin = true;
+    return authenticationStore.isSuperAdmin;
+  } else {
+    authenticationStore.isSuperAdmin = false;
+    return authenticationStore.isSuperAdmin;
+  }
+});
+
 const clickCurso = async () => {
   await courseStore.fetchCourses();
   const token = sessionStorage.getItem(`token`);
   const decoded = jwtDecode(token);
+
   console.log("Rol: " + decoded.role[0]);
+
   if (decoded.role[0] === "ROLE_SUPER_ADMIN") {
     router.push("/app/mostrarcursosSuperAdmin");
   } else if (decoded.role[0] === "ROLE_ADMIN") {
@@ -82,6 +109,9 @@ const mostrarPopup = ref(false);
 const mostrarPopupError = ref(false);
 const mostrarPopupExito = ref(false);
 const emailDestino = ref("");
+const role = ref("");
+
+
 const mensajeError = ref("");
 const mensajeExito = ref("");
 
@@ -124,7 +154,7 @@ const generarCodigo = async () => {
   const body = {
     emailRecipient: emailDestino.value,
     emailCreator: "superadmin@gmail.com",
-    rolType: "ADMIN",
+    rolType: role.value,
   };
 
 

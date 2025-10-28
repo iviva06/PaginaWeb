@@ -1,5 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import { jwtDecode } from "jwt-decode";
 
 export const useAutenticacionStore = defineStore("autenticacion", {
   state: () => ({
@@ -7,11 +8,12 @@ export const useAutenticacionStore = defineStore("autenticacion", {
     password: null,
     token: null,
     autenticacion: false,
+    isSuperAdmin: false,
     userEntityDTO: {
       name: '',
       email: '',
       password: '',
-      dni: null,
+      dni: 0,
       accessCode: ''
     },
   }),
@@ -31,6 +33,10 @@ export const useAutenticacionStore = defineStore("autenticacion", {
           sessionStorage.setItem('token', this.token);
           this.autenticacion = true;
           console.log(this.token);
+
+          const decodeJWT = jwtDecode(this.token);
+          console.log("token: " , decodeJWT)
+          sessionStorage.setItem('role', decodeJWT.role[0])
         }
 
       } catch (error) {
@@ -43,7 +49,8 @@ export const useAutenticacionStore = defineStore("autenticacion", {
     },
     async register() {
       try {
-        const response = await axios.post('https://ubelgrano.diegodev.net/api/v1/users', 
+        // https://ubelgrano.diegodev.net/api/v1/users http://localhost:8081/api/v1/users
+        const response = await axios.post(' https://ubelgrano.diegodev.net/api/v1/users', 
           this.userEntityDTO
         );
 

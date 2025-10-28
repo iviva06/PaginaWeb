@@ -35,16 +35,6 @@
           <span v-if="errors.password" class="error">{{ errors.password }}</span>
         </div>
 
-        <div class="role">
-          <label for="role">Rol:</label>
-          <select v-model="userEntityDTO.role" id="role" name="role" required>
-            <option :value="undefined" disabled selected>Seleccione un rol</option>
-            <option value="ADMIN">Super Administrador</option>
-            <option value="USER">Administrador</option>
-          </select><br />
-          <span v-if="errors.role" class="error">{{ errors.role }}</span>
-        </div>
-
         <div class="accessCode">
           <label for="accessCode">Código de acceso: </label>
           <input type="text" v-model="userEntityDTO.accessCode" id="accessCode" name="accessCode"
@@ -125,13 +115,6 @@ const submitForm = () => {
     errors.password = "La contraseña es obligatoria.";
     isValid = false;
   }
-
-  // CAMBIO APLICADO: Agregar validación para el campo role
-  if (!userEntityDTO.value.role) {
-    errors.role = "El rol es obligatorio.";
-    isValid = false;
-  }
-
 
   if (!userEntityDTO.value.accessCode) {
     errors.accessCode = "El código de acceso es obligatorio.";
