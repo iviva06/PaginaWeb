@@ -131,18 +131,6 @@
           </ul>
         </div>
 
-        <!-- <div class="input-group">
-          <label for="promedio">Promedio</label>
-          <input
-            id="promedio"
-            type="number"
-            step="0.1"
-            placeholder="Promedio"
-            class="input-modal"
-            v-model="courseStore.estudianteActualizado.average"
-          />
-        </div> -->
-
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
           <button class="cancelar" @click="cerrarEdicionEstudiante">❌ Cancelar</button>
@@ -561,9 +549,6 @@ select {
 
   align-items: start;
   margin-bottom: 20px;
-}
-
-.infoCursoText {
 }
 
 .infoCursoText h2 {

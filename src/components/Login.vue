@@ -82,6 +82,7 @@ const login = async () => {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  color: black;
 }
 
 .container-animation {
@@ -114,6 +115,7 @@ const login = async () => {
   inset: 0;
   background: rgba(0,0,0,0.5);
   z-index: 9999;
+  color: black;
 }
 .popup-contenido {
   background: #fff;
