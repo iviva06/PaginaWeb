@@ -4,52 +4,42 @@
     <form>
       <div class="nombre">
         <label for="nombre">Nombre </label><br />
-        <input
-          v-model="studentStore.nuevoEstudiante.name"
-          type="text"
-          placeholder="Nombre del estudiante"
-          id="nombre"
-          name="Nombre"
-          required
-        /><br />
+        <input v-model="studentStore.nuevoEstudiante.name" type="text" placeholder="Nombre del estudiante" id="nombre"
+          name="Nombre" required /><br />
       </div>
       <div class="apellido">
         <label for="apellido">Apellido </label><br />
-        <input
-          v-model="studentStore.nuevoEstudiante.lastName"
-          type="text"
-          placeholder="Apellido del estudiante"
-          id="apellido"
-          name="apellido"
-          required
-        /><br />
+        <input v-model="studentStore.nuevoEstudiante.lastName" type="text" placeholder="Apellido del estudiante"
+          id="apellido" name="apellido" required /><br />
       </div>
       <div class="dni">
         <label for="dni">DNI </label><br />
-        <input
-          v-model="studentStore.nuevoEstudiante.dni"
-          type="text"
-          placeholder="DNI del estudiante"
-          id="dni"
-          name="DNI"
-          required
-        /><br />
+        <input v-model="studentStore.nuevoEstudiante.dni" type="number" placeholder="DNI del estudiante" id="dni"
+          name="DNI" required maxlength="8" minlength="7" @input="validateDniInput" /><br />
       </div>
       <div class="curso">
         <label for="curso">Curso </label><br />
         <select v-model="cursoSeleccionado" id="curso" required @change="clickCurso(cursoSeleccionado)">
           <option :value="undefined" disabled>Selecciona un curso</option>
           <option v-for="curso in courseStore.courseList" :key="curso.id" :value="curso">
-          {{ curso.name }}</option>
+            {{ curso.name }}</option>
         </select>
       </div>
     </form>
     <div class="saveButton" @click="guardarEstudiante">
       <button type="button">Guardar</button>
     </div>
+
     <div v-if="mostrarPopup" class="modal" @click.self="cerrarPopup">
       <div class="modal-content">
         <p>✅ El estudiante se guardó correctamente</p>
+        <button @click="cerrarPopup">Aceptar</button>
+      </div>
+    </div>
+
+    <div v-if="mostrarPopupError" class="modal" @click.self="cerrarPopup">
+      <div class="modal-content">
+        <p style="color: red;">❌ Todos los campos del formulario deben ser completados obligatoriamente.</p>
         <button @click="cerrarPopup">Aceptar</button>
       </div>
     </div>
@@ -80,30 +70,56 @@ onMounted(async () => {
   await courseStore.fetchCourses()
 })
 
+const mostrarPopup = ref(false);
+const mostrarPopupError = ref(false); // <--- NUEVA VARIABLE
+
 const guardarEstudiante = async () => {
+  const estudiante = studentStore.nuevoEstudiante;
+
+  // **LÓGICA DE VALIDACIÓN AÑADIDA**
+  if (!estudiante.name || !estudiante.lastName || !estudiante.dni || !estudiante.idCourse) {
+    mostrarPopupError.value = true; // Mostrar popup de error
+    return; // Detener la ejecución
+  }
+  // **FIN LÓGICA DE VALIDACIÓN**
+
   await studentStore.createStudent();
 
   if (studentStore.isCreated) {
     mostrarPopup.value = true;
     studentStore.isCreated = false;
   } else {
-    // mostrar popup 
+    // Si falla la creación por otra razón (e.g., error del servidor)
+    mostrarPopupError.value = true;
   }
 };
-
-const mostrarPopup = ref(false);
-
 
 
 function cerrarPopup() {
   mostrarPopup.value = false;
+  mostrarPopupError.value = false; // <-- Modificación para cerrar el popup de error también
 }
+
+const validateDniInput = (event) => {
+  event.target.value = event.target.value.replace(/[^0-9]/g, "");
+
+  if (event.target.value.length > 8) {
+    event.target.value = event.target.value.slice(0, 8);
+  }
+  studentStore.nuevoEstudiante.dni = event.target.value;
+};
 </script>
 
 
 <style scoped>
 * {
   box-sizing: border-box;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 header button {
@@ -115,17 +131,21 @@ header button {
   border-radius: 16px;
   font-family: questrial, sans-serif;
 }
+
 .logoutButton button {
   display: flex;
   align-items: center;
   gap: 3px;
 }
+
 .logoutButton a {
-  text-decoration: none; /* para borrar la linea azul de hipervinculo */
+  text-decoration: none;
+  /* para borrar la linea azul de hipervinculo */
 }
 
 header {
-  background-color: #6f1515; /* rojo UB */
+  background-color: #6f1515;
+  /* rojo UB */
   color: white;
   padding: 10px 20px;
   display: flex;
@@ -134,15 +154,18 @@ header {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva,
     Verdana, sans-serif;
 }
+
 header img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   margin-right: 15px;
 }
+
 .sidebar {
   display: flex;
 }
+
 aside {
   background-color: #d3d3d3;
   margin: 0;
@@ -201,7 +224,8 @@ main {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
-  background-color: #890f16; /* normal */
+  background-color: #890f16;
+  /* normal */
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -212,7 +236,8 @@ main {
 
 
 .saveButton button:hover {
-  background-color: #6f1515; /* distinto al normal */
+  background-color: #6f1515;
+  /* distinto al normal */
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -302,6 +327,3 @@ input {
   font-family: "Questrial", sans-serif;
 }
 </style>
-
-
-
