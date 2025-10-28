@@ -12,7 +12,7 @@
         <button class="SidebarButton"><i class="bx bxs-user"></i> Agregar estudiante</button>
       </router-link>
       <router-link to="/app/agregarcurso" class="botonesNav">
-        <button class="SidebarButton"><i class="bx bxs-book"></i> Agregar un curso</button>
+        <button class="SidebarButton"><i class='bx  bx-pencil'  ></i>  Agregar un curso</button>
       </router-link>
       <router-link @click="clickCurso" to="/app/mostrarcursos" class="botonesNav">
         <button class="SidebarButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
@@ -20,6 +20,9 @@
       <button @click="abrirPopup" class="SidebarButton">
         <i class="bx bx-qr"></i> Generar código de acceso
       </button>
+      <router-link to="/app/mostrarcursos" class="botonesNav">
+        <button class="SidebarButton"><i class='bx  bx-list-ul'  ></i>  Ver lista de usuarios</button>
+      </router-link>
     </nav>
   </aside>
 
