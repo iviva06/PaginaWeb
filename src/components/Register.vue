@@ -42,21 +42,22 @@
             <option value="ADMIN">Super Administrador</option>
             <option value="USER">Administrador</option>
           </select><br />
+          <span v-if="errors.role" class="error">{{ errors.role }}</span>
         </div>
 
-          <div class="accessCode">
-            <label for="accessCode">Código de acceso: </label>
-            <input type="text" v-model="userEntityDTO.accessCode" id="accessCode" name="accessCode"
-              placeholder="Ingrese el código de acceso" required /><br />
-            <span v-if="errors.accessCode" class="error">{{ errors.accessCode }}</span>
-          </div>
+        <div class="accessCode">
+          <label for="accessCode">Código de acceso: </label>
+          <input type="text" v-model="userEntityDTO.accessCode" id="accessCode" name="accessCode"
+            placeholder="Ingrese el código de acceso" required /><br />
+          <span v-if="errors.accessCode" class="error">{{ errors.accessCode }}</span>
+        </div>
 
-          <div class="buttons">
-            <button type="submit">Registrarse</button>
-            <router-link to="/">
-              <button type="button">Cancelar</button>
-            </router-link>
-          </div>
+        <div class="buttons">
+          <button type="submit">Registrarse</button>
+          <router-link to="/">
+            <button type="button">Cancelar</button>
+          </router-link>
+        </div>
       </form>
     </div>
   </div>
@@ -78,6 +79,8 @@ const errors = reactive({
   email: "",
   dni: "",
   password: "",
+  // CAMBIO APLICADO: Agregar 'role' al objeto errors
+  role: "",
   accessCode: "",
 });
 
@@ -120,6 +123,12 @@ const submitForm = () => {
 
   if (!userEntityDTO.value.password) {
     errors.password = "La contraseña es obligatoria.";
+    isValid = false;
+  }
+
+  // CAMBIO APLICADO: Agregar validación para el campo role
+  if (!userEntityDTO.value.role) {
+    errors.role = "El rol es obligatorio.";
     isValid = false;
   }
 
@@ -407,7 +416,7 @@ select {
   padding: 20px;
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   font-family: 'Georgia', serif;
 }
 
@@ -434,6 +443,4 @@ input {
   border-radius: 4px;
   box-sizing: border-box;
 }
-
-
 </style>
