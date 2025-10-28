@@ -20,7 +20,7 @@
     <div v-if="mostrarEdicion" class="modal">
       <div class="modal-content">
         <h3>Editar curso</h3>
-        <input v-model="nombreEditado" placeholder="Nombre" />
+        <input v-model="nombreEditado" placeholder="Nombre" required />
 
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambios">✅ Guardar cambios</button>
@@ -68,55 +68,42 @@
 
         <div class="input-group">
           <label for="name">Nombre</label>
-          <input
-            id="name"
-            v-model="courseStore.estudianteActualizado.name"
-            placeholder="Nombre"
-            class="input-modal"
-          />
+          <input id="name" v-model="courseStore.estudianteActualizado.name" placeholder="Nombre" class="input-modal"
+            required />
         </div>
 
         <div class="input-group">
           <label for="lastName">Apellido</label>
-          <input
-            id="lastName"
-            v-model="courseStore.estudianteActualizado.lastName"
-            placeholder="Apellido"
-            class="input-modal"
-          />
+          <input id="lastName" v-model="courseStore.estudianteActualizado.lastName" placeholder="Apellido"
+            class="input-modal" required />
         </div>
 
         <div class="input-group">
           <label for="dni">DNI</label>
-          <input
-            id="dni"
-            v-model="courseStore.estudianteActualizado.dni"
-            placeholder="DNI"
-            class="input-modal"
-          />
+          <input id="dni" type="text" v-model="courseStore.estudianteActualizado.dni" placeholder="DNI"
+            class="input-modal" maxlength="8" @keypress="
+              ($event) => {
+                if (
+                  !/[0-9]/.test($event.key) &&
+                  $event.key.length === 1
+                ) {
+                  $event.preventDefault();
+                }
+              }
+            " required />
         </div>
 
         <div class="input-group">
           <label for="numSemester">Semestre</label>
-          <input
-            id="numSemester"
-            v-model="courseStore.estudianteActualizado.numSemester"
-            placeholder="Semestre"
-            class="input-modal"
-          />
+          <input id="numSemester" type="number" v-model.number="courseStore.estudianteActualizado.numSemester"
+            placeholder="Semestre" class="input-modal" required />
         </div>
 
         <div class="input-group">
           <label for="nota">Agregar nota</label>
           <div style="display: flex; gap: 8px;">
-            <input
-              id="nota"
-              type="number"
-              step="0.1"
-              placeholder="Nota"
-              class="input-modal"
-              v-model.number="nuevaNota"
-            />
+            <input id="nota" type="number" step="0.1" placeholder="Nota" class="input-modal"
+              v-model.number="nuevaNota" />
             <button @click="agregarNota" class="guardar">➕</button>
           </div>
         </div>
@@ -130,18 +117,6 @@
             </li>
           </ul>
         </div>
-
-        <!-- <div class="input-group">
-          <label for="promedio">Promedio</label>
-          <input
-            id="promedio"
-            type="number"
-            step="0.1"
-            placeholder="Promedio"
-            class="input-modal"
-            v-model="courseStore.estudianteActualizado.average"
-          />
-        </div> -->
 
         <div class="modal-buttons">
           <button class="guardar" @click="guardarCambiosEstudiante">✅ Guardar cambios</button>
@@ -158,11 +133,9 @@
           ¿Estás seguro de que quieres eliminar al estudiante
           <br />
           <strong>{{ estudianteAEliminar.name }} {{ estudianteAEliminar.lastName }}</strong>
-          (DNI: <strong>{{ estudianteAEliminar.dni }}</strong
-          >)
+          (DNI: <strong>{{ estudianteAEliminar.dni }}</strong>)
           <br />
-          del curso <strong>{{ cursoSeleccionado.name }}</strong
-          >?
+          del curso <strong>{{ cursoSeleccionado.name }}</strong>?
         </p>
         <p style="font-size: small; color: #d9534f">Esta acción es irreversible.</p>
 
@@ -183,15 +156,13 @@
         <p>{{ mensajeResultado }}</p>
 
         <div class="modal-buttons">
-          <button
-            :class="tipoResultado === 'success' ? 'guardar' : 'eliminar'"
-            @click="cerrarModalResultado"
-          >
+          <button :class="tipoResultado === 'success' ? 'guardar' : 'eliminar'" @click="cerrarModalResultado">
             Aceptar
           </button>
         </div>
       </div>
     </div>
+
     <div v-if="mostrarEliminacionCurso" class="modal">
       <div class="modal-content">
         <h3>⚠️ Eliminar Curso</h3>
@@ -200,8 +171,7 @@
           ¿Estás seguro de que quieres eliminar el curso:
           <br />
           <strong>{{ courseStore.cursoActualizado.name }}</strong>
-          (ID: <strong>{{ courseStore.cursoActualizado.id }}</strong
-          >)?
+          (ID: <strong>{{ courseStore.cursoActualizado.id }}</strong>)?
         </p>
         <p style="font-size: small; color: #d9534f">
           Esta acción es irreversible y eliminará todos sus estudiantes asociados.
@@ -212,23 +182,6 @@
             🗑 Eliminar definitivamente
           </button>
           <button class="cancelar" @click="cerrarEliminacionCurso">❌ Cancelar</button>
-        </div>
-      </div>
-    </div>
-    <div v-if="mostrarResultado" class="modal">
-      <div class="modal-content">
-        <h3 :style="{ color: tipoResultado === 'success' ? '#28a745' : '#d9534f' }">
-          {{ tituloResultado }}
-        </h3>
-        <p>{{ mensajeResultado }}</p>
-
-        <div class="modal-buttons">
-          <button
-            :class="tipoResultado === 'success' ? 'guardar' : 'eliminar'"
-            @click="cerrarModalResultado"
-          >
-            Aceptar
-          </button>
         </div>
       </div>
     </div>
@@ -243,11 +196,9 @@ const courseStore = useCourseStore();
 const cursos = computed(() => courseStore.courseList);
 const cursoSeleccionado = ref();
 
-// Estado del modal curso
 const mostrarEdicion = ref(false);
 const nombreEditado = ref("");
 
-// Estado modal curso (Eliminación/Confirmación de Curso) - ¡NUEVO ESTADO!
 const mostrarEliminacionCurso = ref(false);
 
 const clickCurso = (cursoSeleccionado) => {
@@ -269,25 +220,22 @@ onMounted(async () => {
   await courseStore.fetchCourses();
 });
 
-// Lista de estudiantes (mock de ejemplo)
 const estudiantes = ref([]);
 const countStudents = computed(
   () => Array.isArray(estudiantes.value) && estudiantes.value.length > 0
 );
 
-// Estado modal estudiante (Edición)
 const mostrarEdicionEstudiante = ref(false);
 const estudianteEditado = ref({});
 
-// ESTADO MODAL ELIMINACIÓN (Confirmación de Estudiante)
 const mostrarEliminacionEstudiante = ref(false);
 const estudianteAEliminar = ref({ index: null, dni: null, name: "", lastName: "" });
 
-// ESTADO MODAL RESULTADO
+
 const mostrarResultado = ref(false);
 const tituloResultado = ref("");
 const mensajeResultado = ref("");
-const tipoResultado = ref(""); // 'success' o 'error'
+const tipoResultado = ref(""); 
 
 const mostrarModalResultado = (tipo, titulo, mensaje) => {
   tituloResultado.value = titulo;
@@ -297,18 +245,26 @@ const mostrarModalResultado = (tipo, titulo, mensaje) => {
 };
 
 const cerrarModalResultado = () => {
+  if (tipoResultado.value === 'success') {
+    if (mostrarEdicionEstudiante.value) {
+      cerrarEdicionEstudiante();
+    }
+    if (mostrarEdicion.value) {
+      cerrarEdicion();
+    }
+  }
+
   mostrarResultado.value = false;
   tituloResultado.value = "";
   mensajeResultado.value = "";
   tipoResultado.value = "";
 };
 
-// Editar estudiante
 const editarEstudiante = (index, id) => {
   courseStore.estudianteActualizado.name = estudiantes.value[index].name;
   courseStore.estudianteActualizado.lastName = estudiantes.value[index].lastName;
-  courseStore.estudianteActualizado.dni = estudiantes.value[index].dni;
-  courseStore.estudianteActualizado.numSemester = estudiantes.value[index].numSemester;
+  courseStore.estudianteActualizado.dni = String(estudiantes.value[index].dni);
+  courseStore.estudianteActualizado.numSemester = Number(estudiantes.value[index].numSemester);
   courseStore.estudianteActualizado.average = estudiantes.value[index].average;
   courseStore.estudianteActualizado.notas = estudiantes.value[index].notas || [];
   calcularPromedio();
@@ -323,24 +279,73 @@ const abrirEdicionCurso = (curso) => {
   mostrarEdicion.value = true;
 };
 
-// Guardar cambios estudiante
+const validarCamposEstudiante = () => {
+  const estudiante = courseStore.estudianteActualizado;
+  if (
+    !estudiante.name ||
+    !estudiante.lastName ||
+    !estudiante.dni ||
+    !estudiante.numSemester ||
+    estudiante.name.trim() === "" ||
+    estudiante.lastName.trim() === "" ||
+    !String(estudiante.dni).trim() ||
+    !String(estudiante.numSemester).trim()
+  ) {
+    mostrarModalResultado(
+      "error",
+      "Error de Validación",
+      "Todos los campos (Nombre, Apellido, DNI y Semestre) son obligatorios."
+    );
+    return false;
+  }
+
+  if (
+    isNaN(Number(estudiante.dni)) ||
+    isNaN(Number(estudiante.numSemester)) ||
+    Number(estudiante.dni) <= 0 ||
+    Number(estudiante.numSemester) <= 0
+  ) {
+    mostrarModalResultado(
+      "error",
+      "Error de Validación",
+      "DNI y Semestre deben ser números válidos y mayores a cero."
+    );
+    return false;
+  }
+  return true;
+};
+
+
 const guardarCambiosEstudiante = async () => {
+  if (!validarCamposEstudiante()) {
+    return;
+  }
+
+  const dniNumerico = Number(courseStore.estudianteActualizado.dni);
+  courseStore.estudianteActualizado.dni = dniNumerico;
+
   await courseStore.updateStudent();
+
   if (courseStore.isUpdated) {
-    cerrarEdicionEstudiante();
+
+    mostrarModalResultado(
+      "success",
+      "¡Éxito!",
+      "Los datos del estudiante se han guardado correctamente."
+    );
+  } else {
+    mostrarModalResultado("error", "Error", "Hubo un error al actualizar el estudiante.");
   }
 };
 
-// Cerrar modal estudiante (Edición)
+
 const cerrarEdicionEstudiante = () => {
   mostrarEdicionEstudiante.value = false;
   estudianteEditado.value = {};
 };
 
-// Guardar cambios del curso!!
 const guardarCambios = async () => {
   if (nombreEditado.value.trim() === "") {
-    // Reemplazado alert por modal de error
     mostrarModalResultado(
       "error",
       "Error de Validación",
@@ -355,35 +360,34 @@ const guardarCambios = async () => {
 
   if (success) {
     cursoSeleccionado.value.name = nombreEditado.value;
-    cerrarEdicion();
+
+    mostrarModalResultado(
+      "success",
+      "¡Éxito!",
+      "Los datos del curso se han guardado correctamente."
+    );
   } else {
-    // Reemplazado alert por modal de error
     mostrarModalResultado("error", "Error", "Hubo un error al guardar los cambios del curso.");
   }
 };
 
-// Cerrar modal curso (Edición)
 const cerrarEdicion = () => {
   mostrarEdicion.value = false;
   nombreEditado.value = "";
   courseStore.cursoActualizado.id = null;
 };
 
-// 👇 LÓGICA DE ELIMINACIÓN DE CURSO (SIN ALERTS NI CONFIRMS) 👇
 
-// 1. Abre el modal de confirmación de curso
 const eliminarCurso = () => {
   if (!courseStore.cursoActualizado.id) {
     mostrarModalResultado("error", "Error", "No hay un curso seleccionado para eliminar.");
     return;
   }
-  // Abre el modal de confirmación de curso
   mostrarEliminacionCurso.value = true;
 };
 
-// 2. Ejecuta la eliminación si se confirma en el modal
 const confirmarEliminacionCurso = async () => {
-  mostrarEliminacionCurso.value = false; // Cierra el modal de confirmación
+  mostrarEliminacionCurso.value = false;
 
   const idAEliminar = courseStore.cursoActualizado.id;
   const nombreCurso = courseStore.cursoActualizado.name;
@@ -393,34 +397,26 @@ const confirmarEliminacionCurso = async () => {
 
     if (success) {
       const mensaje = `Curso "${nombreCurso}" (ID ${idAEliminar}) eliminado correctamente.`;
-      // Reemplazado alert por modal de éxito
       mostrarModalResultado("success", "¡Éxito!", mensaje);
 
       cursoSeleccionado.value = null;
       cerrarEdicion();
     } else {
       const mensaje = "Hubo un error al eliminar el curso. Revisa la consola para más detalles.";
-      // Reemplazado alert por modal de error
       mostrarModalResultado("error", "Error en la Eliminación", mensaje);
     }
   } catch (error) {
     const mensaje = `Error al intentar eliminar el curso: ${error.message}`;
-    // Reemplazado alert por modal de error
     mostrarModalResultado("error", "Error de Conexión/API", mensaje);
   }
 };
 
-// 3. Cierra el modal de confirmación de curso
 const cerrarEliminacionCurso = () => {
   mostrarEliminacionCurso.value = false;
 };
 
-// LÓGICA DE MODAL DE ELIMINACIÓN DE ESTUDIANTE (Mantenida)
-
-// Abre el modal y guarda los datos temporalmente
 const eliminarEstudiante = (index, studentDni) => {
   if (!cursoSeleccionado.value || !cursoSeleccionado.value.id) {
-    // Reemplazado alert por modal de error
     mostrarModalResultado(
       "error",
       "Error de Curso",
@@ -429,7 +425,6 @@ const eliminarEstudiante = (index, studentDni) => {
     return;
   }
 
-  // Guardamos los datos del estudiante para mostrarlos en el modal
   estudianteAEliminar.value = {
     index: index,
     dni: studentDni,
@@ -437,12 +432,11 @@ const eliminarEstudiante = (index, studentDni) => {
     lastName: estudiantes.value[index].lastName,
   };
 
-  mostrarEliminacionEstudiante.value = true; // Abre el modal de confirmación
+  mostrarEliminacionEstudiante.value = true;
 };
 
-// Ejecuta la eliminación si se confirma en el modal
 const confirmarEliminacionEstudiante = async () => {
-  mostrarEliminacionEstudiante.value = false; // Cierra el modal de confirmación
+  mostrarEliminacionEstudiante.value = false;
 
   const { index, dni } = estudianteAEliminar.value;
   const courseId = cursoSeleccionado.value.id;
@@ -453,24 +447,19 @@ const confirmarEliminacionEstudiante = async () => {
     if (success) {
       estudiantes.value.splice(index, 1);
       const mensaje = `Estudiante DNI ${dni} eliminado correctamente del curso ${courseId}.`;
-      // Reemplazado alert por modal de éxito
       mostrarModalResultado("success", "¡Éxito!", mensaje);
     } else {
       const mensaje = `No se pudo eliminar el estudiante DNI ${dni}.`;
-      // Reemplazado alert por modal de error
       mostrarModalResultado("error", "Error en la Eliminación", mensaje);
     }
   } catch (error) {
     const mensaje = `Error al intentar eliminar el estudiante DNI ${dni}: ${error.message}`;
-    // Reemplazado alert por modal de error
     mostrarModalResultado("error", "Error de Conexión/API", mensaje);
   } finally {
-    // Limpia los datos temporales
     estudianteAEliminar.value = { index: null, dni: null, name: "", lastName: "" };
   }
 };
 
-// Cierra el modal de eliminación (si el usuario cancela)
 const cerrarEliminacionEstudiante = () => {
   mostrarEliminacionEstudiante.value = false;
   estudianteAEliminar.value = { index: null, dni: null, name: "", lastName: "" };
@@ -486,6 +475,8 @@ const agregarNota = () => {
     courseStore.estudianteActualizado.notas.push(nuevaNota.value);
     calcularPromedio();
     nuevaNota.value = null;
+  } else if (nuevaNota.value !== null) {
+    mostrarModalResultado("error", "Error de Nota", "La nota debe ser un valor numérico.");
   }
 };
 
@@ -526,6 +517,12 @@ select {
   border: 1px solid #ccc;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .tablaEstudiantesCurso th {
   margin-top: 20px;
   padding: 10px;
@@ -563,13 +560,11 @@ select {
   margin-bottom: 20px;
 }
 
-.infoCursoText {
-}
-
 .infoCursoText h2 {
   font-size: clamp(2rem, 2vw + 1.5rem, 2.5rem);
   line-height: 1.2;
 }
+
 .infoCursoText p {
   font-size: clamp(1.5rem, 1.5vw + 1.5rem, 2rem);
 }
@@ -586,6 +581,7 @@ select {
   justify-items: end;
   margin-bottom: 30px;
 }
+
 .infoCursoButton {
   align-self: end;
 }
@@ -593,16 +589,17 @@ select {
 .infoCursoButton button:hover {
   background-color: #6f1515;
 }
+
 @media (max-width: 768px) {
   .infoCurso {
     grid-template-columns: 1fr;
   }
+
   .infoCursoButton {
     justify-self: start;
   }
 }
 
-/* --- TABLA RESPONSIVA --- */
 .tablaEstudiantesCurso {
   width: 100%;
   overflow-x: auto;
@@ -637,9 +634,11 @@ select {
   .tablaEstudiantesCurso table {
     min-width: 0;
   }
+
   .tablaEstudiantesCurso thead {
     display: none;
   }
+
   .tablaEstudiantesCurso tbody tr {
     display: grid;
     grid-template-columns: 1fr;
@@ -648,6 +647,7 @@ select {
     margin-bottom: 10px;
     padding: 8px;
   }
+
   .tablaEstudiantesCurso td {
     display: flex;
     justify-content: space-between;
@@ -655,6 +655,7 @@ select {
     background-color: transparent;
     padding: 6px 4px;
   }
+
   .tablaEstudiantesCurso td::before {
     content: attr(data-label);
     font-weight: 600;
@@ -672,7 +673,7 @@ select {
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.tablaEstudiantesCurso tr + tr td {
+.tablaEstudiantesCurso tr+tr td {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -683,6 +684,7 @@ select {
 }
 
 @media (max-width: 480px) {
+
   .tablaEstudiantesCurso th,
   .tablaEstudiantesCurso td {
     border-right: none;
@@ -690,7 +692,7 @@ select {
   }
 }
 
-/* --- Modal básico --- */
+
 .modal {
   position: fixed;
   top: 0;
@@ -703,6 +705,7 @@ select {
   align-items: center;
   z-index: 999;
 }
+
 .modal-content {
   background: white;
   padding: 25px;
@@ -713,19 +716,23 @@ select {
   gap: 16px;
   text-align: center;
 }
+
 .modal-content h3 {
   margin-bottom: 10px;
 }
+
 .input-modal {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
+
 .modal-buttons {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .modal-buttons button {
   padding: 10px;
   border-radius: 8px;
@@ -733,23 +740,27 @@ select {
   cursor: pointer;
   font-weight: bold;
 }
+
 .modal-buttons .guardar {
   background: #28a745;
   color: white;
   font-family: "Questrial", sans-serif;
 }
+
 .modal-buttons .eliminar {
   background: #6f1515;
   color: rgb(255, 255, 255);
   font-weight: lighter;
   font-family: "Questrial", sans-serif;
 }
+
 .modal-buttons .cancelar {
   background: #6f1515;
   color: white;
   font-weight: lighter;
   font-family: "Questrial", sans-serif;
 }
+
 .input-group label {
   font-weight: 200;
   font-size: medium;

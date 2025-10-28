@@ -24,10 +24,14 @@
         </select>
         <br />
       </div>
+
+      <div class="saveButton">
+        <button type="submit" :disabled="isLoading">
+          {{ isLoading ? 'Guardando...' : 'Crear Curso' }}
+        </button>
+      </div>
     </form>
-    <div class="saveButton">
-      <button type="button" @click="crearCurso">Crear Curso</button>
-    </div>
+
 
     <div v-if="mostrarPopup" class="modal" @click.self="cerrarPopup">
       <div class="modal-content">
@@ -64,7 +68,7 @@ const isLoading = ref(false);
 
 
 const crearCurso = async () => {
-  if (isLoading.value) return; // Evitar múltiples envíos
+  if (isLoading.value) return;
   isLoading.value = true;
   mostrarPopup.value = false;
   mostrarPopupError.value = false;
@@ -128,7 +132,7 @@ select {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
-  background-color: #890f16; /* normal */
+  background-color: #890f16; 
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -138,7 +142,7 @@ select {
 }
 
 .saveButton button:hover {
-  background-color: #6f1515; /* distinto al normal */
+  background-color: #6f1515;
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
