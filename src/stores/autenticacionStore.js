@@ -23,7 +23,7 @@ export const useAutenticacionStore = defineStore("autenticacion", {
         const response = await axios.post('https://ubelgrano.diegodev.net/api/login', {
           email: this.usuario,
           password: this.password,
-        } )
+        })
 
         const data = response.data;
         if (data && data.token) {
