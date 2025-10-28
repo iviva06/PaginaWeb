@@ -71,17 +71,16 @@ onMounted(async () => {
 })
 
 const mostrarPopup = ref(false);
-const mostrarPopupError = ref(false); // <--- NUEVA VARIABLE
+const mostrarPopupError = ref(false); 
 
 const guardarEstudiante = async () => {
   const estudiante = studentStore.nuevoEstudiante;
 
-  // **LÓGICA DE VALIDACIÓN AÑADIDA**
   if (!estudiante.name || !estudiante.lastName || !estudiante.dni || !estudiante.idCourse) {
-    mostrarPopupError.value = true; // Mostrar popup de error
-    return; // Detener la ejecución
+    mostrarPopupError.value = true;
+    return;
   }
-  // **FIN LÓGICA DE VALIDACIÓN**
+
 
   await studentStore.createStudent();
 
@@ -89,7 +88,6 @@ const guardarEstudiante = async () => {
     mostrarPopup.value = true;
     studentStore.isCreated = false;
   } else {
-    // Si falla la creación por otra razón (e.g., error del servidor)
     mostrarPopupError.value = true;
   }
 };
@@ -97,7 +95,7 @@ const guardarEstudiante = async () => {
 
 function cerrarPopup() {
   mostrarPopup.value = false;
-  mostrarPopupError.value = false; // <-- Modificación para cerrar el popup de error también
+  mostrarPopupError.value = false;
 }
 
 const validateDniInput = (event) => {
@@ -140,12 +138,10 @@ header button {
 
 .logoutButton a {
   text-decoration: none;
-  /* para borrar la linea azul de hipervinculo */
 }
 
 header {
   background-color: #6f1515;
-  /* rojo UB */
   color: white;
   padding: 10px 20px;
   display: flex;
@@ -225,7 +221,6 @@ main {
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
   background-color: #890f16;
-  /* normal */
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -237,7 +232,6 @@ main {
 
 .saveButton button:hover {
   background-color: #6f1515;
-  /* distinto al normal */
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
