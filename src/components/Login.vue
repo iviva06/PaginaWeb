@@ -5,7 +5,7 @@
       <img src="/src/assets/logo_login.jpg" alt="logo_login" />
       <form @submit.prevent="login">
         <div class="user">
-          <label for="user">Usuario: </label>
+          <label for="user">Usuario </label>
           <input
             v-model="usuario"
             type="text"
@@ -16,7 +16,7 @@
           /><br />
         </div>
         <div class="password">
-          <label for="password">Contraseña: </label>
+          <label for="password">Contraseña </label>
           <input
             v-model="password"
             type="password"
@@ -54,20 +54,19 @@ const { usuario, password } = storeToRefs(autenticacionStore);
 const router = useRouter();
 const mostrarError = ref(false);
 
-// function login
+
 const login = async () => {
   await autenticacionStore.iniciarSesion();
   if (autenticacionStore.autenticacion) {
     router.push({ name: "HomePrincipal" });
     console.log("Login exitoso");
   } else {
-    mostrarError.value = true; // 👈 activa el popup
+    mostrarError.value = true;
   }
 };
 </script>
 
 <style scoped>
-/* Scoped styles ensure that the CSS only applies to this component*/
 .login {
   background-color: white;
   text-align: center;
@@ -82,7 +81,7 @@ const login = async () => {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  color: black;
+  color : black
 }
 
 .container-animation {
@@ -103,7 +102,6 @@ const login = async () => {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: color 0.5s, background-color 0.5s;
-  /* eliminamos el flex centering */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -115,7 +113,6 @@ const login = async () => {
   inset: 0;
   background: rgba(0,0,0,0.5);
   z-index: 9999;
-  color: black;
 }
 .popup-contenido {
   background: #fff;
@@ -126,6 +123,7 @@ const login = async () => {
   text-align: center;
   position: relative;
   z-index: 10000;
+  color: black;
 }
 
 .cerrar {
@@ -224,7 +222,7 @@ const login = async () => {
 
 .login form .user {
   padding: 10px;
-  font-size: xx-large;
+  font-size:xx-large;
 }
 
 .login form .password {
@@ -263,5 +261,42 @@ const login = async () => {
   .login {
     width: 95%;
   }
+}
+
+.login form {
+  grid-template-columns: 150px minmax(250px, 400px);
+  column-gap: 16px;
+  row-gap: 14px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  color: black;
+  text-align: left;
+}
+.login form .buttons {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.login form > div {
+  display: contents;
+}
+
+.login form label {
+  justify-self: end;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.login form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  box-sizing: border-box;
 }
 </style>
