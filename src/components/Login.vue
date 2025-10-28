@@ -299,4 +299,57 @@ const login = async () => {
   border-radius: 6px;
   box-sizing: border-box;
 }
+
+.login form {
+
+  grid-template-columns: 150px minmax(250px, 400px); 
+  column-gap: 16px;
+  row-gap: 14px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  color: black;
+  text-align: left;
+}
+.login form .buttons {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.login form > div {
+  display: contents;
+}
+
+.login form label {
+  justify-self: end;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.login form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+
+.login form label {
+  font-size: 1.5rem;
+}
+
+.login form input {
+  font-size: 1.3rem;
+  padding: 12px 14px;
+}
+
+.buttons {
+  margin-top: 16px;
+}
+
 </style>

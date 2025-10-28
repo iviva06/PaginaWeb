@@ -123,7 +123,7 @@ const generarCodigo = async () => {
     emailCreator: "superadmin@gmail.com",
     rolType: "ADMIN",
   };
-  
+
 
   console.log("recipient: " + body.emailRecipient)
   console.log("creator: " + body.emailCreator)
@@ -179,9 +179,7 @@ defineEmits(["close"]);
   left: 10px;
   bottom: 0;
   background-color: #e9e9e9;
-
-  width: 14%;
-  /* max-width: 180px; */
+  width: 15%;
   padding: 0.8rem;
 
   box-shadow: rgba(0, 0, 0, 0.18) 0 10px 30px;
@@ -313,6 +311,7 @@ select {
   text-align: center;
   font-size: 18px;
   font-family: "Questrial", sans-serif;
+  color: black;
 }
 
 .modal-content button {
@@ -347,5 +346,49 @@ input {
   border-radius: 8px;
   border: 1px solid #ccc;
   font-family: "Questrial", sans-serif;
+}
+
+.SidebarButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background-color: #d3d3d3;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s ease-in-out;
+  font-family: "Questrial", sans-serif;
+  font-size: clamp(0.75rem, 0.9vw, 1rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.SidebarButton i {
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
+  flex-shrink: 0;
+}
+
+.SidebarButton:hover {
+  background-color: #c9c9c9;
+  transform: scale(0.98);
+}
+
+
+@media (max-width: 768px) {
+  .SidebarButton {
+    padding: 8px 10px;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .SidebarButton {
+    padding: 6px 8px;
+    font-size: clamp(0.65rem, 2vw, 0.8rem);
+  }
 }
 </style>
