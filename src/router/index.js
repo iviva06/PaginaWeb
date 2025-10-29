@@ -12,6 +12,7 @@ const MostrarCursosSuperAdmin = () => import("@/components/MostrarCursosSuperAdm
 const AgregarEstudiante = () => import("@/components/AgregarEstudiante.vue");
 const AgregarCurso = () => import("@/components/AgregarCurso.vue");
 const HomePrincipal = () => import("@/components/HomePrincipal.vue");
+const ListaUsuarios = () => import("@/components/ListaUsuarios.vue");
 
 
 const routes = [
@@ -31,6 +32,7 @@ const routes = [
         component: MostrarCursosSuperAdmin,
       },
       { path: "", redirect: { name: "MostrarCursos" } },
+      { path: "listausuarios", name: "ListaUsuarios", component: ListaUsuarios },
     ],
   },
   { path: "/:pathMatch(.*)*", redirect: "/" },
