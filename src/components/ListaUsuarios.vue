@@ -1,31 +1,21 @@
 <template>
-    <div class="tablaEstudiantesCurso">
+  <div class="tablaUsuariosRegistrados">
       <table>
         <thead>
           <tr>
-            <th>Nombre</th>
             <th>Id</th>
+            <th>Nombre</th>
             <th>DNI</th>
             <th>Email</th>
-            <th>Promedio</th>
-            <th>Edición</th>
           </tr>
         </thead>
-        <tbody v-if="countStudents">
-          <tr v-for="(estudiante, index) in estudiantes" :key="index">
-            <td>{{ estudiante.name }}</td>
-            <td>{{ estudiante.lastName }}</td>
-            <td>{{ estudiante.dni }}</td>
-            <td>{{ estudiante.numSemester }}</td>
-            <td>{{ estudiante.average }}</td>
-            <td>
-              <button @click="editarEstudiante(index, estudiante.id)">
-                <img src="../assets/editar-texto-_2_.ico" alt="" />
-              </button>
-              <button @click="eliminarEstudiante(index, estudiante.dni)">
-                <img src="../assets/eliminar.ico" alt="Eliminar" />
-              </button>
-            </td>
+        <tbody >
+          <tr v-for="(user, index) in listUsers"
+            :key="index">
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.dni }}</td>
+            <td>{{ user.email }}</td>
           </tr>
         </tbody>
       </table>
@@ -33,10 +23,20 @@
 </template>
 
 <script setup>
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/userStore";
+import { onMounted } from "vue";
+
+const userStore = useUserStore();
+const { listUsers } = storeToRefs(userStore);
+
+onMounted(async () => {
+  await userStore.fetchUsers();
+});
 
 </script>
 
-<style>
+<style scoped>
 main {
   flex: 1;
   display: flex;
@@ -62,14 +62,14 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.tablaEstudiantesCurso th {
+.tablaUsuariosRegistrados th {
   margin-top: 20px;
   padding: 10px;
   background-color: #6f1515;
   color: rgb(226, 217, 217);
 }
 
-.tablaEstudiantesCurso td {
+.tablaUsuariosRegistrados td {
   margin-top: 20px;
   padding: 10px;
   max-width: 800px;
@@ -77,7 +77,7 @@ input::-webkit-inner-spin-button {
   justify-content: center;
 }
 
-.tablaEstudiantesCurso img {
+.tablaUsuariosRegistrados img {
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -85,7 +85,7 @@ input::-webkit-inner-spin-button {
   gap: 20px;
 }
 
-.tablaEstudiantesCurso button {
+.tablaUsuariosRegistrados button {
   background: none;
   border: none;
   margin: 10px 10px;
@@ -139,46 +139,47 @@ input::-webkit-inner-spin-button {
   }
 }
 
-.tablaEstudiantesCurso {
+.tablaUsuariosRegistrados {
   width: 100%;
   overflow-x: auto;
+  color: black;
 }
 
-.tablaEstudiantesCurso table {
+.tablaUsuariosRegistrados table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
   min-width: 600px;
 }
 
-.tablaEstudiantesCurso th,
-.tablaEstudiantesCurso td {
+.tablaUsuariosRegistrados th,
+.tablaUsuariosRegistrados td {
   padding: 10px;
   text-align: center;
   white-space: nowrap;
 }
 
-.tablaEstudiantesCurso th {
+.tablaUsuariosRegistrados th {
   background-color: #6f1515;
   color: #e2d9d9;
   position: sticky;
   top: 0;
 }
 
-.tablaEstudiantesCurso td {
+.tablaUsuariosRegistrados td {
   background-color: #dbabab;
 }
 
 @media (max-width: 480px) {
-  .tablaEstudiantesCurso table {
+  .tablaUsuariosRegistrados table {
     min-width: 0;
   }
 
-  .tablaEstudiantesCurso thead {
+  .tablaUsuariosRegistrados thead {
     display: none;
   }
 
-  .tablaEstudiantesCurso tbody tr {
+  .tablaUsuariosRegistrados tbody tr {
     display: grid;
     grid-template-columns: 1fr;
     gap: 6px;
@@ -187,7 +188,7 @@ input::-webkit-inner-spin-button {
     padding: 8px;
   }
 
-  .tablaEstudiantesCurso td {
+  .tablaUsuariosRegistrados td {
     display: flex;
     justify-content: space-between;
     white-space: normal;
@@ -195,37 +196,37 @@ input::-webkit-inner-spin-button {
     padding: 6px 4px;
   }
 
-  .tablaEstudiantesCurso td::before {
+  .tablaUsuariosRegistrados td::before {
     content: attr(data-label);
     font-weight: 600;
     margin-right: 8px;
   }
 }
 
-.tablaEstudiantesCurso table {
+.tablaUsuariosRegistrados table {
   border-collapse: collapse;
   width: 100%;
 }
 
-.tablaEstudiantesCurso th:not(:last-child),
-.tablaEstudiantesCurso td:not(:last-child) {
+.tablaUsuariosRegistrados th:not(:last-child),
+.tablaUsuariosRegistrados td:not(:last-child) {
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.tablaEstudiantesCurso tr+tr td {
+.tablaUsuariosRegistrados tr+tr td {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.tablaEstudiantesCurso th,
-.tablaEstudiantesCurso td {
+.tablaUsuariosRegistrados th,
+.tablaUsuariosRegistrados td {
   text-align: center;
   padding: 10px;
 }
 
 @media (max-width: 480px) {
 
-  .tablaEstudiantesCurso th,
-  .tablaEstudiantesCurso td {
+  .tablaUsuariosRegistrados th,
+  .tablaUsuariosRegistrados td {
     border-right: none;
     border-top: none;
   }

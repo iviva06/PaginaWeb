@@ -20,7 +20,7 @@
       <button v-if="isSuperAdmin" @click="abrirPopup" class="SidebarButton">
         <i class="bx bx-qr"></i> Generar código de acceso
       </button>
-      <router-link v-if="isSuperAdmin" to="/app/mostrarcursos" class="botonesNav">
+      <router-link v-if="isSuperAdmin" to="/app/listausuarios" class="botonesNav">
         <button class="SidebarButton"><i class='bx  bx-list-ul'  ></i>  Ver lista de usuarios</button>
       </router-link>
     </nav>
