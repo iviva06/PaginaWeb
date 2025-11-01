@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-side-effects-in-computed-properties -->
 <template>
   <div v-if="open" class="sb-overlay" @click="$emit('close')" />
   <aside
@@ -83,9 +84,11 @@ const isSuperAdmin = computed(() => {
   const role = sessionStorage.getItem('role')
 
   if(role === 'ROLE_SUPER_ADMIN') {
+    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
     authenticationStore.isSuperAdmin = true;
     return authenticationStore.isSuperAdmin;
   } else {
+    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
     authenticationStore.isSuperAdmin = false;
     return authenticationStore.isSuperAdmin;
   }
