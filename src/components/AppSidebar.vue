@@ -138,8 +138,6 @@ const cerrarPopupExito = () => {
 const generarCodigo = async () => {
   const token = sessionStorage.getItem("token");
   const decoded = jwtDecode(token);
-  console.log("role: " + decoded.role[0])
-  console.log("token: "  + token)
 
   if (decoded.role[0] !== "ROLE_SUPER_ADMIN") {
     mensajeError.value = "❌ No tiene permisos para generar el código.";
@@ -154,17 +152,17 @@ const generarCodigo = async () => {
     return;
   }
 
+  if (!role.value) {
+    mensajeError.value = "Por favor, seleccione un rol antes de continuar.";
+    mostrarPopupError.value = true;
+    return;
+  }
+
   const body = {
     emailRecipient: emailDestino.value,
     emailCreator: "superadmin@gmail.com",
     rolType: role.value,
   };
-
-
-  console.log("recipient: " + body.emailRecipient)
-  console.log("creator: " + body.emailCreator)
-  console.log("role: " + body.rolType)
-  console.log(body)
 
   try {
     const response = await axios.post("https://ubelgrano.diegodev.net/api/v1/access-code",
@@ -175,24 +173,24 @@ const generarCodigo = async () => {
           'Content-Type': 'application/json'
         }
       }
-      )
+    );
 
-      const data = response.data;
-      if (data) {
-        console.log("data: " + data);
-      }
-
-    } catch (error) {
-      console.log("error: " + error);
-      mensajeError.value = "❌ Error al generar o enviar el código. Inténtelo nuevamente.";
-      mostrarPopupError.value = true;
-      console.log(decoded);
+    const data = response.data;
+    if (data) {
+      console.log("data: " + data);
     }
 
     mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`;
     mostrarPopupExito.value = true;
     cerrarPopup();
-}
+
+  } catch (error) {
+    console.log("error: " + error);
+    mensajeError.value = "❌ Error al generar o enviar el código. Inténtelo nuevamente.";
+    mostrarPopupError.value = true;
+  }
+};
+
 
 defineEmits(["close"]);
 </script>
