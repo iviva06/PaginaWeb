@@ -81,7 +81,7 @@ const dniOnly = (e) => {
 
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-const submitForm = () => {
+const submitForm = async () => {
   Object.keys(errors).forEach(key => errors[key] = "");
 
   let isValid = true;
@@ -116,18 +116,25 @@ const submitForm = () => {
     isValid = false;
   }
 
-  if (!userEntityDTO.value.accessCode) {
+   if (!userEntityDTO.value.accessCode) {
     errors.accessCode = "El código de acceso es obligatorio.";
     isValid = false;
   }
 
+  if (!isValid) return;
 
-  if (!isValid) {
+
+  const codeOk = await authenticationStore.validarCodigoAcceso(
+    userEntityDTO.value.accessCode
+  );
+  if (!codeOk) {
+    errors.accessCode = "Código de acceso inválido.";
     return;
   }
 
 
-  if (authenticationStore.register()) {
+
+  if (await authenticationStore.register()) {  
     router.push("/login");
   }
 };

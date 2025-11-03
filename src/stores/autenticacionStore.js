@@ -50,7 +50,7 @@ export const useAutenticacionStore = defineStore("autenticacion", {
     async register() {
       try {
         // https://ubelgrano.diegodev.net/api/v1/users http://localhost:8081/api/v1/users
-        const response = await axios.post(' https://ubelgrano.diegodev.net/api/v1/users', 
+        const response = await axios.post(' https://ubelgrano.diegodev.net/api/v1/users',
           this.userEntityDTO
         );
 
@@ -65,6 +65,17 @@ export const useAutenticacionStore = defineStore("autenticacion", {
           console.log("-> Error del servidor: ", error.response.status);
           return false;
         }
+      }
+    },
+    async validarCodigoAcceso(code) {
+      try {
+        const { data } = await axios.get(
+          "https://ubelgrano.diegodev.net/v1/codes"
+        );
+        return data.includes(code);
+      } catch (e) {
+        console.error("No se pudieron traer los códigos", e);
+        return false;
       }
     }
   },
