@@ -97,7 +97,7 @@ const submitForm = () => {
     errors.dni = "El DNI es obligatorio.";
     isValid = false;
   } else if (!/^\d{8}$/.test(userEntityDTO.value.dni)) {
-    errors.dni = "El DNI debe tener exactamente 8 números.";
+    errors.dni = "El DNI debe tener exactamente 8 números";
     isValid = false;
   }
 
