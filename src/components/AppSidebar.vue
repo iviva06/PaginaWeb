@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-side-effects-in-computed-properties -->
 <template>
   <div v-if="open" class="sb-overlay" @click="$emit('close')" />
   <aside
@@ -13,7 +12,7 @@
         <button class="SidebarButton"><i class="bx bxs-user"></i> Agregar estudiante</button>
       </router-link>
       <router-link to="/app/agregarcurso" class="botonesNav">
-        <button class="SidebarButton"><i class='bx  bx-pencil'  ></i>  Agregar un curso</button>
+        <button class="SidebarButton"><i class="bx bx-pencil"></i> Agregar un curso</button>
       </router-link>
       <router-link @click="clickCurso" to="/app/mostrarcursos" class="botonesNav">
         <button class="SidebarButton"><i class="bx bxs-book"></i> Mostrar Cursos</button>
@@ -22,7 +21,7 @@
         <i class="bx bx-qr"></i> Generar código de acceso
       </button>
       <router-link v-if="isSuperAdmin" to="/app/listausuarios" class="botonesNav">
-        <button class="SidebarButton"><i class='bx  bx-list-ul'  ></i>  Ver lista de usuarios</button>
+        <button class="SidebarButton"><i class="bx bx-list-ul"></i> Ver lista de usuarios</button>
       </router-link>
     </nav>
   </aside>
@@ -33,14 +32,16 @@
       <p>📧 Escriba el mail al cual quiere que le llegue el código generado:</p>
       <input type="email" v-model="emailDestino" placeholder="Ingrese el correo" />
       <div class="role">
-          <label for="role">Rol </label>
+        <label for="role">Rol </label>
+        <form @submit.prevent="generarCodigo">
           <select v-model="role" id="role" name="role" required>
             <option :value="undefined" disabled selected>Seleccione un rol</option>
             <option value="SUPER_ADMIN">Super Administrador</option>
-            <option value="ADMIN">Administrador</option>
-          </select><br />
-          <!-- <span class="error">{{  }}</span> -->
-        </div>
+            <option value="ADMIN">Administrador</option></select
+          ><br />
+        </form>
+        <!-- <span class="error">{{  }}</span> -->
+      </div>
       <div class="botones">
         <button @click="generarCodigo">Enviar</button>
         <button @click="cerrarPopup">Cancelar</button>
@@ -81,9 +82,9 @@ defineProps({ open: { type: Boolean, default: false } });
 const courseStore = useCourseStore();
 
 const isSuperAdmin = computed(() => {
-  const role = sessionStorage.getItem('role')
+  const role = sessionStorage.getItem("role");
 
-  if(role === 'ROLE_SUPER_ADMIN') {
+  if (role === "ROLE_SUPER_ADMIN") {
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties
     authenticationStore.isSuperAdmin = true;
     return authenticationStore.isSuperAdmin;
@@ -93,6 +94,8 @@ const isSuperAdmin = computed(() => {
     return authenticationStore.isSuperAdmin;
   }
 });
+
+//Ejemplo de comentario
 
 const clickCurso = async () => {
   await courseStore.fetchCourses();
@@ -114,7 +117,6 @@ const mostrarPopupExito = ref(false);
 const emailDestino = ref("");
 const role = ref("");
 
-
 const mensajeError = ref("");
 const mensajeExito = ref("");
 
@@ -133,13 +135,13 @@ const cerrarPopupError = () => {
 
 const cerrarPopupExito = () => {
   mostrarPopupExito.value = false;
-}
+};
 
 const generarCodigo = async () => {
   const token = sessionStorage.getItem("token");
   const decoded = jwtDecode(token);
-  console.log("role: " + decoded.role[0])
-  console.log("token: "  + token)
+  console.log("role: " + decoded.role[0]);
+  console.log("token: " + token);
 
   if (decoded.role[0] !== "ROLE_SUPER_ADMIN") {
     mensajeError.value = "❌ No tiene permisos para generar el código.";
@@ -160,39 +162,34 @@ const generarCodigo = async () => {
     rolType: role.value,
   };
 
-
-  console.log("recipient: " + body.emailRecipient)
-  console.log("creator: " + body.emailCreator)
-  console.log("role: " + body.rolType)
-  console.log(body)
+  console.log("recipient: " + body.emailRecipient);
+  console.log("creator: " + body.emailCreator);
+  console.log("role: " + body.rolType);
+  console.log(body);
 
   try {
-    const response = await axios.post("https://ubelgrano.diegodev.net/api/v1/access-code",
-      body,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      }
-      )
+    const response = await axios.post("https://ubelgrano.diegodev.net/api/v1/access-code", body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-      const data = response.data;
-      if (data) {
-        console.log("data: " + data);
-      }
-
-    } catch (error) {
-      console.log("error: " + error);
-      mensajeError.value = "❌ Error al generar o enviar el código. Inténtelo nuevamente.";
-      mostrarPopupError.value = true;
-      console.log(decoded);
+    const data = response.data;
+    if (data) {
+      console.log("data: " + data);
     }
+  } catch (error) {
+    console.log("error: " + error);
+    mensajeError.value = "❌ Error al generar o enviar el código. Inténtelo nuevamente.";
+    mostrarPopupError.value = true;
+    console.log(decoded);
+  }
 
-    mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`;
-    mostrarPopupExito.value = true;
-    cerrarPopup();
-}
+  mensajeExito.value = `✅ Código generado y enviado a ${emailDestino.value}`;
+  mostrarPopupExito.value = true;
+  cerrarPopup();
+};
 
 defineEmits(["close"]);
 </script>
@@ -412,7 +409,6 @@ input {
   background-color: #c9c9c9;
   transform: scale(0.98);
 }
-
 
 @media (max-width: 768px) {
   .SidebarButton {
